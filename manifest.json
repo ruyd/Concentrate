@@ -1,0 +1,34 @@
+{
+    "name" : "Concentrate",
+    "version" : "1.0.1.6",
+    "author" : "SolverApps",
+    "browser_action" : 
+    {
+        "default_icon" : 
+        {
+            "20" : "images/icon_20.png"
+        },
+        "default_title" : "Concentrate",
+        "default_popup" : "html/popup.html"
+    },
+    "content_scripts" : [{
+            "js" : ["js/content.js"],
+            "matches" : ["*://*/*"],
+            "run_at": "document_end"
+        }
+    ],
+    "chrome_url_overrides" : {
+        "newtab": "html/newtab.html"
+      },
+    "default_locale" : "en",
+    "description" : "Multi-Monitor Selective Focus Enhancements for Edge/Chrome",    
+    "permissions" : 
+    [
+        "*://*/*", "notifications", "activeTab", "tabs", "storage"
+    ],     
+    "icons" : {
+        "20" : "images/icon_20.png"
+    },    
+    "web_accessible_resources" : ["images/icon.svg"],    
+    "manifest_version": 2
+}
