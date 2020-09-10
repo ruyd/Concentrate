@@ -1,6 +1,6 @@
 {
     "name" : "Concentrate",
-    "version" : "1.0.1.6",
+    "version" : "1.0.1.8",
     "author" : "SolverApps",
     "browser_action" : 
     {
@@ -21,7 +21,7 @@
         "newtab": "html/newtab.html"
       },
     "default_locale" : "en",
-    "description" : "Multi-Monitor Selective Focus Enhancements for Edge/Chrome",    
+    "description" : "Concentrate enables a True Dark-Mode NewTab Page and Multi-Monitor Deep Focus Enhancements",
     "permissions" : 
     [
         "*://*/*", "notifications", "activeTab", "tabs", "storage"
