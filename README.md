@@ -4,10 +4,12 @@ Concentrate enables a True Dark-Mode NewTab Page and Multi-Monitor Deep Focus En
 
 ![Image](visuals/Concentrate1280x800.png)
 
-Direct link and the Store ID
+Store Link
+
 https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh
 
 Store ID:	0RDCKFWN7QDQ
+
 CRX ID:	mmlolmfkhnilblibmnalmkinojfpcckh
 
 -----BEGIN PUBLIC KEY-----
