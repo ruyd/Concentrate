@@ -24,7 +24,7 @@
     "description" : "Concentrate enables a True Dark-Mode NewTab Page and Multi-Monitor Deep Focus Enhancements",
     "permissions" : 
     [
-        "*://*/*", "notifications", "activeTab", "tabs", "storage"
+        "*://*/*", "activeTab", "tabs", "storage"
     ],     
     "icons" : {
         "20" : "images/icon_20.png"
