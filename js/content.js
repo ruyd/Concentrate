@@ -35,3 +35,5 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 //Initial State
 bind();
 
+//CBMUTE
+//YTMUTE
