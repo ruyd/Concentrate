@@ -41,33 +41,36 @@ bind();
 
 //YouTube Quiet Down
 var isYoutube = document.getElementsByClassName("ytd-player").length > 0;
-var style = document.createElement('style');
+
+var style = document.createElement("style");
 style.innerHTML =
-	'.concentrate {' +
-		'color: #242424;' +
-		'background-color: #242424;' +
-    'opacity: 0.999;' +
-    'z-index: 99999;' + 
-    'display: none;' +
-    'position: fixed;' +  
-    'height: 100%;' + 
-    'width: 100%;' +
-    'top: 0; left: 0;' +     
-    'transition: all 0.3s;' +
-    'user-select: none;' +    
-  '} ' + 
-  '.concentrate:hover {' + 
-    'opacity: 0;' + 
-  '}';
-  
-var ref = document.querySelector('script');
+  ".concentrate {" +
+  "color: #242424;" +
+  "background-color: #242424;" +
+  "opacity: 1;" +
+  "z-index: 99999;" +
+  "display: none;" +
+  "position: fixed;" +
+  "height: 100%;" +
+  "width: 100%;" +
+  "top: 0; left: 0;" +
+  "transition: all 0.3s;" +
+  "user-select: none;" +
+  "} " +
+  ".concentrate:hover {" +
+  "opacity: 0;" +
+  "}";
+
+var ref = document.querySelector("script");
 ref.parentNode.insertBefore(style, ref);
 
-var greyout = document.createElement('div');
+var greyout = document.createElement("div");
 greyout.setAttribute("id", "greyout");
-greyout.setAttribute("class", "concentrate")
+greyout.setAttribute("class", "concentrate");
 document.body.appendChild(greyout);
-greyout.onmouseover = () => { greyout.style.display = "none"; };
+greyout.onmouseover = () => {
+  greyout.style.display = "none";
+};
 
 function removeAds() {
   let strip = ["video-ads ytp-ad-module"];
@@ -78,52 +81,59 @@ function removeAds() {
 }
 
 function resize() {
-  let panel = document.getElementById("movie_player");  
+  let panel = document.getElementById("movie_player");
   if (!panel || !greyout) return;
 
   let coor = panel.getBoundingClientRect();
-  
+
   greyout.style.height = coor.height + "px";
   greyout.style.width = coor.width + "px";
   greyout.style.top = coor.top + "px";
   greyout.style.left = coor.left + "px";
-
 }
- 
 
-var didWeMute = false; 
-function muteAds() { 
+var didWeMute = false;
+function muteAds() {
   let btns = document.getElementsByClassName("ytp-mute-button");
-  //if (btns.length === 0) return;
-
   let btn = btns.length > 0 ? btns[0] : null;
-  let muted = btn ? btn.getAttribute("aria-label").toLowerCase().indexOf("unmute") > -1 : false;
-  let showing = document.getElementsByClassName("ad-showing").length > 0;//ad-interrupting  
+  let muted = btn
+    ? btn.getAttribute("aria-label").toLowerCase().indexOf("unmute") > -1
+    : false;
+  let showing = document.getElementsByClassName("ad-showing").length > 0; //ad-interrupting
 
   if (!showing) {
-
-    if (didWeMute)
-    {
-      console.log('Content back -> unmuting');
-      btn.click();    
+    if (didWeMute) {
+      console.log("Content back -> unmuting");
+      btn.click();
       didWeMute = false;
     }
-    
+
     greyout.style.display = "none";
-  } 
+  }
 
   if (showing) {
-
-    if (!muted)
-    {
-      console.log('muting ad');
+    if (!muted) {
+      console.log("muting ad");
       btn.click();
       didWeMute = true;
     }
-    
+
     resize();
     greyout.style.display = "block";
-  }  
+  }
+}
+
+function removeFrameAds() {
+  let frames = document.getElementsByTagName("IFRAME");
+  for (let f = 0; f < frames.length; f++) {
+    let frame = frames[f];
+    console.log('frame',frame);
+    let id = frame.getAttribute("id") || frame.getAttribute("name") ;
+    let adish = id ? id.indexOf("_ads") > -1 : false;
+    if (adish) {
+      frame.remove();
+    }
+  }
 }
 
 //CB Mute
@@ -131,6 +141,7 @@ function muteAds() {
 //Timer
 
 function startTime() {
+  removeFrameAds();
   removeAds();
   muteAds();
   var t = setTimeout(startTime, 4000);
