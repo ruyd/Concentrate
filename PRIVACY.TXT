@@ -7,4 +7,4 @@ Don't trust us, best policy is transparency:
 - Vanilla Javascript
 - No Packages or External Libraries
 - No http calls or requests of any kind
-- No access to personal data of any kind
+- No access of personal data of any kind
