@@ -7,24 +7,23 @@ const colorInput = document.getElementById("color");
 const colorIndicator = document.getElementById("indicator");
 
 var Settings = {
-  ContentDoubleClick : true,
-  NewTabColor : '#242424',
-  NewTabClick : true,
-  FrameAds : true,
-  YouTubeMute : true,
-  ShowClock : true
+  ContentDoubleClick: true,
+  NewTabColor: "#242424",
+  NewTabClick: true,
+  FrameAds: true,
+  YouTubeMute: true,
+  ShowClock: true,
 };
 
 function get() {
   chrome.storage.sync.get("Settings", function (data) {
-    
     if (data.Settings) {
       Settings = data.Settings;
-    } else { 
+    } else {
       //FirstRun Commit Default Settings
       chrome.storage.sync.set({ Settings });
     }
-    
+
     doubleClickInputCheckbox.checked = Settings.ContentDoubleClick;
     iFrameInputCheckbox.checked = Settings.FrameAds;
     clickInputCheckbox.checked = Settings.NewTabClick;

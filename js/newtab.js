@@ -36,7 +36,6 @@ function bind() {
     }
 
     if (Settings.NewTabColor) {
-      console.log("color", Settings.NewTabColor);
       document.body.style.backgroundColor = Settings.NewTabColor;
       document.body.style.color = Settings.NewTabColor;
     }
