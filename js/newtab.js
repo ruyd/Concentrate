@@ -16,12 +16,9 @@ function bind() {
   
     if (!data.Settings) return;
 
-    console.log('get', data);
-
     Settings = data.Settings;
 
     if (Settings.NewTabClick) {
-      console.log('click enabled');
       document.documentElement.addEventListener(
         "click",
         toggleFullScreen,
@@ -61,13 +58,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
 });
 
-function startTime() {
-  document.getElementById("txt").innerHTML = formatAMPM(new Date());
+function startTime() {  
   if (Settings.ShowClock) {
+    document.getElementById("txt").innerHTML = formatAMPM(new Date());
     var t = setTimeout(startTime, 500);
   } else { 
     document.getElementById("txt").innerHTML = "";
-  }  
+  }
 }
 
 function formatAMPM(date) {
