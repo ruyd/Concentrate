@@ -1,5 +1,10 @@
-OPEN SOURCE READABLE CODE 
-NO EXTERNAL DEPENDENCIES
-NO DATA LEAVES YOUR BROWSER
-NOTHING FANCY
-WE DO NOT WANT YOUR DATA
+CONCENTRATE EXTENSION PRIVACY POLICY v2
+
+What happens on your browser stays on your browser 
+
+Don't trust us, best policy is transparency: 
+- Open Source Readable Code 
+- Vanilla Javascript
+- No Packages or External Libraries
+- No http calls or requests of any kind
+- No access to personal data of any kind
