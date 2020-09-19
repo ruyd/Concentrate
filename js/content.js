@@ -9,8 +9,8 @@ function toggleFullScreen() {
 }
 
 function bind() {
-  chrome.storage.sync.get("ContentDoubleClick", function (data) {
-    if (data.ContentDoubleClick) {
+  chrome.storage.sync.get("Settings", function (data) {
+    if (data.Settings && data.Settings.ContentDoubleClick) {
       document.documentElement.addEventListener(
         "dblclick",
         toggleFullScreen,
@@ -30,8 +30,8 @@ function unbind() {
 
 //Listener
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.Refresh) {
-    if (request.ContentDoubleClick) bind();
+  if (request.Refresh && request.Settings) {
+    if (request.Settings.ContentDoubleClick) bind();
     else unbind();
   }
 });
@@ -73,7 +73,6 @@ greyout.onmouseover = () => {
 };
 
 function removeAds() {
-  let strip = ["video-ads ytp-ad-module"];
   let elements = document.getElementsByClassName("video-ads");
   for (let i = 0; i < elements.length; i++) {
     elements[i].remove();

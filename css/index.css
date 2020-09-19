@@ -67,3 +67,10 @@ input:checked+.slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+input { 
+    background-color: gray;
+    padding: 4px 5px;
+    font-size: 120%;
+    text-align: center;
+}
