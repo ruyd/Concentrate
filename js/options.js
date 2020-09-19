@@ -1,6 +1,4 @@
-const doubleClickInputCheckbox = document.getElementById(
-  "DoubleClickInputCheckbox"
-);
+const doubleClickInputCheckbox = document.getElementById("DoubleClickInputCheckbox");
 const youTubeInputCheckbox = document.getElementById("YouTubeInputCheckbox");
 const iFrameInputCheckbox = document.getElementById("iFrameInputCheckbox");
 const clickInputCheckbox = document.getElementById("ClickInputCheckbox");

@@ -51,8 +51,7 @@ function unbind() {
 
 //Listener
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log('message', request);
-
+  
   if (request.Refresh && request.Settings) {
     
     Settings = request.Settings;

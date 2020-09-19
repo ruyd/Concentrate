@@ -1,3 +1,11 @@
+var Settings = {};
+
+function get() {
+  chrome.storage.sync.get("Settings", function (data) {
+    Settings = data.Settings;
+  });
+}
+
 function toggleFullScreen() {
   if (!document.fullscreenElement) {
     document.documentElement.requestFullscreen();
@@ -8,15 +16,43 @@ function toggleFullScreen() {
   }
 }
 
+function injectStyle() {
+  var style = document.createElement("style");
+  style.innerHTML =
+    ".concentrate {" +
+    "color: #242424;" +
+    "background-color: #242424;" +
+    "opacity: 1;" +
+    "z-index: 99999;" +
+    "display: none;" +
+    "position: fixed;" +
+    "height: 100%;" +
+    "width: 100%;" +
+    "top: 0; left: 0;" +
+    "transition: all 0.3s;" +
+    "user-select: none;" +
+    "} " +
+    ".concentrate:hover {" +
+    "opacity: 0;" +
+    "}";
+
+  const ref = document.querySelector("script");
+  ref.parentNode.insertBefore(style, ref);
+}
+
 function bind() {
   chrome.storage.sync.get("Settings", function (data) {
-    if (data.Settings && data.Settings.ContentDoubleClick) {
+
+    Settings = data.Settings;
+
+    if (Settings.ContentDoubleClick) {
       document.documentElement.addEventListener(
         "dblclick",
         toggleFullScreen,
         false
       );
-    }
+    }    
+
   });
 }
 
@@ -30,39 +66,20 @@ function unbind() {
 
 //Listener
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+
   if (request.Refresh && request.Settings) {
-    if (request.Settings.ContentDoubleClick) bind();
+
+    Settings = request.Settings;
+
+    if (Settings.ContentDoubleClick) bind();
     else unbind();
   }
+
 });
 
 //Initial State
 bind();
-
-//YouTube Quiet Down
-const isYoutube = document.getElementsByClassName("ytd-player").length > 0;
-
-var style = document.createElement("style");
-style.innerHTML =
-  ".concentrate {" +
-  "color: #242424;" +
-  "background-color: #242424;" +
-  "opacity: 1;" +
-  "z-index: 99999;" +
-  "display: none;" +
-  "position: fixed;" +
-  "height: 100%;" +
-  "width: 100%;" +
-  "top: 0; left: 0;" +
-  "transition: all 0.3s;" +
-  "user-select: none;" +
-  "} " +
-  ".concentrate:hover {" +
-  "opacity: 0;" +
-  "}";
-
-const ref = document.querySelector("script");
-ref.parentNode.insertBefore(style, ref);
+injectStyle();
 
 const greyout = document.createElement("div");
 greyout.setAttribute("id", "greyout");
@@ -70,7 +87,6 @@ greyout.setAttribute("class", "concentrate");
 document.body.appendChild(greyout);
 
 var didWeUngray = false;
-
 greyout.onmouseover = () => {
   greyout.style.display = "block";
   didWeUngray = true;
@@ -79,7 +95,10 @@ greyout.onmouseover = () => {
   }, 5000);
 };
 
-function removeAds() {
+//YouTube Noise Removals
+const isYoutube = document.getElementsByClassName("ytd-player").length > 0;
+
+function removeVideoAds() {
   let elements = document.getElementsByClassName("video-ads");
   for (let i = 0; i < elements.length; i++) {
     elements[i].remove();
@@ -99,7 +118,7 @@ function resize() {
 }
 
 var didWeMute = false;
-function muteAds() {
+function muteYouTubeAds() {
   let btns = document.getElementsByClassName("ytp-mute-button");
   let btn = btns.length > 0 ? btns[0] : null;
   let muted = btn
@@ -154,9 +173,16 @@ function removeFrameAds() {
 //Timer
 
 function startTime() {
-  removeFrameAds();
-  removeAds();
-  muteAds();
+
+  if (Settings.YouTubeMute) {
+    muteYouTubeAds();
+    removeVideoAds();
+  }
+
+  if (Settings.FrameAds) { 
+    removeFrameAds();
+  }
+  
   var t = setTimeout(startTime, 3000);
 }
 
