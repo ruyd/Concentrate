@@ -1,4 +1,11 @@
-var Settings = {};
+var Settings = {
+  ContentDoubleClick : true,
+  NewTabColor : '#242424',
+  NewTabClick : true,
+  FrameAds : true,
+  YouTubeMute : true,
+  ShowClock : true
+};
 
 function toggleFullScreen() {
   if (!document.fullscreenElement) {
@@ -11,13 +18,15 @@ function toggleFullScreen() {
 }
 
 function bind() {
-
   chrome.storage.sync.get("Settings", function (data) {
+
+    if (data.Settings) {
+      Settings = data.Settings;
+    } else { 
+      //FirstRun Commit Default Settings
+      chrome.storage.sync.set({ Settings });
+    }
   
-    if (!data.Settings) return;
-
-    Settings = data.Settings;
-
     if (Settings.NewTabClick) {
       document.documentElement.addEventListener(
         "click",
@@ -27,7 +36,7 @@ function bind() {
     }
 
     if (Settings.NewTabColor) {
-      console.log('color', Settings.NewTabColor)
+      console.log("color", Settings.NewTabColor);
       document.body.style.backgroundColor = Settings.NewTabColor;
       document.body.style.color = Settings.NewTabColor;
     }
@@ -35,7 +44,6 @@ function bind() {
     if (Settings.ShowClock) {
       startTime();
     }
-
   });
 }
 
@@ -49,9 +57,7 @@ function unbind() {
 
 //Listener
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  
   if (request.Refresh && request.Settings) {
-    
     Settings = request.Settings;
 
     if (Settings.NewTabClick) bind();
@@ -59,11 +65,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
 });
 
-function startTime() {  
+function startTime() {
   if (Settings.ShowClock) {
     document.getElementById("txt").innerHTML = formatAMPM(new Date());
     var t = setTimeout(startTime, 500);
-  } else { 
+  } else {
     document.getElementById("txt").innerHTML = "";
   }
 }
@@ -79,6 +85,5 @@ function formatAMPM(date) {
   return strTime;
 }
 
-//document.body.onload = () => startTime();
 //Initial State
 bind();
