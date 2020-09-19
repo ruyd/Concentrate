@@ -3,6 +3,9 @@
 Concentrate enables a True Dark-Mode NewTab Page, Focus Enhancement and Content Noise Reduction 
 
 ![Image](visuals/Concentrate1280x800.png)
+![Image](visuals/ConcentrateUI.gif)
+![Image](visuals/options.png)
+
 
 Store Link
 
