@@ -1,6 +1,6 @@
 {
     "name" : "Concentrate",
-    "version" : "1.0.1.8",
+    "version" : "1.0.2.0",
     "author" : "SolverApps",
     "browser_action" : 
     {
@@ -17,6 +17,7 @@
             "run_at": "document_end"
         }
     ],
+    "options_page": "html/options.html",
     "chrome_url_overrides" : {
         "newtab": "html/newtab.html"
       },

@@ -1,18 +1,50 @@
 <html>
+
 <head>
-    <title>Concentrate 2.0</title>
+    <title>Concentrate</title>
+    <link rel="stylesheet" href="../css/index.css" type="text/css" />
     <style>
-        body {
-            background-color: #242424;
-        }
+
     </style>
 </head>
 
 <body>
-    <h3>New Tab Settings</h3>
-    <h3>-Color</h3>
-    <h3>-FullScreen Click - On/Off</h3>
-    <h3>-Hover to Reveal Time</h3>
+    <div style="text-align: center; margin-top: 5%;">
+        <h2>Content</h2>
+        <h3>FullScreen DoubleClick</h3>
+        <label class="switch">
+            <input type="checkbox" value="true" id="DoubleClickInputCheckbox">
+            <span class="slider round"></span>
+        </label>
+        <h3>YouTube Noise Reduction</h3>
+        <label class="switch">
+            <input type="checkbox" value="true" id="YouTubeInputCheckbox">
+            <span class="slider round"></span>
+        </label>
+        <h3>Ads Reduction</h3>
+        <label class="switch">
+            <input type="checkbox" value="true" id="iFrameInputCheckbox">
+            <span class="slider round"></span>
+        </label>
+        <h2>New Tab</h2>
+        <h3>FullScreen Click</h3>
+        <label class="switch">
+            <input type="checkbox" value="true" id="ClickInputCheckbox">
+            <span class="slider round"></span>
+        </label>
+        <h3>Hover to Reveal Time</h3>
+        <label class="switch">
+            <input type="checkbox" value="true" id="ClockInputCheckbox">
+            <span class="slider round"></span>
+        </label>
+        <h3>Color</h3>
+        <input type="text" id="color" name="color" />
+    </div>
+    <div style="text-align: right; margin-top: 5%; padding-right: 10%;">
+        <h1>Concentrate Options</h1>
+    </div>
+
+    <script src="../js/options.js"></script>
 </body>
 
 </html>

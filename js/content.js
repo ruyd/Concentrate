@@ -40,7 +40,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 bind();
 
 //YouTube Quiet Down
-var isYoutube = document.getElementsByClassName("ytd-player").length > 0;
+const isYoutube = document.getElementsByClassName("ytd-player").length > 0;
 
 var style = document.createElement("style");
 style.innerHTML =
@@ -61,10 +61,10 @@ style.innerHTML =
   "opacity: 0;" +
   "}";
 
-var ref = document.querySelector("script");
+const ref = document.querySelector("script");
 ref.parentNode.insertBefore(style, ref);
 
-var greyout = document.createElement("div");
+const greyout = document.createElement("div");
 greyout.setAttribute("id", "greyout");
 greyout.setAttribute("class", "concentrate");
 document.body.appendChild(greyout);
@@ -128,9 +128,11 @@ function removeFrameAds() {
   for (let f = 0; f < frames.length; f++) {
     let frame = frames[f];
     console.log('frame',frame);
-    let id = frame.getAttribute("id") || frame.getAttribute("name") ;
+    let id = frame.getAttribute("id") || frame.getAttribute("name");
     let adish = id ? id.indexOf("_ads") > -1 : false;
-    if (adish) {
+    let src = frame.getAttribute("src") || "";
+    let srcadish = src.indexOf("ads") > -1 || src.indexOf("doubleclick") > -1 || src.indexOf("about:blank") > -1;
+    if (adish || srcadish) {
       frame.remove();
     }
   }
