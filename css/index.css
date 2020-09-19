@@ -74,3 +74,10 @@ input {
     font-size: 120%;
     text-align: center;
 }
+
+.color-indicator {    
+    height: 75px; 
+    width: auto;
+    border-radius: 1px;
+    margin: 5px auto;
+}

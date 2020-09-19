@@ -68,8 +68,15 @@ const greyout = document.createElement("div");
 greyout.setAttribute("id", "greyout");
 greyout.setAttribute("class", "concentrate");
 document.body.appendChild(greyout);
+
+var didWeUngray = false;
+
 greyout.onmouseover = () => {
-  greyout.style.display = "none";
+  greyout.style.display = "block";
+  didWeUngray = true;
+  setTimeout(() => {
+    didWeUngray = false;
+  }, 5000);
 };
 
 function removeAds() {
@@ -117,8 +124,10 @@ function muteAds() {
       didWeMute = true;
     }
 
-    resize();
-    greyout.style.display = "block";
+    if (!didWeUngray) {
+      resize();
+      greyout.style.display = "block";
+    }
   }
 }
 
@@ -126,11 +135,14 @@ function removeFrameAds() {
   let frames = document.getElementsByTagName("IFRAME");
   for (let f = 0; f < frames.length; f++) {
     let frame = frames[f];
-    console.log('frame',frame);
+    console.log("frame", frame);
     let id = frame.getAttribute("id") || frame.getAttribute("name");
     let adish = id ? id.indexOf("_ads") > -1 : false;
     let src = frame.getAttribute("src") || "";
-    let srcadish = src.indexOf("ads") > -1 || src.indexOf("doubleclick") > -1 || src.indexOf("about:blank") > -1;
+    let srcadish =
+      src.indexOf("ads") > -1 ||
+      src.indexOf("doubleclick") > -1 ||
+      src.indexOf("about:blank") > -1;
     if (adish || srcadish) {
       frame.remove();
     }
@@ -145,7 +157,7 @@ function startTime() {
   removeFrameAds();
   removeAds();
   muteAds();
-  var t = setTimeout(startTime, 4000);
+  var t = setTimeout(startTime, 3000);
 }
 
-setTimeout(startTime, 1000);
+startTime();
