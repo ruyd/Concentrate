@@ -86,12 +86,12 @@ greyout.setAttribute("id", "greyout");
 greyout.setAttribute("class", "concentrate");
 document.body.appendChild(greyout);
 
-var didWeUngray = false;
+var didWeCancel = false;
 greyout.onmouseover = () => {
   greyout.style.display = "none";
-  didWeUngray = true;
+  didWeCancel = true;
   setTimeout(() => {
-    didWeUngray = false;
+    didWeCancel = false;
   }, 10000);
 };
 
@@ -131,7 +131,7 @@ function muteYouTubeAds() {
       console.log("Content back -> unmuting");
       btn.click();
       didWeMute = false;
-      didWeUngray = false;
+      didWeCancel = false;
     }
 
     greyout.style.display = "none";
@@ -144,7 +144,7 @@ function muteYouTubeAds() {
       didWeMute = true;
     }
 
-    if (!didWeUngray) {
+    if (!didWeCancel) {
       resize();
       greyout.style.display = "block";
     }
