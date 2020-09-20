@@ -131,6 +131,7 @@ function muteYouTubeAds() {
       console.log("Content back -> unmuting");
       btn.click();
       didWeMute = false;
+      didWeUngray = false;
     }
 
     greyout.style.display = "none";
