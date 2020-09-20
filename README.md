@@ -1,6 +1,6 @@
 # Concentrate Extension
 
-Concentrate enables a True Dark-Mode NewTab Page, Fullscreen Focus Enhancements and Ad Noise Reductions 
+Concentrate enables a True Dark-Mode NewTab Page, Fullscreen Focus Enhancements and Noise Reductions 
 
 ![Image](visuals/Concentrate1280x800.png)
 
