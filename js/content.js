@@ -88,11 +88,11 @@ document.body.appendChild(greyout);
 
 var didWeUngray = false;
 greyout.onmouseover = () => {
-  greyout.style.display = "block";
+  greyout.style.display = "none";
   didWeUngray = true;
   setTimeout(() => {
     didWeUngray = false;
-  }, 5000);
+  }, 10000);
 };
 
 //YouTube Noise Removals
