@@ -206,13 +206,8 @@ function refresh(starting = false) {
   }  
 
   //const currents = document.getElementsByClassName("ytp-time-current");
-  //const current = currents.length > 0 ? currents[0].textContent : null;  
-  //const csplit = (current || "").split(":");  
-  //const current_seconds = parseInt(csplit[0]) * 60 + parseInt(csplit[1]);
-
   const durations = document.getElementsByClassName("ytp-time-duration");
   const duration = durations.length > 0 ? durations[0].textContent : null;
-
   const dsplit = (duration || "").split(":");
   const duration_seconds = parseInt(dsplit[0]) * 60 + parseInt(dsplit[1]);
   
@@ -237,7 +232,7 @@ function refresh(starting = false) {
     seconds = "0" + seconds;
   }  
 
-  console.log(showing, current_seconds_counter, duration, last_duration);
+  // console.log(showing, current_seconds_counter, duration, last_duration);
 
   if (showing && remaining && duration) {
     remaining.innerText = `${minutes}:${seconds} / ${duration}`;
