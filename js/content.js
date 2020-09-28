@@ -20,11 +20,11 @@ function injectStyle() {
   var style = document.createElement("style");
   style.innerHTML =
     ".concentrate {" +
+    "display: none;" +
     "color: #242424;" +
     "background-color: #242424;" +
     "opacity: 1;" +
     "z-index: 99999;" +
-    "display: none;" +
     "position: fixed;" +
     "height: 100%;" +
     "width: 100%;" +
@@ -34,6 +34,16 @@ function injectStyle() {
     "} " +
     ".concentrate:hover {" +
     "opacity: 0;" +
+    "}" +
+    ".remaining {" +
+    "color: black !important;" +
+    "font-size: 300%;" +
+    "position: relative;" +
+    "height: 100px;" +
+    "width: 200px;" +
+    "text-align:center;" +
+    "top: 50%; left: 45%;" +
+    "user-select: none;" +
     "}";
 
   const ref = document.querySelector("script");
@@ -42,7 +52,6 @@ function injectStyle() {
 
 function bind() {
   chrome.storage.sync.get("Settings", function (data) {
-
     Settings = data.Settings;
 
     if (Settings.ContentDoubleClick) {
@@ -51,8 +60,7 @@ function bind() {
         toggleFullScreen,
         false
       );
-    }    
-
+    }
   });
 }
 
@@ -66,15 +74,12 @@ function unbind() {
 
 //Listener
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-
   if (request.Refresh && request.Settings) {
-
     Settings = request.Settings;
 
     if (Settings.ContentDoubleClick) bind();
     else unbind();
   }
-
 });
 
 //Initial State
@@ -84,6 +89,9 @@ injectStyle();
 const greyout = document.createElement("div");
 greyout.setAttribute("id", "greyout");
 greyout.setAttribute("class", "concentrate");
+const remaining = document.createElement("div");
+remaining.setAttribute("class", "remaining");
+greyout.appendChild(remaining);
 document.body.appendChild(greyout);
 
 var didWeCancel = false;
@@ -92,14 +100,26 @@ greyout.onmouseover = () => {
   didWeCancel = true;
   setTimeout(() => {
     didWeCancel = false;
-  }, 10000);
+  }, 5000);
 };
 
 //YouTube Noise Removals
-const isYoutube = document.getElementsByClassName("ytd-player").length > 0;
+const isYoutube = document.getElementById("player");
 
 function removeVideoAds() {
-  let elements = document.getElementsByClassName("video-ads");
+  let names = [
+    "video-ads",
+    "ytd-player-legacy-desktop-watch-ads-renderer",
+    "ytd-watch-next-secondary-results-renderer sparkles-light-cta",
+  ];
+
+  for (let name of names) {
+    removeClassName(name);
+  }
+}
+
+function removeClassName(name) {
+  let elements = document.getElementsByClassName(name);
   for (let i = 0; i < elements.length; i++) {
     elements[i].remove();
   }
@@ -119,12 +139,12 @@ function resize() {
 
 var didWeMute = false;
 function muteYouTubeAds() {
-  let btns = document.getElementsByClassName("ytp-mute-button");
-  let btn = btns.length > 0 ? btns[0] : null;
-  let muted = btn
+  const btns = document.getElementsByClassName("ytp-mute-button");
+  const btn = btns.length > 0 ? btns[0] : null;
+  const muted = btn
     ? btn.getAttribute("aria-label").toLowerCase().indexOf("unmute") > -1
     : false;
-  let showing = document.getElementsByClassName("ad-showing").length > 0; //ad-interrupting
+  const showing = document.getElementsByClassName("ad-showing").length > 0; //ad-interrupting
 
   if (!showing) {
     if (didWeMute) {
@@ -137,29 +157,27 @@ function muteYouTubeAds() {
     greyout.style.display = "none";
   }
 
-  if (showing) {
+  if (showing && !didWeCancel) {
     if (!muted) {
       console.log("muting ad");
       btn.click();
       didWeMute = true;
+      refresh(true);
     }
 
-    if (!didWeCancel) {
-      resize();
-      greyout.style.display = "block";
-    }
+    resize();
+    greyout.style.display = "block";
   }
 }
 
 function removeFrameAds() {
-  let frames = document.getElementsByTagName("IFRAME");
+  const frames = document.getElementsByTagName("IFRAME");
   for (let f = 0; f < frames.length; f++) {
-    let frame = frames[f];
-    console.log("frame", frame);
-    let id = frame.getAttribute("id") || frame.getAttribute("name");
-    let adish = id ? id.indexOf("_ads") > -1 : false;
-    let src = frame.getAttribute("src") || "";
-    let srcadish =
+    const frame = frames[f];
+    const id = frame.getAttribute("id") || frame.getAttribute("name");
+    const adish = id ? id.indexOf("_ads") > -1 : false;
+    const src = frame.getAttribute("src") || "";
+    const srcadish =
       src.indexOf("ads") > -1 ||
       src.indexOf("doubleclick") > -1 ||
       src.indexOf("about:blank") > -1;
@@ -169,22 +187,101 @@ function removeFrameAds() {
   }
 }
 
+function observerCallback(mutationsList, observer) {
+  for (const mutation of mutationsList) {
+  }
+}
+
+var current_seconds_counter = 0;
+var last_duration = null;
+
+//1 Second Timer Tick
+function refresh(starting = false) {
+    
+  const showing = document.getElementsByClassName("ad-showing").length > 0;
+  if (!showing) {
+    current_seconds_counter = 0;
+    last_duration = null;
+    return;
+  }  
+
+  //const currents = document.getElementsByClassName("ytp-time-current");
+  //const current = currents.length > 0 ? currents[0].textContent : null;  
+  //const csplit = (current || "").split(":");  
+  //const current_seconds = parseInt(csplit[0]) * 60 + parseInt(csplit[1]);
+
+  const durations = document.getElementsByClassName("ytp-time-duration");
+  const duration = durations.length > 0 ? durations[0].textContent : null;
+
+  const dsplit = (duration || "").split(":");
+  const duration_seconds = parseInt(dsplit[0]) * 60 + parseInt(dsplit[1]);
+  
+  if (starting || duration_seconds !== last_duration) {    
+    current_seconds_counter = duration_seconds;
+  } else {
+    current_seconds_counter--;
+  }
+
+  last_duration = duration_seconds;
+
+  let minutes = 0;
+  let seconds = current_seconds_counter > 0 ? current_seconds_counter : current_seconds_counter * -1;
+
+  if (seconds >= 60) {
+    const m = (seconds / 60) << 0;
+    minutes += m;
+    seconds -= 60 * m;
+  }
+
+  if (seconds < 10) {
+    seconds = "0" + seconds;
+  }  
+
+  console.log(showing, current_seconds_counter, duration, last_duration);
+
+  if (showing && remaining && duration) {
+    remaining.innerText = `${minutes}:${seconds} / ${duration}`;
+  } else {
+    remaining.innerText = "";
+  }
+}
+
+//const observer = new MutationObserver(observerCallback);
+
+function startWatch() {
+  const targetNodes = document.getElementsByClassName("ytp-time-current");
+
+  if (!targetNodes.length) return;
+
+  const targetNode = targetNodes[0];
+  const config = { attributes: true, childList: true, subtree: true };
+  observer.observe(targetNode, config);
+}
+
+function stopWatch() {
+  observer.disconnect();
+}
+
 //CB Mute
 
 //Timer
 
 function startTime() {
+  if (isYoutube) {
+    refresh();
+  }
+
+  if (Settings.FrameAds) {
+    removeFrameAds();
+  }
 
   if (Settings.YouTubeMute) {
     muteYouTubeAds();
     removeVideoAds();
   }
 
-  if (Settings.FrameAds) { 
-    removeFrameAds();
-  }
-  
-  var t = setTimeout(startTime, 3000);
+  var t = setTimeout(startTime, 1000);
 }
 
 startTime();
+// startWatch();
