@@ -20,30 +20,31 @@ function injectStyle() {
   var style = document.createElement("style");
   style.innerHTML =
     ".concentrate {" +
-    "display: none;" +
-    "color: #242424;" +
-    "background-color: #242424;" +
-    "opacity: 1;" +
-    "z-index: 99999;" +
-    "position: fixed;" +
-    "height: 100%;" +
-    "width: 100%;" +
-    "top: 0; left: 0;" +
-    "transition: all 0.3s;" +
-    "user-select: none;" +
-    "} " +
+    "  display: none;" +
+    "  color: #242424;" +
+    "  background-color: #242424;" +
+    "  opacity: 1;" +
+    "  z-index: 99999;" +
+    "  position: fixed;" +
+    "  height: 100%;" +
+    "  width: 100%;" +
+    "  top: 0; left: 0;" +
+    "  transition: all 0.3s;" +
+    "  user-select: none;" +
+    "}" +
     ".concentrate:hover {" +
-    "opacity: 0;" +
+    "  opacity: 0;" +
     "}" +
     ".remaining {" +
-    "color: black !important;" +
-    "font-size: 300%;" +
-    "position: relative;" +
-    "height: 100px;" +
-    "width: 200px;" +
-    "text-align:center;" +
-    "top: 50%; left: 45%;" +
-    "user-select: none;" +
+    "  display: block;" + 
+    "  color: rgba(28, 28, 28, 1) !important;" +
+    "  font-size: 300%;" +
+    "  position: relative;" +
+    "  height: 100px;" +
+    "  width: 200px;" +
+    "  text-align:center;" +
+    "  top: 50%; left: 45%;" +
+    "  user-select: none;" +
     "}";
 
   const ref = document.querySelector("script");
@@ -137,6 +138,14 @@ function resize() {
   greyout.style.left = coor.left + "px";
 }
 
+function isPlaying() { 
+  const btns = document.getElementsByClassName("ytp-play-button");
+  const btn = btns.length > 0 ? btns[0] : null;
+  return btn
+    ? btn.getAttribute("aria-label").toLowerCase().indexOf("pause") > -1
+    : false;
+}
+
 var didWeMute = false;
 function muteYouTubeAds() {
   const btns = document.getElementsByClassName("ytp-mute-button");
@@ -144,6 +153,8 @@ function muteYouTubeAds() {
   const muted = btn
     ? btn.getAttribute("aria-label").toLowerCase().indexOf("unmute") > -1
     : false;
+
+  
   const showing = document.getElementsByClassName("ad-showing").length > 0; //ad-interrupting
 
   if (!showing) {
@@ -202,6 +213,11 @@ function refresh(starting = false) {
   if (!showing) {
     current_seconds_counter = 0;
     last_duration = null;
+    return;
+  }
+  
+  if (!isPlaying()) {    
+    remaining.innerText = "Paused";
     return;
   }  
 
