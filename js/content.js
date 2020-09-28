@@ -206,7 +206,6 @@ function observerCallback(mutationsList, observer) {
 var current_seconds_counter = 0;
 var last_duration = null;
 
-//1 Second Timer Tick
 function refresh(starting = false) {
     
   const showing = document.getElementsByClassName("ad-showing").length > 0;
@@ -255,27 +254,9 @@ function refresh(starting = false) {
   } else {
     remaining.innerText = "";
   }
-}
+} 
 
-//const observer = new MutationObserver(observerCallback);
-
-function startWatch() {
-  const targetNodes = document.getElementsByClassName("ytp-time-current");
-
-  if (!targetNodes.length) return;
-
-  const targetNode = targetNodes[0];
-  const config = { attributes: true, childList: true, subtree: true };
-  observer.observe(targetNode, config);
-}
-
-function stopWatch() {
-  observer.disconnect();
-}
-
-//CB Mute
-
-//Timer
+//CB Mute - ToDo
 
 function startTime() {
   if (isYoutube) {
@@ -295,4 +276,3 @@ function startTime() {
 }
 
 startTime();
-// startWatch();
