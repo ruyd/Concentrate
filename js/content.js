@@ -1,4 +1,8 @@
 var Settings = {};
+var current_seconds_counter = 0;
+var last_duration = null;
+var didWeMute = false;
+var didWeCancel = false;
 
 function get() {
   chrome.storage.sync.get("Settings", function (data) {
@@ -36,7 +40,7 @@ function injectStyle() {
     "  opacity: 0;" +
     "}" +
     ".remaining {" +
-    "  display: block;" + 
+    "  display: block;" +
     "  color: rgba(28, 28, 28, 1) !important;" +
     "  font-size: 300%;" +
     "  position: relative;" +
@@ -95,7 +99,6 @@ remaining.setAttribute("class", "remaining");
 greyout.appendChild(remaining);
 document.body.appendChild(greyout);
 
-var didWeCancel = false;
 greyout.onmouseover = () => {
   greyout.style.display = "none";
   didWeCancel = true;
@@ -138,7 +141,7 @@ function resize() {
   greyout.style.left = coor.left + "px";
 }
 
-function isPlaying() { 
+function isPlaying() {
   const btns = document.getElementsByClassName("ytp-play-button");
   const btn = btns.length > 0 ? btns[0] : null;
   return btn
@@ -146,7 +149,6 @@ function isPlaying() {
     : false;
 }
 
-var didWeMute = false;
 function muteYouTubeAds() {
   const btns = document.getElementsByClassName("ytp-mute-button");
   const btn = btns.length > 0 ? btns[0] : null;
@@ -154,7 +156,6 @@ function muteYouTubeAds() {
     ? btn.getAttribute("aria-label").toLowerCase().indexOf("unmute") > -1
     : false;
 
-  
   const showing = document.getElementsByClassName("ad-showing").length > 0; //ad-interrupting
 
   if (!showing) {
@@ -163,6 +164,8 @@ function muteYouTubeAds() {
       btn.click();
       didWeMute = false;
       didWeCancel = false;
+      last_duration = null;
+      current_seconds_counter = 0;
     }
 
     greyout.style.display = "none";
@@ -203,30 +206,24 @@ function observerCallback(mutationsList, observer) {
   }
 }
 
-var current_seconds_counter = 0;
-var last_duration = null;
-
 function refresh(starting = false) {
-    
   const showing = document.getElementsByClassName("ad-showing").length > 0;
   if (!showing) {
-    current_seconds_counter = 0;
-    last_duration = null;
     return;
   }
-  
-  if (!isPlaying()) {    
+
+  if (!isPlaying()) {
     remaining.innerText = "Paused";
     return;
-  }  
+  }
 
   //const currents = document.getElementsByClassName("ytp-time-current");
   const durations = document.getElementsByClassName("ytp-time-duration");
   const duration = durations.length > 0 ? durations[0].textContent : null;
   const dsplit = (duration || "").split(":");
   const duration_seconds = parseInt(dsplit[0]) * 60 + parseInt(dsplit[1]);
-  
-  if (starting || duration_seconds !== last_duration) {    
+
+  if (starting || duration_seconds !== last_duration) {
     current_seconds_counter = duration_seconds;
   } else {
     current_seconds_counter--;
@@ -235,7 +232,10 @@ function refresh(starting = false) {
   last_duration = duration_seconds;
 
   let minutes = 0;
-  let seconds = current_seconds_counter > 0 ? current_seconds_counter : current_seconds_counter * -1;
+  let seconds =
+    current_seconds_counter > 0
+      ? current_seconds_counter
+      : current_seconds_counter * -1;
 
   if (seconds >= 60) {
     const m = (seconds / 60) << 0;
@@ -245,7 +245,7 @@ function refresh(starting = false) {
 
   if (seconds < 10) {
     seconds = "0" + seconds;
-  }  
+  }
 
   // console.log(showing, current_seconds_counter, duration, last_duration);
 
@@ -254,7 +254,7 @@ function refresh(starting = false) {
   } else {
     remaining.innerText = "";
   }
-} 
+}
 
 //CB Mute - ToDo
 
