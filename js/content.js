@@ -112,13 +112,19 @@ greyout.onmouseover = () => {
 const isYoutube = document.getElementById("player");
 const muteButtons = document.getElementsByClassName("ytp-mute-button");
 const muteButton = muteButtons.length > 0 ? muteButtons[0] : null;
-muteButton.addEventListener(
-  "click",
-  (e) => {
-    didWeCancelMuteManually = true;    
-  },
-  false
-);
+
+if (muteButton) {
+  muteButton.addEventListener(
+    "click",
+    (e) => {
+      const showing = document.getElementsByClassName("ad-showing").length > 0;
+      if (showing) {
+        didWeCancelMuteManually = true;
+      }
+    },
+    false
+  );
+}
 
 function removeVideoAds() {
   let names = [
