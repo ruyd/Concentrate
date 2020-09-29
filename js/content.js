@@ -140,15 +140,15 @@ function removeClassName(name) {
 }
 
 function resize() {
-  let panel = document.getElementById("movie_player");
+  const panel = document.getElementById("movie_player");
   if (!panel || !greyout) return;
 
-  let coor = panel.getBoundingClientRect();
+  const rect = panel.getBoundingClientRect();
 
-  greyout.style.height = coor.height + "px";
-  greyout.style.width = coor.width + "px";
-  greyout.style.top = coor.top + "px";
-  greyout.style.left = coor.left + "px";
+  greyout.style.height = rect.height + "px";
+  greyout.style.width = rect.width + "px";
+  greyout.style.top = rect.top + "px";
+  greyout.style.left = rect.left + "px";
 }
 
 function reset_variables() {
