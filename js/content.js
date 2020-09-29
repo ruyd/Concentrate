@@ -3,6 +3,7 @@ var current_seconds_counter = 0;
 var last_duration = null;
 var didWeMute = false;
 var didWeCancel = false;
+var didWeCancelMuteManually = false;
 
 function get() {
   chrome.storage.sync.get("Settings", function (data) {
@@ -109,6 +110,15 @@ greyout.onmouseover = () => {
 
 //YouTube Noise Removals
 const isYoutube = document.getElementById("player");
+const muteButtons = document.getElementsByClassName("ytp-mute-button");
+const muteButton = muteButtons.length > 0 ? muteButtons[0] : null;
+muteButton.addEventListener(
+  "click",
+  (e) => {
+    didWeCancelMuteManually = true;    
+  },
+  false
+);
 
 function removeVideoAds() {
   let names = [
@@ -141,40 +151,44 @@ function resize() {
   greyout.style.left = coor.left + "px";
 }
 
+function reset_variables() {
+  didWeMute = false;
+  didWeCancel = false;
+  didWeCancelMuteManually = false;
+  last_duration = null;
+  current_seconds_counter = 0;
+}
+
 function isPlaying() {
   const btns = document.getElementsByClassName("ytp-play-button");
-  const btn = btns.length > 0 ? btns[0] : null;
-  return btn
-    ? btn.getAttribute("aria-label").toLowerCase().indexOf("pause") > -1
-    : false;
+  if (btns.length === 0) return false;
+  const btn = btns[0];
+  const label = btn.getAttribute("title") ?? "";
+  return label.toLowerCase().indexOf("pause") > -1;
+}
+
+function isMuted() {
+  const label = muteButton ? muteButton.getAttribute("title") ?? "" : "";
+  return label.toLowerCase().indexOf("unmute") > -1;
 }
 
 function muteYouTubeAds() {
-  const btns = document.getElementsByClassName("ytp-mute-button");
-  const btn = btns.length > 0 ? btns[0] : null;
-  const muted = btn
-    ? btn.getAttribute("aria-label").toLowerCase().indexOf("unmute") > -1
-    : false;
-
   const showing = document.getElementsByClassName("ad-showing").length > 0; //ad-interrupting
 
   if (!showing) {
     if (didWeMute) {
       console.log("Content back -> unmuting");
-      btn.click();
-      didWeMute = false;
-      didWeCancel = false;
-      last_duration = null;
-      current_seconds_counter = 0;
+      muteButton.click();
+      reset_variables();
     }
 
     greyout.style.display = "none";
   }
 
-  if (showing && !didWeCancel) {
-    if (!muted) {
+  if (showing && !didWeCancel && !didWeCancelMuteManually) {
+    if (!isMuted()) {
       console.log("muting ad");
-      btn.click();
+      muteButton.click();
       didWeMute = true;
       refresh(true);
     }
