@@ -237,6 +237,12 @@ function refresh(starting = false) {
     return;
   }
 
+  const skips = document.getElementsByClassName("ytp-ad-skip-button");
+  const skipButton = skips.length > 0 ? skips[0] : null;
+  if (skipButton) {
+    skipButton.click();
+  }
+
   //const currents = document.getElementsByClassName("ytp-time-current");
   const durations = document.getElementsByClassName("ytp-time-duration");
   const duration = durations.length > 0 ? durations[0].textContent : null;
