@@ -4,7 +4,8 @@ var last_duration = null;
 var didWeMute = false;
 var didWeCancel = false;
 var didWeCancelMuteManually = false;
-
+const debug = true; 
+const log = debug ? console.log.bind(window.console) : function(){};
 function get() {
   chrome.storage.sync.get("Settings", function (data) {
     Settings = data.Settings;
@@ -92,6 +93,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 bind();
 injectStyle();
 
+//YouTube Noise Removals
+const isYoutube = document.getElementById("player");
+
 const greyout = document.createElement("div");
 greyout.setAttribute("id", "greyout");
 greyout.setAttribute("class", "concentrate");
@@ -99,20 +103,22 @@ const remaining = document.createElement("div");
 remaining.setAttribute("class", "remaining");
 greyout.appendChild(remaining);
 document.body.appendChild(greyout);
-
 greyout.onmouseover = () => {
   greyout.style.display = "none";
   didWeCancel = true;
+  log('cancel', didWeCancel, didWeCancelMuteManually);
   setTimeout(() => {
     didWeCancel = false;
+    log('revert', didWeCancel, didWeCancelMuteManually);
   }, 5000);
 };
 
-//YouTube Noise Removals
-const isYoutube = document.getElementById("player");
-const muteButtons = document.getElementsByClassName("ytp-mute-button");
-const muteButton = muteButtons.length > 0 ? muteButtons[0] : null;
+function getMuteButton() {
+  const muteButtons = document.getElementsByClassName("ytp-mute-button");
+  return muteButtons.length > 0 ? muteButtons[0] : null;
+}
 
+var muteButton = getMuteButton();
 if (muteButton) {
   muteButton.addEventListener(
     "click",
@@ -166,6 +172,8 @@ function reset_variables() {
 }
 
 function isPlaying() {
+  //ytp class: paused-mode
+
   const btns = document.getElementsByClassName("ytp-play-button");
   if (btns.length === 0) return false;
   const btn = btns[0];
@@ -174,6 +182,8 @@ function isPlaying() {
 }
 
 function isMuted() {
+  //change to class
+  //ytp-unmute 
   const label = muteButton ? muteButton.getAttribute("title") ?? "" : "";
   return label.toLowerCase().indexOf("unmute") > -1;
 }
@@ -181,21 +191,42 @@ function isMuted() {
 function muteYouTubeAds() {
   const showing = document.getElementsByClassName("ad-showing").length > 0; //ad-interrupting
 
+  const skips = document.getElementsByClassName("ytp-ad-skip-button");
+  const skipButton = skips.length > 0 ? skips[0] : null;
+  if (skipButton) {
+    log("Skip ad!");
+    skipButton.click();
+    reset_variables();
+    return;
+  }
+
+  if (!muteButton) {
+    muteButton = getMuteButton();
+  }
+
   if (!showing) {
     if (didWeMute) {
-      console.log("Content back -> unmuting");
-      muteButton.click();
+      log("Content back -> unmuting");
+      if (muteButton) {
+        muteButton.click();
+      }
       reset_variables();
     }
 
     greyout.style.display = "none";
   }
 
+  log('showing', showing, didWeCancel, didWeCancelMuteManually);
+
   if (showing && !didWeCancel && !didWeCancelMuteManually) {
     if (!isMuted()) {
-      console.log("muting ad");
-      muteButton.click();
+      log("muting ad");
+      if (muteButton) {
+        muteButton.click();
+      }
       didWeMute = true;
+      didWeCancel = false;
+      didWeCancelMuteManually = false;
       refresh(true);
     }
 
@@ -228,19 +259,14 @@ function observerCallback(mutationsList, observer) {
 
 function refresh(starting = false) {
   const showing = document.getElementsByClassName("ad-showing").length > 0;
-  if (!showing) {
+  if (!showing) { 
     return;
   }
 
   if (!isPlaying()) {
     remaining.innerText = "Paused";
+    log('refresh abort 1');
     return;
-  }
-
-  const skips = document.getElementsByClassName("ytp-ad-skip-button");
-  const skipButton = skips.length > 0 ? skips[0] : null;
-  if (skipButton) {
-    skipButton.click();
   }
 
   //const currents = document.getElementsByClassName("ytp-time-current");
@@ -273,7 +299,7 @@ function refresh(starting = false) {
     seconds = "0" + seconds;
   }
 
-  // console.log(showing, current_seconds_counter, duration, last_duration);
+  log(showing, current_seconds_counter, duration, last_duration);
 
   if (showing && remaining && duration) {
     remaining.innerText = `${minutes}:${seconds} / ${duration}`;
