@@ -65,6 +65,21 @@ bind();
 //YouTube Noise Removals
 const isYoutube = document.getElementById("player");
 
+function getMuteButton() {
+  const muteButtons = document.getElementsByClassName("ytp-mute-button");
+  return muteButtons.length > 0 ? muteButtons[0] : null;
+}
+
+function isMuted() {
+  //change to class
+  //ytp-unmute
+  const label = muteButton ? muteButton.getAttribute("title") ?? "" : "";
+  return label.toLowerCase().indexOf("unmute") > -1;
+}
+
+var muteButton = getMuteButton();
+
+const initialMute = isMuted();
 const greyout = document.createElement("div");
 greyout.setAttribute("id", "greyout");
 greyout.setAttribute("class", "concentrate");
@@ -76,7 +91,7 @@ document.body.appendChild(greyout);
 
 const power_button = document.createElement("div");
 power_button.setAttribute("id", "power");
-power_button.setAttribute("class", "on");
+power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
 power_button.setAttribute("title", "Show");
 power_button.onclick = () => {
   const active = power_button.getAttribute("class") === "on";
@@ -84,38 +99,39 @@ power_button.onclick = () => {
   greyout.style.display = active ? "none" : "display";
   Context.GrayingOn = !active;
 };
-greyout.appendChild(power_button);
+document.body.appendChild(power_button);
 
 const audio_button = document.createElement("div");
 audio_button.setAttribute("id", "audio");
-audio_button.setAttribute("class", "on");
+audio_button.setAttribute("class", initialMute ? "off" : "on");
 audio_button.setAttribute("title", "Listen");
 audio_button.onclick = () => {
-  const active = audio_button.getAttribute("class") === "on";
-  audio_button.setAttribute("class", active ? "off" : "on");  
-  Context.MutingOn = !active;
+
+  Context.MutingOn = !Context.MutingOn;
+  audio_button.setAttribute("class", Context.MutingOn ? "on" : "off");  
+  if (!Context.MutingOn && isMuted()) {
+    if (muteButton) {
+      log("unmuting manually");
+      muteButton.click();
+    }
+  }
 };
-greyout.appendChild(audio_button);
+document.body.appendChild(audio_button);
 
-
-function getMuteButton() {
-  const muteButtons = document.getElementsByClassName("ytp-mute-button");
-  return muteButtons.length > 0 ? muteButtons[0] : null;
-}
-
-var muteButton = getMuteButton();
 if (muteButton) {
   muteButton.addEventListener(
     "click",
     (e) => {
       const showing = document.getElementsByClassName("ad-showing").length > 0;
       if (showing) {
-        didWeCancelMuteManually = true;
+        Context.ManualMute = isMuted();
+        
       }
     },
     false
   );
 }
+
 
 function removeVideoAds() {
   let names = [
@@ -142,10 +158,15 @@ function resize() {
 
   const rect = panel.getBoundingClientRect();
 
-  greyout.style.height = rect.height + "px";
+  greyout.style.height = rect.height - 1 + "px"; //yellow bar looks....?
   greyout.style.width = rect.width + "px";
   greyout.style.top = rect.top + "px";
   greyout.style.left = rect.left + "px";
+
+  //power_button.style.top = rect.top + 20 + "px";
+  //power_button.style.left = rect.left + 50 + "px";
+  //audio_button.style.top = rect.top + 20 + "px";
+  //power_button.style.left = rect.left + 20 + "px";  
 }
 
 function reset_variables() {
@@ -166,11 +187,16 @@ function isPlaying() {
   return label.toLowerCase().indexOf("pause") > -1;
 }
 
-function isMuted() {
-  //change to class
-  //ytp-unmute
-  const label = muteButton ? muteButton.getAttribute("title") ?? "" : "";
-  return label.toLowerCase().indexOf("unmute") > -1;
+function show() { 
+  greyout.style.display = "block";
+  power_button.style.display = "block";
+  audio_button.style.display = "block";
+}
+
+function hide() {
+  greyout.style.display = "none";
+  power_button.style.display = "none";
+  audio_button.style.display = "none";
 }
 
 function muteYouTubeAds() {
@@ -198,26 +224,28 @@ function muteYouTubeAds() {
       reset_variables();
     }
 
-    greyout.style.display = "none";
+    hide();
   }
 
-  log("showing", showing, Context);
+  //log("showing", showing, Context);
 
   if (showing) {
-    if (Context.MutingOn && !isMuted()) {
+    if (Context.GrayingOn) {
+      resize();
+      show();
+    }
+
+    const muted = isMuted();
+    if (Context.MutingOn && !muted) {
       log("muting ad");
       if (muteButton) {
         muteButton.click();
       }
       refresh(true);
-    } else {
-      refresh();
+      return;
     }
 
-    if (Context.GrayingOn) {
-      resize();
-      greyout.style.display = "block";
-    }
+    refresh();
   }
 }
 
@@ -244,7 +272,7 @@ function refresh(starting = false) {
     log("duration reset");
     current_seconds_counter = duration_seconds;
   } else {
-    log("duration minus");
+    //log("duration minus");
     current_seconds_counter--;
   }
 
@@ -270,7 +298,7 @@ function refresh(starting = false) {
     seconds = "0" + seconds;
   }
 
-  log(showing, current_seconds_counter, duration, last_duration);
+  //log(showing, current_seconds_counter, duration, last_duration);
 
   if (showing && remaining && duration) {
     remaining.innerText = `${minutes}:${seconds} / ${duration}`;
