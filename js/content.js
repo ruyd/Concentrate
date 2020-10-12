@@ -84,7 +84,7 @@ const greyout = document.createElement("div");
 greyout.setAttribute("id", "greyout");
 greyout.setAttribute("class", "concentrate");
 greyout.onclick = () => {
-  Context.GrayingOn = !Context.GrayingOn;  
+  Context.GrayingOn = !Context.GrayingOn;
   power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
   greyout.style.display = Context.GrayingOn ? "display" : "none";
 };
@@ -97,11 +97,17 @@ document.body.appendChild(greyout);
 const power_button = document.createElement("div");
 power_button.setAttribute("id", "power");
 power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
-power_button.setAttribute("title", Context.GrayingOn ? "Switch Graying OFF" : "Switch Graying ON");
+power_button.setAttribute(
+  "title",
+  Context.GrayingOn ? "Switch Graying OFF" : "Switch Graying ON"
+);
 power_button.onclick = () => {
-  Context.GrayingOn = !Context.GrayingOn;  
+  Context.GrayingOn = !Context.GrayingOn;
   power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
-  power_button.setAttribute("title", Context.GrayingOn ? "Switch Graying OFF" : "Switch Graying ON");
+  power_button.setAttribute(
+    "title",
+    Context.GrayingOn ? "Switch Graying OFF" : "Switch Graying ON"
+  );
   greyout.style.display = Context.GrayingOn ? "display" : "none";
 };
 document.body.appendChild(power_button);
@@ -109,13 +115,19 @@ document.body.appendChild(power_button);
 const audio_button = document.createElement("div");
 audio_button.setAttribute("id", "audio");
 audio_button.setAttribute("class", initialMute ? "off" : "on");
-audio_button.setAttribute("title", Context.MutingOn ? "Switch Sound ON" : "Switch Sound OFF");
+audio_button.setAttribute(
+  "title",
+  Context.MutingOn ? "Switch Sound ON" : "Switch Sound OFF"
+);
 audio_button.onclick = () => {
   Context.MutingOn = !Context.MutingOn;
   audio_button.setAttribute("class", Context.MutingOn ? "on" : "off");
-  audio_button.setAttribute("title", Context.MutingOn ? "Switch Sound ON" : "Switch Sound OFF");
+  audio_button.setAttribute(
+    "title",
+    Context.MutingOn ? "Switch Sound ON" : "Switch Sound OFF"
+  );
   if (!Context.MutingOn && isMuted()) {
-    if (muteButton) {      
+    if (muteButton) {
       muteButton.click();
     }
   }
@@ -126,16 +138,19 @@ if (muteButton) {
   muteButton.addEventListener(
     "click",
     (e) => {
+      log("muteButton.click", e);
       const showing = document.getElementsByClassName("ad-showing").length > 0;
       if (showing) {
-        Context.MutingOn = !Context.MutingOn;
-        audio_button.setAttribute("class", Context.MutingOn ? "on" : "off");              
+        //Simulated = false
+        if (e.isTrusted) {
+          Context.MutingOn = !Context.MutingOn;
+          audio_button.setAttribute("class", Context.MutingOn ? "on" : "off");
+        }
       }
     },
     false
   );
 }
-
 
 function removeVideoAds() {
   let names = [
@@ -162,11 +177,10 @@ function resize() {
 
   const rect = panel.getBoundingClientRect();
 
-  greyout.style.height = rect.height - 0.5 + "px";//nice yellow strip, leave?
+  greyout.style.height = rect.height - 0.5 + "px"; //nice yellow strip, leave?
   greyout.style.width = rect.width + "px";
   greyout.style.top = rect.top + "px";
   greyout.style.left = rect.left + "px";
- 
 }
 
 function reset_variables() {
@@ -185,7 +199,7 @@ function isPlaying() {
   return label.toLowerCase().indexOf("pause") > -1;
 }
 
-function show() { 
+function show() {
   greyout.style.display = "block";
   power_button.style.display = "block";
   audio_button.style.display = "block";
