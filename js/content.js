@@ -137,8 +137,7 @@ document.body.appendChild(audio_button);
 if (muteButton) {
   muteButton.addEventListener(
     "click",
-    (e) => {
-      log("muteButton.click", e);
+    (e) => {      
       const showing = document.getElementsByClassName("ad-showing").length > 0;
       if (showing) {
         //Simulated = false
@@ -181,6 +180,10 @@ function resize() {
   greyout.style.width = rect.width + "px";
   greyout.style.top = rect.top + "px";
   greyout.style.left = rect.left + "px";
+
+  power_button.style.left = rect.right - 200 + "px";
+  audio_button.style.left = rect.right - 150 + "px";
+
 }
 
 function reset_variables() {
@@ -200,8 +203,8 @@ function isPlaying() {
 }
 
 function show() {
-  if (Context.GrayingOn) {
-    resize();
+  resize();
+  if (Context.GrayingOn) {    
     greyout.style.display = "block";    
   }
   power_button.style.display = "block";
@@ -264,13 +267,13 @@ function muteYouTubeAds() {
 function refresh(starting = false) {
   const showing = document.getElementsByClassName("ad-showing").length > 0;
   if (!showing) {
-    log("not showing");
+    //log("not showing");
     return;
   }
 
   if (!isPlaying()) {
     remaining.innerText = "Paused";
-    log("refresh abort 1");
+    //log("refresh abort 1");
     return;
   }
 
@@ -281,7 +284,7 @@ function refresh(starting = false) {
   const duration_seconds = parseInt(dsplit[0]) * 60 + parseInt(dsplit[1]);
 
   if (starting || duration !== last_duration) {
-    log("duration reset");
+    //log("duration reset");
     current_seconds_counter = duration_seconds;
   } else {
     //log("duration minus");
