@@ -114,7 +114,7 @@ document.body.appendChild(power_button);
 
 const audio_button = document.createElement("div");
 audio_button.setAttribute("id", "audio");
-audio_button.setAttribute("class", initialMute ? "off" : "on");
+audio_button.setAttribute("class", initialMute ? "on" : "off");
 audio_button.setAttribute(
   "title",
   Context.MutingOn ? "Switch Sound ON" : "Switch Sound OFF"
