@@ -2,7 +2,7 @@ var Settings = {};
 var Context = {
   GrayingOn: true,
   MutingOn: true,
-  SkipOn: false,
+  SkipOn: true,
   DidWeMute: false,
 };
 
