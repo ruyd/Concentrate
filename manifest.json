@@ -13,6 +13,7 @@
     },
     "content_scripts" : [{
             "js" : ["js/content.js"],
+            "css" : ["css/content.css"],
             "matches" : ["*://*/*"],
             "run_at": "document_end"
         }
@@ -30,6 +31,6 @@
     "icons" : {
         "20" : "images/icon_20.png"
     },    
-    "web_accessible_resources" : ["images/icon.svg"],    
+    "web_accessible_resources" : ["images/*"],
     "manifest_version": 2
 }
