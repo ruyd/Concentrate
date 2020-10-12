@@ -200,7 +200,10 @@ function isPlaying() {
 }
 
 function show() {
-  greyout.style.display = "block";
+  if (Context.GrayingOn) {
+    resize();
+    greyout.style.display = "block";    
+  }
   power_button.style.display = "block";
   audio_button.style.display = "block";
 }
@@ -242,10 +245,7 @@ function muteYouTubeAds() {
   //log("showing", showing, Context);
 
   if (showing) {
-    if (Context.GrayingOn) {
-      resize();
-      show();
-    }
+    show();
 
     const muted = isMuted();
     if (Context.MutingOn && !muted) {
