@@ -176,7 +176,8 @@ function resize() {
 
   const rect = panel.getBoundingClientRect();
 
-  greyout.style.height = rect.height - 0.5 + "px"; //nice yellow strip, leave?
+  //greyout.style.height = rect.height - 0.5 + "px"; //nice yellow strip
+  greyout.style.height = rect.height + "px";
   greyout.style.width = rect.width + "px";
   greyout.style.top = rect.top + "px";
   greyout.style.left = rect.left + "px";
