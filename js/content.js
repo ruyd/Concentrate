@@ -261,6 +261,7 @@ function muteYouTubeAds() {
       log("muting ad");
       if (muteButton) {
         muteButton.click();
+        Context.DidWeMute = true;
       }
       refresh(true);
       return;
