@@ -251,8 +251,6 @@ function muteYouTubeAds() {
     hide();
   }
 
-  //log("showing", showing, Context);
-
   if (showing) {
     show();
 
@@ -274,27 +272,22 @@ function muteYouTubeAds() {
 function refresh(starting = false) {
   const showing = document.getElementsByClassName("ad-showing").length > 0;
   if (!showing) {
-    //log("not showing");
     return;
   }
 
   if (!isPlaying()) {
     remaining.innerText = "Paused";
-    //log("refresh abort 1");
     return;
   }
 
-  //const currents = document.getElementsByClassName("ytp-time-current");
   const durations = document.getElementsByClassName("ytp-time-duration");
   const duration = durations.length > 0 ? durations[0].textContent : null;
   const dsplit = (duration || "").split(":");
   const duration_seconds = parseInt(dsplit[0]) * 60 + parseInt(dsplit[1]);
 
   if (starting || duration !== last_duration) {
-    //log("duration reset");
     current_seconds_counter = duration_seconds;
   } else {
-    //log("duration minus");
     current_seconds_counter--;
   }
 
@@ -319,8 +312,6 @@ function refresh(starting = false) {
   if (seconds < 10) {
     seconds = "0" + seconds;
   }
-
-  //log(showing, current_seconds_counter, duration, last_duration);
 
   if (showing && remaining && duration) {
     remaining.innerText = `${minutes}:${seconds} / ${duration}`;
@@ -360,8 +351,6 @@ function observerCallback(mutationsList, observer) {
   for (const mutation of mutationsList) {
   }
 }
-
-//CB Mute - ToDo
 
 function startTime() {
   if (Settings.FrameAds) {
