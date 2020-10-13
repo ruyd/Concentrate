@@ -83,11 +83,6 @@ const initialMute = isMuted();
 const greyout = document.createElement("div");
 greyout.setAttribute("id", "greyout");
 greyout.setAttribute("class", "concentrate");
-greyout.onclick = () => {
-  Context.GrayingOn = !Context.GrayingOn;
-  power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
-  greyout.style.display = Context.GrayingOn ? "display" : "none";
-};
 
 const remaining = document.createElement("div");
 remaining.setAttribute("class", "remaining");
@@ -150,6 +145,16 @@ if (muteButton) {
     false
   );
 }
+
+greyout.onclick = () => {
+  Context.GrayingOn = !Context.GrayingOn;
+  power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
+  greyout.style.display = Context.GrayingOn ? "display" : "none";
+
+  if (isMuted()) {
+    audio_button.click();
+  }
+};
 
 function removeVideoAds() {
   let names = [
