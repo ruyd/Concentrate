@@ -63,7 +63,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 bind();
 
 //YouTube Noise Removals
-const isYoutube = document.getElementById("player");
+const isYoutube = window.location.hostname.indexOf("youtube") > -1;
 
 function getMuteButton() {
   const muteButtons = document.getElementsByClassName("ytp-mute-button");
@@ -92,17 +92,11 @@ document.body.appendChild(greyout);
 const power_button = document.createElement("div");
 power_button.setAttribute("id", "power");
 power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
-power_button.setAttribute(
-  "title",
-  Context.GrayingOn ? "Switch Graying OFF" : "Switch Graying ON"
-);
+power_button.setAttribute("title",`Switch Graying ${Context.GrayingOn ? 'OFF' : 'ON'}`);
 power_button.onclick = () => {
   Context.GrayingOn = !Context.GrayingOn;
   power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
-  power_button.setAttribute(
-    "title",
-    Context.GrayingOn ? "Switch Graying OFF" : "Switch Graying ON"
-  );
+  power_button.setAttribute("title",`Switch Graying ${Context.GrayingOn ? 'OFF' : 'ON'}`);
   greyout.style.display = Context.GrayingOn ? "display" : "none";
 };
 document.body.appendChild(power_button);
