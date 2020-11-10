@@ -92,11 +92,17 @@ document.body.appendChild(greyout);
 const power_button = document.createElement("div");
 power_button.setAttribute("id", "power");
 power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
-power_button.setAttribute("title",`Switch Graying ${Context.GrayingOn ? 'OFF' : 'ON'}`);
+power_button.setAttribute(
+  "title",
+  `Switch Graying ${Context.GrayingOn ? "OFF" : "ON"}`
+);
 power_button.onclick = () => {
   Context.GrayingOn = !Context.GrayingOn;
   power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
-  power_button.setAttribute("title",`Switch Graying ${Context.GrayingOn ? 'OFF' : 'ON'}`);
+  power_button.setAttribute(
+    "title",
+    `Switch Graying ${Context.GrayingOn ? "OFF" : "ON"}`
+  );
   greyout.style.display = Context.GrayingOn ? "display" : "none";
 };
 document.body.appendChild(power_button);
@@ -126,7 +132,7 @@ document.body.appendChild(audio_button);
 if (muteButton) {
   muteButton.addEventListener(
     "click",
-    (e) => {      
+    (e) => {
       const showing = document.getElementsByClassName("ad-showing").length > 0;
       if (showing) {
         //Simulated = false
@@ -183,7 +189,6 @@ function resize() {
 
   power_button.style.left = rect.right - 200 + "px";
   audio_button.style.left = rect.right - 150 + "px";
-
 }
 
 function reset_variables() {
@@ -204,8 +209,8 @@ function isPlaying() {
 
 function show() {
   resize();
-  if (Context.GrayingOn) {    
-    greyout.style.display = "block";    
+  if (Context.GrayingOn) {
+    greyout.style.display = "block";
   }
   power_button.style.display = "block";
   audio_button.style.display = "block";
@@ -325,6 +330,7 @@ function removeFrameAds() {
     const srcadish =
       src.indexOf("ads") > -1 ||
       src.indexOf("doubleclick") > -1 ||
+      src.indexOf("chatan") > -1 ||
       src.indexOf("about:blank") > -1;
     if (adish || srcadish) {
       frame.remove();
