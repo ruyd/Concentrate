@@ -4,6 +4,7 @@ var Context = {
   MutingOn: true,
   SkipOn: true,
   DidWeMute: false,
+  Tabs: new Map(),
 };
 
 var current_seconds_counter = 0;
@@ -27,7 +28,7 @@ function toggleFullScreen() {
   }
 }
 
-function bind() {
+function bind(tabId) {
   chrome.storage.sync.get("Settings", function (data) {
     Settings = data.Settings;
 
@@ -40,6 +41,11 @@ function bind() {
     }
   });
 }
+
+// chrome.Tabs.get({ active: true, currentWindow: true }).then((res)=> {
+//   res.id;
+
+// });
 
 function unbind() {
   document.documentElement.removeEventListener(
@@ -78,56 +84,68 @@ function isMuted() {
 }
 
 var muteButton = getMuteButton();
-
 const initialMute = isMuted();
-const greyout = document.createElement("div");
-greyout.setAttribute("id", "greyout");
-greyout.setAttribute("class", "concentrate");
 
-const remaining = document.createElement("div");
-remaining.setAttribute("class", "remaining");
-greyout.appendChild(remaining);
-document.body.appendChild(greyout);
+function appendNodeIfNeeded() {
+  return isYoutube ? document.createElement("div") : null;
+}
 
-const power_button = document.createElement("div");
-power_button.setAttribute("id", "power");
-power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
-power_button.setAttribute(
-  "title",
-  `Switch Graying ${Context.GrayingOn ? "OFF" : "ON"}`
-);
-power_button.onclick = () => {
-  Context.GrayingOn = !Context.GrayingOn;
+const greyout = appendNodeIfNeeded();
+if (greyout) {
+  greyout.setAttribute("id", "greyout");
+  greyout.setAttribute("class", "concentrate");
+}
+
+const remaining = appendNodeIfNeeded();
+if (remaining) {
+  remaining.setAttribute("class", "remaining");
+  greyout.appendChild(remaining);
+  document.body.appendChild(greyout);
+}
+
+const power_button = appendNodeIfNeeded();
+if (power_button) {
+  power_button.setAttribute("id", "power");
   power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
   power_button.setAttribute(
     "title",
     `Switch Graying ${Context.GrayingOn ? "OFF" : "ON"}`
   );
-  greyout.style.display = Context.GrayingOn ? "display" : "none";
-};
-document.body.appendChild(power_button);
+  power_button.onclick = () => {
+    Context.GrayingOn = !Context.GrayingOn;
+    power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
+    power_button.setAttribute(
+      "title",
+      `Switch Graying ${Context.GrayingOn ? "OFF" : "ON"}`
+    );
+    greyout.style.display = Context.GrayingOn ? "display" : "none";
+  };
+  document.body.appendChild(power_button);
+}
 
-const audio_button = document.createElement("div");
-audio_button.setAttribute("id", "audio");
-audio_button.setAttribute("class", initialMute ? "on" : "off");
-audio_button.setAttribute(
-  "title",
-  Context.MutingOn ? "Switch Sound ON" : "Switch Sound OFF"
-);
-audio_button.onclick = () => {
-  Context.MutingOn = !Context.MutingOn;
-  audio_button.setAttribute("class", Context.MutingOn ? "on" : "off");
+const audio_button = appendNodeIfNeeded();
+if (audio_button) {
+  audio_button.setAttribute("id", "audio");
+  audio_button.setAttribute("class", initialMute ? "on" : "off");
   audio_button.setAttribute(
     "title",
     Context.MutingOn ? "Switch Sound ON" : "Switch Sound OFF"
   );
-  if (!Context.MutingOn && isMuted()) {
-    if (muteButton) {
-      muteButton.click();
+  audio_button.onclick = () => {
+    Context.MutingOn = !Context.MutingOn;
+    audio_button.setAttribute("class", Context.MutingOn ? "on" : "off");
+    audio_button.setAttribute(
+      "title",
+      Context.MutingOn ? "Switch Sound ON" : "Switch Sound OFF"
+    );
+    if (!Context.MutingOn && isMuted()) {
+      if (muteButton) {
+        muteButton.click();
+      }
     }
-  }
-};
-document.body.appendChild(audio_button);
+  };
+  document.body.appendChild(audio_button);
+}
 
 if (muteButton) {
   muteButton.addEventListener(
@@ -146,15 +164,17 @@ if (muteButton) {
   );
 }
 
-greyout.onclick = () => {
-  Context.GrayingOn = !Context.GrayingOn;
-  power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
-  greyout.style.display = Context.GrayingOn ? "display" : "none";
+if (greyout) {
+  greyout.onclick = () => {
+    Context.GrayingOn = !Context.GrayingOn;
+    power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
+    greyout.style.display = Context.GrayingOn ? "display" : "none";
 
-  if (isMuted()) {
-    audio_button.click();
-  }
-};
+    if (isMuted()) {
+      audio_button.click();
+    }
+  };
+}
 
 function removeVideoAds() {
   let names = [
@@ -325,10 +345,12 @@ function removeFrameAds() {
   for (let f = 0; f < frames.length; f++) {
     const frame = frames[f];
     const id = frame.getAttribute("id") || frame.getAttribute("name");
-    const adish = id ? id.indexOf("_ads") > -1 : false;
-    const src = frame.getAttribute("src") || "";
+    const adish = id ? id.indexOf("ads") > -1 : false;
+    const src = frame.getAttribute("src");
     const srcadish =
-      src.indexOf("ads") > -1 ||
+      src === "" ||
+      src.indexOf("adserve") > -1 ||
+      src.indexOf("_ads") > -1 ||
       src.indexOf("doubleclick") > -1 ||
       src.indexOf("chatan") > -1 ||
       src.indexOf("about:blank") > -1;
