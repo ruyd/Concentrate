@@ -346,11 +346,13 @@ function removeFrameAds() {
     const frame = frames[f];
     const id = frame.getAttribute("id") || frame.getAttribute("name");
     const adish = id ? id.indexOf("ads") > -1 : false;
-    const src = frame.getAttribute("src");
+    const src = frame.getAttribute("src") || "";
     const srcadish =
       src === "" ||
       src.indexOf("adserve") > -1 ||
-      src.indexOf("_ads") > -1 ||
+      src.indexOf("ads") > -1 ||
+      src.indexOf("_ad") > -1 ||
+      src.indexOf("podium") > -1 ||
       src.indexOf("doubleclick") > -1 ||
       src.indexOf("chatan") > -1 ||
       src.indexOf("about:blank") > -1;

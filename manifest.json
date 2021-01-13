@@ -1,36 +1,44 @@
 {
-    "name" : "Concentrate",
-    "version" : "2.0.0.3",
-    "author" : "SolverApps",
-    "browser_action" : 
-    {
-        "default_icon" : 
-        {
-            "20" : "images/icon_20.png"
+    "name": "Concentrate",
+    "version": "2.0.0.3",
+    "author": "SolverApps",
+    "browser_action": {
+        "default_icon": {
+            "20": "images/icon_20.png"
         },
-        "default_title" : "Concentrate",
-        "default_popup" : "html/popup.html"
+        "default_title": "Concentrate",
+        "default_popup": "html/popup.html"
     },
-    "content_scripts" : [{
-            "js" : ["js/content.js"],
-            "css" : ["css/content.css"],
-            "matches" : ["*://*/*"],
+    "content_scripts": [
+        {
+            "js": [
+                "js/content.js"
+            ],
+            "css": [
+                "css/content.css"
+            ],
+            "matches": [
+                "*://*/*"
+            ],
             "run_at": "document_end"
         }
     ],
     "options_page": "html/options.html",
-    "chrome_url_overrides" : {
+    "chrome_url_overrides": {
         "newtab": "html/newtab.html"
-      },
-    "default_locale" : "en",
-    "description" : "Concentrate enables a True Dark-Mode NewTab Page, Fullscreen Focus Enhancements and Noise Reductions",
-    "permissions" : 
-    [
-        "*://*/*", "activeTab", "tabs", "storage"
-    ],     
-    "icons" : {
-        "20" : "images/icon_20.png"
-    },    
-    "web_accessible_resources" : ["images/*"],
+    },
+    "default_locale": "en",
+    "description": "Concentrate enables a True Dark-Mode NewTab Page, Fullscreen Focus Enhancements and Noise Reductions",
+    "permissions": [
+        "activeTab",
+        "tabs",
+        "storage"
+    ],
+    "icons": {
+        "20": "images/icon_20.png"
+    },
+    "web_accessible_resources": [
+        "images/*"
+    ],
     "manifest_version": 2
 }
