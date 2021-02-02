@@ -11,9 +11,7 @@
     },
     "background": {
         "persistent": true,
-        "scripts": [
-            "js/background.js"
-        ]
+        "page": "html/background.html"
     },
     "content_scripts": [
         {
@@ -44,7 +42,8 @@
         "20": "images/icon_20.png"
     },
     "web_accessible_resources": [
-        "images/*"
+        "images/*",
+        "js/*"
     ],
     "manifest_version": 2
 }

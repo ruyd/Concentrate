@@ -9,7 +9,7 @@
             "request": "attach",
             "port": 9223,
             "name": "Edge Attach 9223",
-            "url": "extension://pflhhidhafdpggilhocmlfbaogcgbnln/_generated_background_page.html",
+            "url": "extension://pflhhidhafdpggilhocmlfbaogcgbnln/html/background.html",
             "webRoot": "${workspaceFolder}/js"
         }
     ]

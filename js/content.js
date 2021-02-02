@@ -1,92 +1,21 @@
-import "./common";
-
-var Settings = {};
-
-const power_button = new Button("power");
-const audio_button = new Button("audio");
-const greyout = Greyout();
-
-function appendIfNeeded() {
-  if (!isYoutube) return;
-
-  document.body.appendChild(greyout);
-  document.body.appendChild(audio_button);
-  document.body.appendChild(power_button);
-}
-
-function toggleFullScreen() {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen();
-  } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    }
-  }
-}
-
-function bind(tabId) {
-  chrome.storage.sync.get("Settings", function (data) {
-    Settings = data.Settings;
-
-    if (Settings.ContentDoubleClick) {
-      document.documentElement.addEventListener(
-        "dblclick",
-        toggleFullScreen,
-        false
-      );
-    }
-  });
-}
-
-function unbind() {
-  document.documentElement.removeEventListener(
-    "dblclick",
-    toggleFullScreen,
-    false
-  );
-}
+var Model = null;
+const isYoutube = window.location.hostname.indexOf("youtube") > -1;
 
 //Messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.Refresh && request.Settings) {
-    Settings = request.Settings;
-
-    if (Settings.ContentDoubleClick) bind();
-    else unbind();
+  if (request.refresh) {
+    Model.State = request.state;
   }
+
+  if (request.init) {
+    Model = request.model;
+  }
+
+  onUpdate();
 });
 
-//YouTube Noise Removals
-var muteButton = getMuteButton();
-const initialMute = isMuted();
-
-if (muteButton) {
-  muteButton.addEventListener(
-    "click",
-    (e) => {
-      const showing = document.getElementsByClassName("ad-showing").length > 0;
-      if (showing) {
-        //Simulated = false
-        if (e.isTrusted) {
-          Context.MutingOn = !Context.MutingOn;
-          audio_button.setAttribute("class", Context.MutingOn ? "on" : "off");
-        }
-      }
-    },
-    false
-  );
-}
-
-if (greyout) {
-  greyout.onclick = () => {
-    Context.GrayingOn = !Context.GrayingOn;
-    power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
-    greyout.style.display = Context.GrayingOn ? "display" : "none";
-
-    if (isMuted()) {
-      audio_button.click();
-    }
-  };
+function onUpdate() {
+  //
 }
 
 function removeVideoAds() {
@@ -125,7 +54,7 @@ function resize() {
 }
 
 function reset_variables() {
-  Context.DidWeMute = false;
+  Model.State.DidWeMute = false;
   last_duration = null;
   current_seconds_counter = 0;
 }
@@ -142,7 +71,7 @@ function isPlaying() {
 
 function show() {
   resize();
-  if (Context.GrayingOn) {
+  if (Model.State.GrayingOn) {
     greyout.show();
   }
   power_button.show();
@@ -160,7 +89,7 @@ function muteYouTubeAds() {
 
   const skips = document.getElementsByClassName("ytp-ad-skip-button");
   const skipButton = skips.length > 0 ? skips[0] : null;
-  if (skipButton && Context.SkipOn) {
+  if (skipButton && Model.State.SkipOn) {
     log("Skip ad!");
     skipButton.click();
     reset_variables();
@@ -172,7 +101,7 @@ function muteYouTubeAds() {
   }
 
   if (!showing) {
-    if (Context.DidWeMute) {
+    if (Model.State.DidWeMute) {
       log("Content back -> unmuting");
       if (muteButton) {
         muteButton.click();
@@ -187,11 +116,11 @@ function muteYouTubeAds() {
     show();
 
     const muted = isMuted();
-    if (Context.MutingOn && !muted) {
+    if (Model.State.MutingOn && !muted) {
       log("muting ad");
       if (muteButton) {
         muteButton.click();
-        Context.DidWeMute = true;
+        Model.State.DidWeMute = true;
       }
       refresh(true);
       return;
@@ -299,5 +228,3 @@ function startTime() {
 
 /////
 startTime();
-bind();
-appendIfNeeded();
