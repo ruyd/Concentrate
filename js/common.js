@@ -33,7 +33,7 @@ function isMuted(element) {
 
 // Prototypes
 
-Tab.prototype = {
+TabModel.prototype = {
   toggleMute: () => {
     console.log("mute");
   },
@@ -42,7 +42,7 @@ Tab.prototype = {
   },
 };
 
-Tab.prototype.appendIfNeeded = () => {
+TabModel.prototype.appendIfNeeded = () => {
   if (!isYoutube) return;
 
   document.body.appendChild(greyout);
@@ -50,7 +50,7 @@ Tab.prototype.appendIfNeeded = () => {
   document.body.appendChild(power_button);
 };
 
-Tab.prototype.toggleFullScreen = () => {
+TabModel.prototype.toggleFullScreen = () => {
   if (!document.fullscreenElement) {
     document.documentElement.requestFullscreen();
   } else {
@@ -60,7 +60,7 @@ Tab.prototype.toggleFullScreen = () => {
   }
 };
 
-Tab.prototype.bind = (tabId) => {
+TabModel.prototype.bind = (tabId) => {
   chrome.storage.sync.get("Settings", function (data) {
     Settings = data.Settings;
 
@@ -74,7 +74,7 @@ Tab.prototype.bind = (tabId) => {
   });
 };
 
-Tab.prototype.unbind = () => {
+TabModel.prototype.unbind = () => {
   document.documentElement.removeEventListener(
     "dblclick",
     toggleFullScreen,
@@ -82,7 +82,7 @@ Tab.prototype.unbind = () => {
   );
 };
 
-Tab.prototype.bindMute = () => {
+TabModel.prototype.bindMute = () => {
   const mute = getMuteButton();
   if (!mute) return;
   mute.addEventListener(
@@ -99,7 +99,7 @@ Tab.prototype.bindMute = () => {
   );
 };
 
-Tab.prototype.bindGray = () => {
+TabModel.prototype.bindGray = () => {
   greyout.onclick = () => {
     Context.GrayingOn = !Context.GrayingOn;
     power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
@@ -113,26 +113,31 @@ Tab.prototype.bindGray = () => {
 
 // Objects
 
-function Tab(chrome_tab, settings) {
+function TabModel(chrome_tab, settings) {
   this.Tab = chrome_tab;
   this.State = new TabState(settings);
   this.Greyout = Greyout();
   this.SoundButton = new Button("audio");
   this.PowerButton = new Button("power");
   this.MuteButton = getMuteButton();
+  this.IsYoutube = () =>
+    this.Tab && this.Tab.url && this.Tab.url.indexOf("youtube") > 1;
 }
 
 class TabState extends Settings {
-  constructor(settings) {
+  constructor(loaded) {
     this.DidWeMute = false;
     this.SecondCounter = 0;
     this.LastDuration = null;
     this.isFullscreen = false;
-    this.isYoutube = false;
+
+    if (loaded) {
+      Object.assign(loaded, this);
+    }
   }
 }
 
-function Settings(loaded) {
+function Settings() {
   this.ContentDoubleClick = true;
   this.NewTabColor = "#242424";
   this.NewTabClick = true;
@@ -142,10 +147,6 @@ function Settings(loaded) {
   this.GrayingOn = true;
   this.MutingOn = true;
   this.SkipAds = true;
-
-  if (loaded) {
-    Object.assign(loaded, this);
-  }
 }
 
 function Button(id) {

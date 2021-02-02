@@ -1,4 +1,4 @@
-import Tab from "./common.js";
+import TabModel from "./common.js";
 
 const Tabs = new Map();
 const Context = {};
@@ -17,13 +17,12 @@ function tabify() {
     log("tabs", list);
     for (let item of list) {
       log(item);
-      if (item)
-        setModel(item);
+      if (item) setModel(item);
     }
   });
 }
 function setModel(item) {
-  const model = new Tab(item, Context.Settings);
+  const model = new TabModel(item, Context.Settings);
   Tabs.set(item.id, model);
   chrome.tabs.sendMessage(item.id, { init: true, model: model }, (response) => {
     log(response);
