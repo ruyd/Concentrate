@@ -9,8 +9,8 @@
             "request": "attach",
             "port": 9223,
             "name": "Edge Attach 9223",
-            "url": "https://usuario.midatacredito.com/registro?product=midc",
+            "url": "extension://pflhhidhafdpggilhocmlfbaogcgbnln/_generated_background_page.html",
             "webRoot": "${workspaceFolder}/js"
-        },
+        }
     ]
 }

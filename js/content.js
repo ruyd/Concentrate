@@ -1,22 +1,4 @@
 var Settings = {};
-var Context = {
-  GrayingOn: true,
-  MutingOn: true,
-  SkipOn: true,
-  DidWeMute: false,
-  Tabs: new Map(),
-};
-
-var current_seconds_counter = 0;
-var last_duration = null;
-
-const debug = true;
-const log = debug ? console.log.bind(window.console) : function () {};
-function get() {
-  chrome.storage.sync.get("Settings", function (data) {
-    Settings = data.Settings;
-  });
-}
 
 function toggleFullScreen() {
   if (!document.fullscreenElement) {
@@ -41,11 +23,6 @@ function bind(tabId) {
     }
   });
 }
-
-// chrome.Tabs.get({ active: true, currentWindow: true }).then((res)=> {
-//   res.id;
-
-// });
 
 function unbind() {
   document.documentElement.removeEventListener(
@@ -368,11 +345,6 @@ function removeClass(name) {
   const elements = document.getElementsByClassName(name);
   for (let el of elements) {
     el.remove();
-  }
-}
-
-function observerCallback(mutationsList, observer) {
-  for (const mutation of mutationsList) {
   }
 }
 

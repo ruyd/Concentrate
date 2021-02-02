@@ -9,6 +9,12 @@
         "default_title": "Concentrate",
         "default_popup": "html/popup.html"
     },
+    "background": {
+        "persistent": true,
+        "scripts": [
+            "js/background.js"
+        ]
+    },
     "content_scripts": [
         {
             "js": [
@@ -30,8 +36,8 @@
     "default_locale": "en",
     "description": "Concentrate enables a True Dark-Mode NewTab Page, Fullscreen Focus Enhancements and Noise Reductions",
     "permissions": [
-        "activeTab",
         "tabs",
+        "activeTab",
         "storage"
     ],
     "icons": {
