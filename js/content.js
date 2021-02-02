@@ -1,16 +1,18 @@
 var Model = null;
 const isYoutube = window.location.hostname.indexOf("youtube") > -1;
+const log = console.log.bind(window.console);
 
+log("concentrate...");
 //Messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.refresh) {
+  if (request.state) {
     Model.State = request.state;
   }
 
   if (request.init) {
     Model = request.model;
   }
-
+  log("onMessage", request);
   onUpdate();
 });
 
@@ -227,4 +229,4 @@ function startTime() {
 }
 
 /////
-startTime();
+//startTime();

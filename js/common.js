@@ -122,24 +122,27 @@ function Tab(chrome_tab, settings) {
   this.MuteButton = getMuteButton();
 }
 
-function TabState(settings) {
-  this.grayingOn = settings.GrayingOn;
-  this.mutingOn = settings.MutingOn;
-  this.skipOn = true;
-  this.didWeMute = false;
-  this.current_seconds_counter = 0;
-  this.last_duration = null;
-  this.FullscreenF11 = false;
-  this.isYoutube = false;
+class TabState extends Settings {
+  constructor(settings) {
+    this.DidWeMute = false;
+    this.SecondCounter = 0;
+    this.LastDuration = null;
+    this.isFullscreen = false;
+    this.isYoutube = false;
+  }
 }
 
 function Settings(loaded) {
   this.ContentDoubleClick = true;
   this.NewTabColor = "#242424";
   this.NewTabClick = true;
-  this.FrameAds = true;
+  this.AdRemover = true;
   this.YouTubeMute = true;
   this.ShowClock = true;
+  this.GrayingOn = true;
+  this.MutingOn = true;
+  this.SkipAds = true;
+
   if (loaded) {
     Object.assign(loaded, this);
   }

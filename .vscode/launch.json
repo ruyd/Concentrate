@@ -10,6 +10,7 @@
             "port": 9223,
             "name": "Edge Attach 9223",
             "url": "extension://pflhhidhafdpggilhocmlfbaogcgbnln/html/background.html",
+            "url2": "http://localhost",
             "webRoot": "${workspaceFolder}/js"
         }
     ]
