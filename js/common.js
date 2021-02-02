@@ -1,3 +1,5 @@
+const isYoutube = window.location.hostname.indexOf("youtube") > -1;
+
 function div(id, cls) {
   const node = document.createElement("div");
   node.setAttribute("id", id);
@@ -9,6 +11,26 @@ function Greyout() {
   const node = div("greyout", "concentrate");
   node.remaining = div("remaining", "concentrate");
   node.appendChild(node.remaining);
+  node.hide = () => {
+    this.style.display = "none";
+  };
+  node.show = () => {
+    this.style.display = "display";
+  };
+  return node;
+}
+
+function getMuteButton() {
+  const muteButtons = document.getElementsByClassName("ytp-mute-button");
+  const node = muteButtons.length > 0 ? new MuteButton(muteButtons[0]) : null;
+  return node;
+}
+
+function isMuted(element) {
+  //change to class
+  //ytp-unmute
+  const label = element ? element.getAttribute("title") ?? "" : "";
+  return label.toLowerCase().indexOf("unmute") > -1;
 }
 
 // Prototypes
@@ -28,8 +50,8 @@ function Tab(chrome_tab, settings) {
   this.Tab = chrome_tab;
   this.State = new TabState(settings);
   this.Overlay = Greyout();
-  this.SoundButton = {};
-  this.OverlayButton = {};
+  this.SoundButton = new Button("audio");
+  this.OverlayButton = new Button("power");
 }
 
 function TabState(settings) {
@@ -40,6 +62,7 @@ function TabState(settings) {
   this.current_seconds_counter = 0;
   this.last_duration = null;
   this.isYouTube = false;
+  this.FullscreenF11 = false;
 }
 
 function Settings(loaded) {
@@ -71,4 +94,10 @@ function Button(id) {
   };
 
   this.set();
+}
+
+function MuteButton(element) {
+  this.Node = element;
+  this.Muted = isMuted(element);
+  this.click = () => this.Node.click();
 }

@@ -25,6 +25,8 @@ chrome.tabs.onCreated.addListener(tabify);
 
 chrome.tabs.onRemoved.addListener(tabify);
 
+chrome.tabs.onActiveChanged.addListener(function (ot) {});
+
 /////
 
 init();

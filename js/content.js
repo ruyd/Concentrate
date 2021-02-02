@@ -4,6 +4,15 @@ var Settings = {};
 
 const power_button = new Button("power");
 const audio_button = new Button("audio");
+const greyout = Greyout();
+
+function appendIfNeeded() {
+  if (!isYoutube) return;
+
+  document.body.appendChild(greyout);
+  document.body.appendChild(audio_button);
+  document.body.appendChild(power_button);
+}
 
 function toggleFullScreen() {
   if (!document.fullscreenElement) {
@@ -47,87 +56,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
 });
 
-//Initial State
-bind();
-
 //YouTube Noise Removals
-const isYoutube = window.location.hostname.indexOf("youtube") > -1;
-
-function getMuteButton() {
-  const muteButtons = document.getElementsByClassName("ytp-mute-button");
-  return muteButtons.length > 0 ? muteButtons[0] : null;
-}
-
-function isMuted() {
-  //change to class
-  //ytp-unmute
-  const label = muteButton ? muteButton.getAttribute("title") ?? "" : "";
-  return label.toLowerCase().indexOf("unmute") > -1;
-}
-
 var muteButton = getMuteButton();
 const initialMute = isMuted();
-
-function appendNodeIfNeeded() {
-  return isYoutube ? document.createElement("div") : null;
-}
-
-const greyout = appendNodeIfNeeded();
-if (greyout) {
-  greyout.setAttribute("id", "greyout");
-  greyout.setAttribute("class", "concentrate");
-}
-
-const remaining = appendNodeIfNeeded();
-if (remaining) {
-  remaining.setAttribute("class", "remaining");
-  greyout.appendChild(remaining);
-  document.body.appendChild(greyout);
-}
-
-const power_button = appendNodeIfNeeded();
-if (power_button) {
-  power_button.setAttribute("id", "power");
-  power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
-  power_button.setAttribute(
-    "title",
-    `Switch Graying ${Context.GrayingOn ? "OFF" : "ON"}`
-  );
-  power_button.onclick = () => {
-    Context.GrayingOn = !Context.GrayingOn;
-    power_button.setAttribute("class", Context.GrayingOn ? "on" : "off");
-    power_button.setAttribute(
-      "title",
-      `Switch Graying ${Context.GrayingOn ? "OFF" : "ON"}`
-    );
-    greyout.style.display = Context.GrayingOn ? "display" : "none";
-  };
-  document.body.appendChild(power_button);
-}
-
-const audio_button = appendNodeIfNeeded();
-if (audio_button) {
-  audio_button.setAttribute("id", "audio");
-  audio_button.setAttribute("class", initialMute ? "on" : "off");
-  audio_button.setAttribute(
-    "title",
-    Context.MutingOn ? "Switch Sound ON" : "Switch Sound OFF"
-  );
-  audio_button.onclick = () => {
-    Context.MutingOn = !Context.MutingOn;
-    audio_button.setAttribute("class", Context.MutingOn ? "on" : "off");
-    audio_button.setAttribute(
-      "title",
-      Context.MutingOn ? "Switch Sound ON" : "Switch Sound OFF"
-    );
-    if (!Context.MutingOn && isMuted()) {
-      if (muteButton) {
-        muteButton.click();
-      }
-    }
-  };
-  document.body.appendChild(audio_button);
-}
 
 if (muteButton) {
   muteButton.addEventListener(
@@ -212,16 +143,16 @@ function isPlaying() {
 function show() {
   resize();
   if (Context.GrayingOn) {
-    greyout.style.display = "block";
+    greyout.show();
   }
-  power_button.style.display = "block";
-  audio_button.style.display = "block";
+  power_button.show();
+  audio_button.show();
 }
 
 function hide() {
-  greyout.style.display = "none";
-  power_button.style.display = "none";
-  audio_button.style.display = "none";
+  greyout.hide();
+  power_button.hide();
+  audio_button.hide();
 }
 
 function muteYouTubeAds() {
@@ -366,4 +297,7 @@ function startTime() {
   var t = setTimeout(startTime, 1000);
 }
 
+/////
 startTime();
+bind();
+appendIfNeeded();
