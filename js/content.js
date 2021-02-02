@@ -1,4 +1,9 @@
+import "./common";
+
 var Settings = {};
+
+const power_button = new Button("power");
+const audio_button = new Button("audio");
 
 function toggleFullScreen() {
   if (!document.fullscreenElement) {
@@ -32,7 +37,7 @@ function unbind() {
   );
 }
 
-//Listener
+//Messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.Refresh && request.Settings) {
     Settings = request.Settings;
