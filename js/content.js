@@ -1,23 +1,48 @@
-var Model = null;
+var Model;
+var Port;
+var Timer;
+
+const interval = 1000;
 const isYoutube = window.location.hostname.indexOf("youtube") > -1;
 const log = console.log.bind(window.console);
 
-log("concentrate...");
-//Messages
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.state) {
-    Model.State = request.state;
-  }
+//Messaging
+function connect() {
+  log("connecting");
+  Port = chrome.runtime.connect({
+    name: "content",
+  });
 
-  if (request.init) {
-    Model = request.model;
-  }
-  log("onMessage", request);
-  onUpdate();
-});
+  Port.onMessage.addListener(onMessage);
 
-function onUpdate() {
-  //
+  Port.onDisconnect.addListener(function () {
+    if (Port) {
+      Port.Closed = true;
+    }
+  });
+
+  Port.postMessage({
+    type: "connected",
+  });
+}
+
+function onMessage(message) {
+  log("::", message);
+  const action = message && message.type;
+  switch (action) {
+    case "ping":
+      Port.postMessage({ type: "pong" });
+      break;
+    case "model":
+      setModel(message.payload);
+      break;
+    default:
+      break;
+  }
+}
+
+function setModel(model) {
+  Model = model;
 }
 
 function removeVideoAds() {
@@ -41,24 +66,18 @@ function removeClassName(name) {
 
 function resize() {
   const panel = document.getElementById("movie_player");
-  if (!panel || !greyout) return;
+  if (!panel || !Model.Greyout) return;
 
   const rect = panel.getBoundingClientRect();
 
-  //greyout.style.height = rect.height - 0.5 + "px"; //nice yellow strip
-  greyout.style.height = rect.height + "px";
-  greyout.style.width = rect.width + "px";
-  greyout.style.top = rect.top + "px";
-  greyout.style.left = rect.left + "px";
+  //Model.Greyout.style.height = rect.height - 0.5 + "px"; //nice yellow strip
+  Model.Greyout.style.height = rect.height + "px";
+  Model.Greyout.style.width = rect.width + "px";
+  Model.Greyout.style.top = rect.top + "px";
+  Model.Greyout.style.left = rect.left + "px";
 
   power_button.style.left = rect.right - 200 + "px";
   audio_button.style.left = rect.right - 150 + "px";
-}
-
-function reset_variables() {
-  Model.State.DidWeMute = false;
-  last_duration = null;
-  current_seconds_counter = 0;
 }
 
 function isPlaying() {
@@ -74,57 +93,39 @@ function isPlaying() {
 function show() {
   resize();
   if (Model.State.GrayingOn) {
-    greyout.show();
+    Model.Greyout.show();
   }
-  power_button.show();
-  audio_button.show();
+  Model.PowerButton.show();
+  Model.AudioButton.show();
 }
 
 function hide() {
-  greyout.hide();
-  power_button.hide();
-  audio_button.hide();
+  Model.Greyout.hide();
+  Model.PowerButton.hide();
+  Model.AudioButton.hide();
 }
 
 function muteYouTubeAds() {
-  const showing = document.getElementsByClassName("ad-showing").length > 0; //ad-interrupting
-
-  const skips = document.getElementsByClassName("ytp-ad-skip-button");
-  const skipButton = skips.length > 0 ? skips[0] : null;
-  if (skipButton && Model.State.SkipOn) {
+  if (Model.SkipButton && Model.State.SkipOn) {
     log("Skip ad!");
-    skipButton.click();
-    reset_variables();
+    Model.skip();
     return;
   }
 
-  if (!muteButton) {
-    muteButton = getMuteButton();
-  }
-
-  if (!showing) {
+  if (!Model.State.Showing) {
     if (Model.State.DidWeMute) {
       log("Content back -> unmuting");
-      if (muteButton) {
-        muteButton.click();
-      }
-      reset_variables();
+      Model.unmute();
     }
 
     hide();
   }
 
-  if (showing) {
+  if (Model.State.Showing) {
     show();
-
-    const muted = isMuted();
-    if (Model.State.MutingOn && !muted) {
+    if (Model.State.MutingOn && !Model.State.Muted) {
       log("muting ad");
-      if (muteButton) {
-        muteButton.click();
-        Model.State.DidWeMute = true;
-      }
-      refresh(true);
+      Model.mute();
       return;
     }
 
@@ -133,8 +134,8 @@ function muteYouTubeAds() {
 }
 
 function refresh(starting = false) {
-  const showing = document.getElementsByClassName("ad-showing").length > 0;
-  if (!showing) {
+  Model.detect();
+  if (!Model.State.Model.State.Showing) {
     return;
   }
 
@@ -142,11 +143,6 @@ function refresh(starting = false) {
     remaining.innerText = "Paused";
     return;
   }
-
-  const durations = document.getElementsByClassName("ytp-time-duration");
-  const duration = durations.length > 0 ? durations[0].textContent : null;
-  const dsplit = (duration || "").split(":");
-  const duration_seconds = parseInt(dsplit[0]) * 60 + parseInt(dsplit[1]);
 
   if (starting || duration !== last_duration) {
     current_seconds_counter = duration_seconds;
@@ -176,13 +172,15 @@ function refresh(starting = false) {
     seconds = "0" + seconds;
   }
 
-  if (showing && remaining && duration) {
+  if (Model.State.Showing && remaining && duration) {
     remaining.innerText = `${minutes}:${seconds} / ${duration}`;
   } else {
     log("blank");
     remaining.innerText = "";
   }
 }
+
+function updateState() {}
 
 function removeFrameAds() {
   const frames = document.getElementsByTagName("IFRAME");
@@ -215,18 +213,21 @@ function removeClass(name) {
   }
 }
 
-function startTime() {
-  if (Settings.FrameAds) {
-    removeFrameAds();
+function startTimer() {
+  if (Model && Model.hasOwnProperty("State")) {
+    if (Model.State.FrameAds) {
+      removeFrameAds();
+    }
+
+    if (Model.State.YouTubeMute && isYoutube) {
+      muteYouTubeAds();
+      removeVideoAds();
+    }
   }
 
-  if (Settings.YouTubeMute && isYoutube) {
-    muteYouTubeAds();
-    removeVideoAds();
-  }
-
-  var t = setTimeout(startTime, 1000);
+  Timer = setTimeout(startTimer, interval);
 }
 
-/////
-//startTime();
+///
+connect();
+startTimer();
