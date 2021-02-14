@@ -37,26 +37,27 @@ function isMuted(element) {
 
 function Greyout() {
   const node = createElement("greyout", "concentrate");
-  node.remaining = createElement("remaining", "concentrate");
-  node.appendChild(node.remaining);
-  node.hide = function () {
-    node.style.display = "none";
+  const remaining = createElement("remaining", "concentrate");
+  this.Node = node;
+  this.Remaining = remaining;
+  node.appendChild(remaining);
+
+  this.hide = function () {
+    this.Node.style.display = "none";
   };
-  node.show = function () {
-    node.style.display = "display";
+  this.show = function () {
+    this.Node.style.display = "display";
   };
 
-  node.setText = (s) => {
-    node.remaining.innerText = s;
+  this.setText = function (s) {
+    this.Remaining.innerText = s;
   };
-
-  return node;
 }
 
 function TabModel(chrome_tab, settings) {
   this.Tab = chrome_tab;
   this.State = new TabState(settings);
-  this.Greyout = Greyout();
+  this.Greyout = new Greyout();
   this.SoundButton = makeButton("audio", "Sound");
   this.PowerButton = makeButton("power", "Graying");
   this.MuteButton = GetMuteButton();
@@ -82,12 +83,15 @@ function Settings(loaded) {
   this.ContentDoubleClick = true;
   this.NewTabColor = "#242424";
   this.NewTabClick = true;
-  this.AdRemover = true;
+  this.RemoveAds = true;
+  this.RemoveComments = true;
   this.YouTubeMute = true;
   this.ShowClock = true;
   this.GrayingOn = true;
   this.MutingOn = true;
   this.SkipAds = true;
+  this.LabelWindowNewTabs = true;
+
   if (loaded) {
     Object.assign(loaded, this);
   }
@@ -234,7 +238,7 @@ TabModel.prototype.tick = function () {
   this.SecondsCounter--;
 };
 
-TabState.prototype.reset = function () {
+TabModel.prototype.reset = function () {
   this.DidWeMute = false;
   this.DurationInSeconds = 0;
 };
@@ -259,8 +263,8 @@ TabModel.prototype.detect = function () {
   //this.State.Playing = label.toLowerCase().indexOf("pause") > -1;
 };
 
-TabState.prototype.GetDurationText = function () {
-  const duration = this.DurationInSeconds;
+TabModel.prototype.GetDurationText = function () {
+  const duration = this.State.DurationInSeconds;
 
   if (duration <= 0) return "Zero";
 

@@ -1,10 +1,10 @@
 var Settings = {
-  ContentDoubleClick : true,
-  NewTabColor : '#242424',
-  NewTabClick : true,
-  FrameAds : true,
-  YouTubeMute : true,
-  ShowClock : true
+  ContentDoubleClick: true,
+  NewTabColor: "#242424",
+  NewTabClick: true,
+  FrameAds: true,
+  YouTubeMute: true,
+  ShowClock: true,
 };
 
 function toggleFullScreen() {
@@ -19,14 +19,13 @@ function toggleFullScreen() {
 
 function bind() {
   chrome.storage.sync.get("Settings", function (data) {
-
     if (data.Settings) {
       Settings = data.Settings;
-    } else { 
+    } else {
       //FirstRun Commit Default Settings
       chrome.storage.sync.set({ Settings });
     }
-  
+
     if (Settings.NewTabClick) {
       document.documentElement.addEventListener(
         "click",
@@ -86,3 +85,16 @@ function formatAMPM(date) {
 
 //Initial State
 bind();
+
+function title() {
+  chrome.windows.getCurrent({ populate: true }, (info) => {
+    if (!info) return;
+
+    chrome.windows.getAll({ populate: true }, (list) => {
+      let index = list.findIndex((i) => i.id === info.id);
+      if (index > -1) document.title = "" + String.fromCharCode(index + 65);
+    });
+  });
+}
+
+title();
