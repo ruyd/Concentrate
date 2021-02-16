@@ -408,15 +408,17 @@ function removeFrameAds() {
     "about:blank",
   ];
 
+  const match = (w, s) => w.indexOf(s) > -1;
+
   for (let f = 0; f < frames.length; f++) {
     const frame = frames[f];
     const id = frame.getAttribute("id") || "";
     const name = frame.getAttribute("name") || "";
     const src = frame.getAttribute("src") || "";
-    const idHit = words.find((word) => id.indexOf(word) > -1);
-    const nameHit = words.find((word) => name.indexOf(word) > -1);
-    const srcHit = words.find((word) => src.indexOf(word) > -1);
-    if (idHit || nameHit || srcHit) {
+    const hit = words.find(
+      (word) => match(word, id) || match(word, name) || match(src, name)
+    );
+    if (hit) {
       frame.remove();
     }
   }
