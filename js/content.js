@@ -418,7 +418,7 @@ function removeFrameAds() {
     const hit = words.find(
       (word) => match(word, id) || match(word, name) || match(word, src)
     );
-    if (hit) {
+    if (typeof hit == "string") {
       frame.remove();
     }
   }
