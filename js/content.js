@@ -408,7 +408,7 @@ function removeFrameAds() {
     "about:blank",
   ];
 
-  const match = (w, s) => w.indexOf(s) > -1;
+  const match = (w, s) => (w.indexOf(s) > -1 ? true : false);
 
   for (let f = 0; f < frames.length; f++) {
     const frame = frames[f];
@@ -416,7 +416,7 @@ function removeFrameAds() {
     const name = frame.getAttribute("name") || "";
     const src = frame.getAttribute("src") || "";
     const hit = words.find(
-      (word) => match(word, id) || match(word, name) || match(src, name)
+      (word) => match(word, id) || match(word, name) || match(word, src)
     );
     if (hit) {
       frame.remove();
