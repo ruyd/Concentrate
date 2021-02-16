@@ -132,12 +132,12 @@ function TabModel(chrome_tab, settings) {
   this.Tab = chrome_tab;
   this.State = new TabState(settings);
   this.Greyout = new Greyout();
-  this.SoundButton = makeButton("audio", "Sound");
+  this.AudioButton = makeButton("audio", "Sound");
   this.PowerButton = makeButton("power", "Graying");
   this.MuteButton = GetMuteButton();
   this.SkipButton = GetSkipButton();
   this.PlayButton = GetPlayButton();
-  this.IsYoutube = function () {
+  this.IsYoutubeCheck = function () {
     this.Tab && this.Tab.url && this.Tab.url.indexOf("youtube") > 1;
   };
 }
@@ -263,20 +263,19 @@ TabModel.prototype.bind = function () {
 
 TabModel.prototype.draw = function () {
   const panel = document.getElementById("movie_player");
-  if (!panel || !this.Greyout) return;
+  if (!panel) return;
 
   const rect = panel.getBoundingClientRect();
+  const node = this.Greyout.Node;
+  node.style.height = rect.height - 0.5 + "px"; //nice yellow strip
+  node.style.height = rect.height + "px";
+  node.style.width = rect.width + "px";
+  node.style.top = rect.top + "px";
+  node.style.left = rect.left + "px";
+  this.PowerButton.Node.style.left = rect.right - 200 + "px";
+  this.AudioButton.Node.style.left = rect.right - 150 + "px";
 
-  //Model.Greyout.style.height = rect.height - 0.5 + "px"; //nice yellow strip
-  this.Greyout.style.height = rect.height + "px";
-  this.Greyout.style.width = rect.width + "px";
-  this.Greyout.style.top = rect.top + "px";
-  this.Greyout.style.left = rect.left + "px";
-
-  this.PowerButton.style.left = rect.right - 200 + "px";
-  this.AudioButton.style.left = rect.right - 150 + "px";
-
-  const text = this.State.GetDurationText();
+  const text = this.GetDurationText();
   this.Greyout.setText(text);
 };
 
@@ -397,7 +396,6 @@ function muteYouTubeAds() {
 function removeFrameAds() {
   const frames = document.getElementsByTagName("IFRAME");
   const words = [
-    "",
     "adserve",
     "ads",
     "_ad",
@@ -408,13 +406,14 @@ function removeFrameAds() {
     "about:blank",
   ];
 
-  const match = (w, s) => (s.indexOf(w) > -1 ? true : false);
+  const match = (w, s) => s.indexOf(w) > -1;
+  const attrib = (o, s) => o.getAttribute(s) || "xxxxx";
 
   for (let f = 0; f < frames.length; f++) {
     const frame = frames[f];
-    const id = frame.getAttribute("id") || "na";
-    const name = frame.getAttribute("name") || "na";
-    const src = frame.getAttribute("src") || "na";
+    const id = attrib(frame, "id");
+    const name = attrib(frame, "name");
+    const src = attrib(frame, "src");
     const hit = words.find(
       (word) => match(word, id) || match(word, name) || match(word, src)
     );
@@ -453,5 +452,5 @@ function startTimer() {
 }
 
 /// INITIALIZATION
-startTimer();
 connect();
+startTimer();
