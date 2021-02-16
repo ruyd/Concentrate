@@ -1,4 +1,5 @@
 "use strict";
+const settingsName = "Settings";
 var SavedSettings = {
   ContentDoubleClick: true,
   NewTabColor: "#242424",
@@ -31,8 +32,8 @@ const colorInput = document.getElementById("color");
 const colorIndicator = document.getElementById("indicator");
 
 function get() {
-  chrome.storage.sync.get("SavedSettings", function (data) {
-    if (data.SavedSettings) {
+  chrome.storage.sync.get(settingsName, function (data) {
+    if (data.Settings) {
       SavedSettings = data.SavedSettings;
     } else {
       //FirstRun Commit Default SavedSettings
@@ -56,6 +57,7 @@ function save() {
   SavedSettings.NewTabClick = clickInputCheckbox.checked;
   SavedSettings.RemoveAds = removeAdsInputCheckbox.checked;
   SavedSettings.YouTubeMute = youTubeAdsInputCheckbox.checked;
+  SavedSettings.RemoveComments = youTubeCommentsInputCheckbox.checked;
   SavedSettings.ShowClock = clockInputCheckbox.checked;
 
   commitToStorage();
@@ -63,14 +65,14 @@ function save() {
 }
 
 function commitToStorage() {
-  chrome.storage.sync.set({ Settings: SavedSettings });
+  chrome.storage.sync.set({ settingsName: SavedSettings });
 }
 
 function send() {
   let msg = {
     From: "options",
     Refresh: true,
-    Settings: SavedSettings,
+    settingsName: SavedSettings,
   };
 
   chrome.tabs.query({}, function (tabs) {
