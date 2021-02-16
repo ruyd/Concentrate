@@ -419,6 +419,7 @@ function removeFrameAds() {
       (word) => match(word, id) || match(word, name) || match(word, src)
     );
     if (typeof hit == "string") {
+      log("removing", frame);
       frame.remove();
     }
   }
