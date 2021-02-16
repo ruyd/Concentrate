@@ -23,8 +23,8 @@ const youTubeAdsInputCheckbox = document.getElementById(
 const removeAdsInputCheckbox = document.getElementById(
   "RemoveAdsInputCheckbox"
 );
-const youTubeCommentsInputCheckbox = document.getElementById(
-  "YouTubeCommentsInputCheckbox"
+const removeCommentsInputCheckbox = document.getElementById(
+  "RemoveCommentsInputCheckbox"
 );
 const clickInputCheckbox = document.getElementById("ClickInputCheckbox");
 const clockInputCheckbox = document.getElementById("ClockInputCheckbox");
@@ -44,7 +44,7 @@ function get() {
     removeAdsInputCheckbox.checked = SavedSettings.RemoveAds;
     clickInputCheckbox.checked = SavedSettings.NewTabClick;
     youTubeAdsInputCheckbox.checked = SavedSettings.YouTubeMute;
-    youTubeCommentsInputCheckbox.checked = SavedSettings.RemoveComments;
+    removeCommentsInputCheckbox.checked = SavedSettings.RemoveComments;
     clockInputCheckbox.checked = SavedSettings.ShowClock;
     colorInput.value = SavedSettings.NewTabColor || "";
     colorIndicator.style.backgroundColor = colorInput.value;
@@ -57,7 +57,7 @@ function save() {
   SavedSettings.NewTabClick = clickInputCheckbox.checked;
   SavedSettings.RemoveAds = removeAdsInputCheckbox.checked;
   SavedSettings.YouTubeMute = youTubeAdsInputCheckbox.checked;
-  SavedSettings.RemoveComments = youTubeCommentsInputCheckbox.checked;
+  SavedSettings.RemoveComments = RemoveCommentsInputCheckbox.checked;
   SavedSettings.ShowClock = clockInputCheckbox.checked;
 
   commitToStorage();
@@ -89,7 +89,7 @@ function send() {
 
 doubleClickInputCheckbox.onchange = save;
 youTubeAdsInputCheckbox.onchange = save;
-youTubeCommentsInputCheckbox.onchange = save;
+removeCommentsInputCheckbox.onchange = save;
 removeAdsInputCheckbox.onchange = save;
 clickInputCheckbox.onchange = save;
 clockInputCheckbox.onchange = save;

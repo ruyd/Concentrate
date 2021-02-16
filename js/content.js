@@ -7,24 +7,6 @@ const interval = 1000;
 const isYoutube = window.location.hostname.indexOf("youtube") > -1;
 const log = console.log.bind(window.console);
 const element = document.body || document.head || document.documentElement;
-const resources = [];
-
-// Worker
-function resource(filename) {
-  let script = document.createElement("script");
-  script.type = "module";
-  script.src = chrome.extension.getURL(filename);
-  return script;
-}
-
-for (let i = 0; i < resources.length; i++) {
-  let filename = resources[i];
-  let script = resource(filename);
-
-  if (!element.querySelector("script[src*='" + filename + "']")) {
-    element.appendChild(script);
-  }
-}
 
 // Messaging
 function connect() {
@@ -118,7 +100,7 @@ function makeButton(id, label) {
 function setModel(payload) {
   const model = new TabModel(payload.Tab, payload.SavedSettings);
   Model = model;
-  log(model);
+  model.bind();
 }
 // Objects
 
@@ -253,17 +235,23 @@ TabModel.prototype.toggleFullScreen = function () {
 };
 
 TabModel.prototype.bind = function () {
-  if (this.Model.State.ContentDoubleClick) {
-    document.documentElement.addEventListener("dblclick", toggleFullScreen);
+  if (this.State.ContentDoubleClick) {
+    document.documentElement.addEventListener(
+      "dblclick",
+      this.toggleFullScreen
+    );
   } else {
-    document.documentElement.removeEventListener("dblclick", toggleFullScreen);
+    document.documentElement.removeEventListener(
+      "dblclick",
+      this.toggleFullScreen
+    );
   }
 
   const mute = this.MuteButton;
   if (!mute) return;
 
   mute.addEventListener("click", (e) => {
-    if (Model.State.Showing && e.isTrusted) {
+    if (this.State.Showing && e.isTrusted) {
       //Model.toggleMute();
     }
   });
