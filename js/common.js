@@ -18,7 +18,7 @@ export function Settings(loaded) {
 
 export function TabModel(chrome_tab, settings) {
   this.Tab = chrome_tab;
-  this.SavedSettings = settings;
+  this.SavedSettings = new Settings(settings);
 }
 
-export default Settings;
+export default TabModel;

@@ -16,7 +16,6 @@ function tabify() {
   Tabs.clear();
   return chrome.tabs.query({}, (list) => {
     for (let item of list) {
-      log(item);
       if (item) setModel(item);
     }
   });
@@ -28,8 +27,8 @@ function setModel(item) {
 
 function onChange(e) {
   const item = e;
-  log(e);
-  //setModel(item);
+  log("change", e);
+  setModel(item);
 }
 
 // Listeners
@@ -52,11 +51,11 @@ function onMessageHandler(message, port) {
   const action = message && message.type;
   const model = port ? Tabs.get(port.sender.tab.id) : null;
   if (!model) {
-    log("tab n/a", message, port);
+    log("tab without model - bug1", Tabs, message, port);
   }
   switch (action) {
     case "connected":
-      if (port) port.postMessage({ type: "model", payload: model });
+      if (port) port.postMessage({ action: "model", payload: model });
       break;
     default:
       break;

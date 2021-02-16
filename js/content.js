@@ -48,8 +48,8 @@ function connect() {
 
 function onMessage(message) {
   log("onMessage", message);
-  const { type, payload } = message;
-  switch (type) {
+  const { action, payload } = message;
+  switch (action) {
     case "model":
       setModel(payload);
       break;
@@ -105,6 +105,7 @@ function makeButton(id, label) {
 function setModel(payload) {
   const model = new TabModel(payload.Tab, payload.SavedSettings);
   Model = model;
+  log(model);
 }
 // Objects
 
@@ -296,6 +297,7 @@ TabModel.prototype.hide = function () {
 
 TabModel.prototype.tick = function () {
   this.detect();
+
   if (!this.State.isTimerRunning) {
     this.State.isTimerRunning = true;
     this.SecondCounter = this.Duration;
@@ -394,21 +396,27 @@ function muteYouTubeAds() {
 
 function removeFrameAds() {
   const frames = document.getElementsByTagName("IFRAME");
+  const words = [
+    "",
+    "adserve",
+    "ads",
+    "_ad",
+    "podium",
+    "doubleclick",
+    "chatan",
+    "javascript:window",
+    "about:blank",
+  ];
+
   for (let f = 0; f < frames.length; f++) {
     const frame = frames[f];
-    const id = frame.getAttribute("id") || frame.getAttribute("name");
-    const adish = id ? id.indexOf("ads") > -1 : false;
+    const id = frame.getAttribute("id") || "";
+    const name = frame.getAttribute("name") || "";
     const src = frame.getAttribute("src") || "";
-    const srcadish =
-      src === "" ||
-      src.indexOf("adserve") > -1 ||
-      src.indexOf("ads") > -1 ||
-      src.indexOf("_ad") > -1 ||
-      src.indexOf("podium") > -1 ||
-      src.indexOf("doubleclick") > -1 ||
-      src.indexOf("chatan") > -1 ||
-      src.indexOf("about:blank") > -1;
-    if (adish || srcadish) {
+    const idHit = words.find((word) => id.indexOf(word) > -1);
+    const nameHit = words.find((word) => name.indexOf(word) > -1);
+    const srcHit = words.find((word) => src.indexOf(word) > -1);
+    if (idHit || nameHit || srcHit) {
       frame.remove();
     }
   }
@@ -427,18 +435,14 @@ function removeClass(name) {
 
 function startTimer() {
   if (Model && Model.hasOwnProperty("State")) {
-    if (Model.State.FrameAds) {
+    if (Model.State.RemoveAds) {
       removeFrameAds();
     }
 
     if (Model.State.YouTubeMute && isYoutube) {
+      Model.tick();
       muteYouTubeAds();
       removeVideoAds();
-    }
-    if (Model.tick) {
-      log("tick found!");
-    } else {
-      log("tick not found");
     }
   }
 
