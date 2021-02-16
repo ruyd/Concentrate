@@ -12,7 +12,7 @@ export function Settings(loaded) {
   this.LabelWindowNewTabs = true;
 
   if (loaded) {
-    Object.assign(loaded, this);
+    Object.assign(this, loaded);
   }
 }
 

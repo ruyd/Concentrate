@@ -47,15 +47,28 @@ function connect() {
 }
 
 function onMessage(message) {
-  log("onMessage", message);
+  log("ContentJS::onMessage", message);
   const { action, payload } = message;
   switch (action) {
     case "model":
       setModel(payload);
       break;
+    case "update":
+      updateOptionSettings(payload);
+      break;
     default:
       break;
   }
+}
+
+chrome.runtime.onMessage.addListener(runtimeMessageHandler);
+function runtimeMessageHandler(request, sender, sendResponse) {
+  log("Content::RuntimeMessage", request, sender);
+  onMessage(request);
+}
+
+function updateOptionSettings(payload) {
+  Object.assign(Model.State, payload);
 }
 
 // Composition
@@ -143,8 +156,8 @@ function TabModel(chrome_tab, settings) {
 }
 
 class TabState extends Settings {
-  constructor() {
-    super();
+  constructor(loaded) {
+    super(loaded);
     this.DidWeMute = false;
     this.DurationInSeconds = 0;
     this.PreviousDuration = 0;
@@ -154,20 +167,15 @@ class TabState extends Settings {
 }
 
 function Settings(loaded) {
-  this.ContentDoubleClick = true;
-  this.NewTabColor = "#242424";
-  this.NewTabClick = true;
-  this.RemoveAds = true;
-  this.RemoveComments = true;
-  this.YouTubeMute = true;
-  this.ShowClock = true;
-  this.GrayingOn = true;
-  this.MutingOn = true;
-  this.SkipAds = true;
-  this.LabelWindowNewTabs = true;
+  this.ContentDoubleClick = false;
+  this.RemoveAds = false;
+  this.RemoveComments = false;
+  this.GrayingOn = false;
+  this.MutingOn = false;
+  this.SkipAds = false;
 
   if (loaded) {
-    Object.assign(loaded, this);
+    Object.assign(this, loaded);
   }
 }
 
@@ -422,7 +430,7 @@ function removeFrameAds() {
 function emptyTagName(name, removeNode) {
   const nodes = document.getElementsByTagName(name);
   for (let node of nodes) {
-    node.innerHTML = "";
+    if (node.innerHTML.length > 0) node.innerHTML = "";
     if (removeNode) node.remove();
   }
 }

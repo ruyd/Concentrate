@@ -9,9 +9,9 @@
             "request": "attach",
             "port": 9223,
             "name": "Edge Attach 9223",
-            "url": "https://readm.org/manga/16086/969/all-pages",
-            "url3": "extension://pflhhidhafdpggilhocmlfbaogcgbnln/html/background.html",
-            "url2": "edge://newtab",
+            "url": "https://www.youtube.com/watch?v=YQc4WT0yDH4",
+            "url2": "extension://pflhhidhafdpggilhocmlfbaogcgbnln/html/background.html",
+            "url23": "edge://newtab",
             "webRoot": "${workspaceFolder}/js"
         }
     ]

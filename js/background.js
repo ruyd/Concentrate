@@ -43,19 +43,37 @@ chrome.runtime.onConnect.addListener(onConnect);
 
 function onConnect(port) {
   log(port);
-  port.onMessage.addListener(onMessageHandler);
+  port.onMessage.addListener(tabMessageHandler);
   port.onDisconnect.addListener(() => {});
 }
 
-function onMessageHandler(message, port) {
+function tabMessageHandler(message, port) {
   const action = message && message.type;
   const model = port ? Tabs.get(port.sender.tab.id) : null;
   if (!model) {
-    log("tab without model - bug1", Tabs, message, port);
+    console.error("tab without model - bug1", Tabs, message, port);
   }
   switch (action) {
     case "connected":
       if (port) port.postMessage({ action: "model", payload: model });
+      break;
+    default:
+      break;
+  }
+}
+
+chrome.runtime.onMessage.addListener(runtimeMessageHandler);
+
+function runtimeMessageHandler({ action, payload }, sender, sendResponse) {
+  log("BgJS", action, payload);
+  const p = payload;
+  switch (action) {
+    case "update":
+      Object.assign(Context.Settings, payload);
+
+      Tabs.forEach((item) => {
+        Object.assign(item.SavedSettings, payload);
+      });
       break;
     default:
       break;

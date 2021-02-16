@@ -70,11 +70,14 @@ function commitToStorage() {
 
 function send() {
   let msg = {
-    From: "options",
-    Refresh: true,
-    Settings: SavedSettings,
+    action: "update",
+    payload: SavedSettings,
   };
 
+  //BgJS
+  chrome.runtime.sendMessage(msg);
+
+  //ContentJS as Runtime
   chrome.tabs.query({}, function (tabs) {
     for (let tab of tabs) {
       chrome.tabs.sendMessage(tab.id, msg);
