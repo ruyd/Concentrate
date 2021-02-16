@@ -365,13 +365,6 @@ function removeVideoAds() {
   }
 }
 
-function removeClassName(name) {
-  let elements = document.getElementsByClassName(name);
-  for (let i = 0; i < elements.length; i++) {
-    elements[i].remove();
-  }
-}
-
 function muteYouTubeAds() {
   if (Model.SkipButton && Model.State.SkipOn) {
     Model.skip();
@@ -423,13 +416,22 @@ function removeFrameAds() {
     }
   }
 
-  removeClass("OUTBRAIN");
+  removeClassName("OUTBRAIN");
 }
 
-function removeClass(name) {
+function emptyTagName(name, removeNode) {
+  const nodes = document.getElementsByTagName(name);
+  for (let node of nodes) {
+    node.innerHTML = "";
+    if (removeNode) node.remove();
+  }
+}
+
+function removeClassName(name) {
   const elements = document.getElementsByClassName(name);
   for (let el of elements) {
     el.remove();
+    log("class-");
   }
 }
 
@@ -441,10 +443,16 @@ function startTimer() {
       removeFrameAds();
     }
 
-    if (Model.State.YouTubeMute && isYoutube) {
+    if (!isYoutube) return;
+
+    if (Model.State.YouTubeMute) {
       Model.tick();
       muteYouTubeAds();
       removeVideoAds();
+    }
+
+    if (Model.State.RemoveComments) {
+      emptyTagName("ytd-comments");
     }
   }
 

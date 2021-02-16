@@ -1,5 +1,5 @@
 "use strict";
-import TabModel from "./common.js";
+import TabModel from "./TabModel.Settings.js";
 
 const Tabs = new Map();
 const Context = {};

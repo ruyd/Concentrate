@@ -1,56 +1,76 @@
-const doubleClickInputCheckbox = document.getElementById("DoubleClickInputCheckbox");
-const youTubeInputCheckbox = document.getElementById("YouTubeInputCheckbox");
-const iFrameInputCheckbox = document.getElementById("iFrameInputCheckbox");
+"use strict";
+var SavedSettings = {
+  ContentDoubleClick: true,
+  NewTabColor: "#242424",
+  NewTabClick: true,
+  RemoveAds: true,
+  RemoveComments: true,
+  YouTubeMute: true,
+  ShowClock: true,
+  GrayingOn: true,
+  MutingOn: true,
+  SkipAds: true,
+  LabelWindowNewTabs: true,
+};
+
+const doubleClickInputCheckbox = document.getElementById(
+  "DoubleClickInputCheckbox"
+);
+const youTubeAdsInputCheckbox = document.getElementById(
+  "YouTubeAdsInputCheckbox"
+);
+const removeAdsInputCheckbox = document.getElementById(
+  "RemoveAdsInputCheckbox"
+);
+const youTubeCommentsInputCheckbox = document.getElementById(
+  "YouTubeCommentsInputCheckbox"
+);
 const clickInputCheckbox = document.getElementById("ClickInputCheckbox");
 const clockInputCheckbox = document.getElementById("ClockInputCheckbox");
 const colorInput = document.getElementById("color");
 const colorIndicator = document.getElementById("indicator");
 
-var Settings = {
-  ContentDoubleClick: true,
-  NewTabColor: "#242424",
-  NewTabClick: true,
-  FrameAds: true,
-  YouTubeMute: true,
-  ShowClock: true,
-};
-
 function get() {
-  chrome.storage.sync.get("Settings", function (data) {
-    if (data.Settings) {
-      Settings = data.Settings;
+  chrome.storage.sync.get("SavedSettings", function (data) {
+    if (data.SavedSettings) {
+      SavedSettings = data.SavedSettings;
     } else {
-      //FirstRun Commit Default Settings
-      chrome.storage.sync.set({ Settings });
+      //FirstRun Commit Default SavedSettings
+      commitToStorage();
     }
 
-    doubleClickInputCheckbox.checked = Settings.ContentDoubleClick;
-    iFrameInputCheckbox.checked = Settings.FrameAds;
-    clickInputCheckbox.checked = Settings.NewTabClick;
-    youTubeInputCheckbox.checked = Settings.YouTubeMute;
-    clockInputCheckbox.checked = Settings.ShowClock;
-    colorInput.value = Settings.NewTabColor || "";
+    doubleClickInputCheckbox.checked = SavedSettings.ContentDoubleClick;
+    removeAdsInputCheckbox.checked = SavedSettings.RemoveAds;
+    clickInputCheckbox.checked = SavedSettings.NewTabClick;
+    youTubeAdsInputCheckbox.checked = SavedSettings.YouTubeMute;
+    youTubeCommentsInputCheckbox.checked = SavedSettings.RemoveComments;
+    clockInputCheckbox.checked = SavedSettings.ShowClock;
+    colorInput.value = SavedSettings.NewTabColor || "";
     colorIndicator.style.backgroundColor = colorInput.value;
   });
 }
 
 function save() {
-  Settings.ContentDoubleClick = doubleClickInputCheckbox.checked;
-  Settings.NewTabColor = colorInput.value;
-  Settings.NewTabClick = clickInputCheckbox.checked;
-  Settings.FrameAds = iFrameInputCheckbox.checked;
-  Settings.YouTubeMute = youTubeInputCheckbox.checked;
-  Settings.ShowClock = clockInputCheckbox.checked;
+  SavedSettings.ContentDoubleClick = doubleClickInputCheckbox.checked;
+  SavedSettings.NewTabColor = colorInput.value;
+  SavedSettings.NewTabClick = clickInputCheckbox.checked;
+  SavedSettings.RemoveAds = removeAdsInputCheckbox.checked;
+  SavedSettings.YouTubeMute = youTubeAdsInputCheckbox.checked;
+  SavedSettings.ShowClock = clockInputCheckbox.checked;
 
-  chrome.storage.sync.set({ Settings });
+  commitToStorage();
   send();
+}
+
+function commitToStorage() {
+  chrome.storage.sync.set({ Settings: SavedSettings });
 }
 
 function send() {
   let msg = {
     From: "options",
     Refresh: true,
-    Settings: Settings,
+    Settings: SavedSettings,
   };
 
   chrome.tabs.query({}, function (tabs) {
@@ -63,8 +83,9 @@ function send() {
 //Events
 
 doubleClickInputCheckbox.onchange = save;
-youTubeInputCheckbox.onchange = save;
-iFrameInputCheckbox.onchange = save;
+youTubeAdsInputCheckbox.onchange = save;
+youTubeCommentsInputCheckbox.onchange = save;
+removeAdsInputCheckbox.onchange = save;
 clickInputCheckbox.onchange = save;
 clockInputCheckbox.onchange = save;
 colorInput.onchange = () => {
