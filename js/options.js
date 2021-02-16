@@ -1,5 +1,5 @@
 "use strict";
-const settingsName = "Settings";
+
 var SavedSettings = {
   ContentDoubleClick: true,
   NewTabColor: "#242424",
@@ -32,9 +32,9 @@ const colorInput = document.getElementById("color");
 const colorIndicator = document.getElementById("indicator");
 
 function get() {
-  chrome.storage.sync.get(settingsName, function (data) {
-    if (data.Settings) {
-      SavedSettings = data.SavedSettings;
+  chrome.storage.sync.get("Settings", function (store) {
+    if (store.Settings) {
+      SavedSettings = store.Settings;
     } else {
       //FirstRun Commit Default SavedSettings
       commitToStorage();
@@ -65,14 +65,14 @@ function save() {
 }
 
 function commitToStorage() {
-  chrome.storage.sync.set({ settingsName: SavedSettings });
+  chrome.storage.sync.set({ Settings: SavedSettings });
 }
 
 function send() {
   let msg = {
     From: "options",
     Refresh: true,
-    settingsName: SavedSettings,
+    Settings: SavedSettings,
   };
 
   chrome.tabs.query({}, function (tabs) {
