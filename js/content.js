@@ -1,7 +1,7 @@
 "use strict";
 var Port;
 var Model;
-var Timer = null;
+var Timer;
 
 const interval = 1000;
 const isYoutube = window.location.hostname.indexOf("youtube") > -1;
