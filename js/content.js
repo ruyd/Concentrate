@@ -14,7 +14,7 @@ function connect() {
     name: "content",
   });
 
-  Port.onMessage.addListener(onMessage);
+  Port.onMessage.addListener(onMessageHandler);
 
   Port.onDisconnect.addListener(function () {
     if (Port) {
@@ -23,11 +23,11 @@ function connect() {
   });
 
   Port.postMessage({
-    type: "connected",
+    action: "connected",
   });
 }
 
-function onMessage(message) {
+function onMessageHandler(message) {
   const { action, payload } = message;
   switch (action) {
     case "model":
@@ -43,7 +43,7 @@ function onMessage(message) {
 
 chrome.runtime.onMessage.addListener(runtimeMessageHandler);
 function runtimeMessageHandler(request, sender, sendResponse) {
-  onMessage(request);
+  onMessageHandler(request);
 }
 
 function updateOptionSettings(payload) {

@@ -43,41 +43,36 @@ chrome.runtime.onConnect.addListener(onConnect);
 
 function onConnect(port) {
   log(port);
-  port.onMessage.addListener(tabMessageHandler);
+  port.onMessage.addListener(onMessageHandler);
   port.onDisconnect.addListener(() => {});
 }
 
-function tabMessageHandler(message, port) {
-  const action = message && message.type;
-  const model = port ? Tabs.get(port.sender.tab.id) : null;
-  if (!model) {
-    console.error("tab without model - bug1", Tabs, message, port);
-  }
+function onMessageHandler(message, port) {
+  const { action, payload } = message;
   switch (action) {
     case "connected":
+      const model = port ? Tabs.get(port.sender.tab.id) : null;
+      if (!model) {
+        console.error("tab without model - bug1", Tabs, message, port);
+      }
       if (port) port.postMessage({ action: "model", payload: model });
       break;
+
+    case "update":
+      Object.assign(Context.Settings, payload);
+      Tabs.forEach((item) => {
+        Object.assign(item.SavedSettings, payload);
+      });
+      break;
+
     default:
       break;
   }
 }
 
 chrome.runtime.onMessage.addListener(runtimeMessageHandler);
-
-function runtimeMessageHandler({ action, payload }, sender, sendResponse) {
-  log("BgJS", action, payload);
-  const p = payload;
-  switch (action) {
-    case "update":
-      Object.assign(Context.Settings, payload);
-
-      Tabs.forEach((item) => {
-        Object.assign(item.SavedSettings, payload);
-      });
-      break;
-    default:
-      break;
-  }
+function runtimeMessageHandler(message, sender, sendResponse) {
+  onMessageHandler(message, sender);
 }
 
 function onNavigate() {}

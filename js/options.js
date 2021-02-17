@@ -1,5 +1,5 @@
 "use strict";
-
+// Defaults
 var SavedSettings = {
   ContentDoubleClick: true,
   NewTabColor: "#242424",
@@ -14,6 +14,7 @@ var SavedSettings = {
   LabelWindowNewTabs: true,
 };
 
+// Form
 const checkboxes = new Map();
 const keys = Object.keys(SavedSettings);
 keys.forEach((a) => {
@@ -75,7 +76,6 @@ function send() {
 }
 
 // Events
-
 checkboxes.forEach((checkbox, key) => {
   checkbox.onchange = save;
 });
