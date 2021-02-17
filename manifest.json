@@ -32,7 +32,7 @@
         "newtab": "html/newtab.html"
     },
     "default_locale": "en",
-    "description": "Concentrate enables a True Dark-Mode NewTab Page, Fullscreen Focus Enhancements and Noise Reductions",
+    "description": "Concentrate enables a clean Dark-Mode NewTab Page and removes distracting Ads and Social Comments",
     "permissions": [
         "tabs",
         "activeTab",

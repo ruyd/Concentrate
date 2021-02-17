@@ -1,8 +1,8 @@
 "use strict";
-//webpack?
 var Port;
 var Model;
 var Timer;
+var scrollInterval;
 const interval = 1000;
 const isYoutube = window.location.hostname.indexOf("youtube") > -1;
 const log = console.log.bind(window.console);
@@ -10,7 +10,6 @@ const element = document.body || document.head || document.documentElement;
 
 // Messaging
 function connect() {
-  log("connecting");
   Port = chrome.runtime.connect({
     name: "content",
   });
@@ -146,6 +145,8 @@ class TabState extends Settings {
     this.PreviousDuration = 0;
     this.isFullscreen = false;
     this.isTimerRunning = false;
+    this.EnableAutoScroll = false;
+    this.AutoScrollSpeed = 1;
   }
 }
 
@@ -236,20 +237,28 @@ TabModel.prototype.toggleFullScreen = function () {
 };
 
 TabModel.prototype.bind = function () {
-  log("bind()");
   if (this.State.ContentDoubleClick) {
-    if (this.Bound) return;
-    this.Bound = true;
+    if (this.DoubleClickBound) return;
+    this.DoubleClickBound = true;
     document.documentElement.addEventListener(
       "dblclick",
       this.toggleFullScreen
     );
   } else {
-    this.Bound = false;
+    this.DoubleClickBound = false;
     document.documentElement.removeEventListener(
       "dblclick",
       this.toggleFullScreen
     );
+  }
+
+  if (!this.KeyDownBound) {
+    document.documentElement.addEventListener("keydown", onKeyDown);
+    this.KeyDownBound = true;
+  }
+
+  if (isYoutube) {
+    this.inject();
   }
 
   const mute = this.MuteButton;
@@ -436,7 +445,53 @@ function removeClassName(name) {
   }
 }
 
-// Timer
+function onKeyDown(e) {
+  const key = e.code;
+  const shiftDown = e.shiftKey;
+  const controlDown = e.ctrlKey;
+  if (controlDown && key === "Space") {
+    Model.State.EnableAutoScroll = !Model.State.EnableAutoScroll;
+    e.preventDefault();
+  }
+
+  if (Model.State.EnableAutoScroll && controlDown) {
+    if (key === "ArrowUp") {
+      Model.State.AutoScrollSpeed += 1;
+    }
+    if (key === "ArrowDown") {
+      if (Model.State.AutoScrollSpeed > 1) Model.State.AutoScrollSpeed -= 1;
+    }
+    e.preventDefault();
+  }
+}
+
+function autoScroll() {
+  if (Model.State.EnableAutoScroll) {
+    if (!scrollInterval) {
+      const delay = 1;
+      scrollInterval = setInterval(
+        () =>
+          window.scrollBy({
+            top: Model.State.AutoScrollSpeed,
+            left: 0,
+            behavior: "smooth",
+          }),
+        delay
+      );
+    }
+  } else {
+    resetScroll();
+  }
+}
+
+function resetScroll() {
+  if (scrollInterval) {
+    clearInterval(scrollInterval);
+    scrollInterval = null;
+  }
+}
+
+// Timer - Refactor
 
 function startTimer() {
   if (Model && Model.hasOwnProperty("State")) {
@@ -444,15 +499,15 @@ function startTimer() {
       removeFrameAds();
     }
 
-    if (!isYoutube) return;
+    autoScroll();
 
-    if (Model.State.YouTubeMute) {
+    if (Model.State.YouTubeMute && isYoutube) {
       Model.tick();
       muteYouTubeAds();
       removeVideoAds();
     }
 
-    if (Model.State.RemoveComments) {
+    if (Model.State.RemoveComments && isYoutube) {
       emptyTagName("ytd-comments");
     }
   }
