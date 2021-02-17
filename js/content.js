@@ -28,7 +28,6 @@ function connect() {
 }
 
 function onMessage(message) {
-  log("ContentJS::onMessage", message);
   const { action, payload } = message;
   switch (action) {
     case "model":
@@ -44,7 +43,6 @@ function onMessage(message) {
 
 chrome.runtime.onMessage.addListener(runtimeMessageHandler);
 function runtimeMessageHandler(request, sender, sendResponse) {
-  log("Content::RuntimeMessage", request, sender);
   onMessage(request);
 }
 

@@ -14,20 +14,13 @@ var SavedSettings = {
   LabelWindowNewTabs: true,
 };
 
-const doubleClickInputCheckbox = document.getElementById(
-  "DoubleClickInputCheckbox"
-);
-const youTubeAdsInputCheckbox = document.getElementById(
-  "YouTubeAdsInputCheckbox"
-);
-const removeAdsInputCheckbox = document.getElementById(
-  "RemoveAdsInputCheckbox"
-);
-const removeCommentsInputCheckbox = document.getElementById(
-  "RemoveCommentsInputCheckbox"
-);
-const clickInputCheckbox = document.getElementById("ClickInputCheckbox");
-const clockInputCheckbox = document.getElementById("ClockInputCheckbox");
+const checkboxes = new Map();
+const keys = Object.keys(SavedSettings);
+keys.forEach((a) => {
+  const el = document.getElementById(a + "InputCheckbox");
+  if (el) checkboxes.set(a, el);
+});
+
 const colorInput = document.getElementById("color");
 const colorIndicator = document.getElementById("indicator");
 
@@ -36,29 +29,25 @@ function get() {
     if (store.Settings) {
       SavedSettings = store.Settings;
     } else {
-      //FirstRun Commit Default SavedSettings
+      // FirstRun Commit Default SavedSettings
       commitToStorage();
     }
 
-    doubleClickInputCheckbox.checked = SavedSettings.ContentDoubleClick;
-    removeAdsInputCheckbox.checked = SavedSettings.RemoveAds;
-    clickInputCheckbox.checked = SavedSettings.NewTabClick;
-    youTubeAdsInputCheckbox.checked = SavedSettings.YouTubeMute;
-    removeCommentsInputCheckbox.checked = SavedSettings.RemoveComments;
-    clockInputCheckbox.checked = SavedSettings.ShowClock;
+    checkboxes.forEach((checkbox, key) => {
+      checkbox.checked = SavedSettings[key];
+    });
+
     colorInput.value = SavedSettings.NewTabColor || "";
     colorIndicator.style.backgroundColor = colorInput.value;
   });
 }
 
 function save() {
-  SavedSettings.ContentDoubleClick = doubleClickInputCheckbox.checked;
+  checkboxes.forEach((checkbox, key) => {
+    SavedSettings[key] = checkbox.checked;
+  });
+
   SavedSettings.NewTabColor = colorInput.value;
-  SavedSettings.NewTabClick = clickInputCheckbox.checked;
-  SavedSettings.RemoveAds = removeAdsInputCheckbox.checked;
-  SavedSettings.YouTubeMute = youTubeAdsInputCheckbox.checked;
-  SavedSettings.RemoveComments = RemoveCommentsInputCheckbox.checked;
-  SavedSettings.ShowClock = clockInputCheckbox.checked;
 
   commitToStorage();
   send();
@@ -74,10 +63,10 @@ function send() {
     payload: SavedSettings,
   };
 
-  //BgJS
+  // BgJS
   chrome.runtime.sendMessage(msg);
 
-  //ContentJS as Runtime
+  // ContentJS as Runtime
   chrome.tabs.query({}, function (tabs) {
     for (let tab of tabs) {
       chrome.tabs.sendMessage(tab.id, msg);
@@ -85,14 +74,12 @@ function send() {
   });
 }
 
-//Events
+// Events
 
-doubleClickInputCheckbox.onchange = save;
-youTubeAdsInputCheckbox.onchange = save;
-removeCommentsInputCheckbox.onchange = save;
-removeAdsInputCheckbox.onchange = save;
-clickInputCheckbox.onchange = save;
-clockInputCheckbox.onchange = save;
+checkboxes.forEach((checkbox, key) => {
+  checkbox.onchange = save;
+});
+
 colorInput.onchange = () => {
   colorIndicator.style.backgroundColor = colorInput.value;
   save();
@@ -102,4 +89,5 @@ colorInput.onkeyup = () => {
   colorIndicator.style.backgroundColor = colorInput.value;
 };
 
+// Init
 get();
