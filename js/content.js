@@ -1,11 +1,11 @@
 "use strict";
 var Port;
 var Model;
+var Timer = null;
 
 const interval = 1000;
 const isYoutube = window.location.hostname.indexOf("youtube") > -1;
 const log = console.log.bind(window.console);
-const element = document.body || document.head || document.documentElement;
 
 // Messaging
 function connect() {
@@ -129,7 +129,6 @@ function TabModel(chrome_tab, settings) {
   this.MuteButton = GetMuteButton();
   this.SkipButton = GetSkipButton();
   this.PlayButton = GetPlayButton();
-  this.Timer;
   this.Tasks = new Set();
   this.ScrollInterval;
 }
@@ -466,8 +465,6 @@ function stopScroll() {
   }
 }
 
-// AutoScroll-ish
-
 function onKeyDown(e) {
   const key = e.code;
   const shiftDown = e.shiftKey;
@@ -498,7 +495,7 @@ function onKeyDown(e) {
   }
 }
 
-/// Utils
+// Utils
 function emptyTagName(name, removeNode) {
   const nodes = document.getElementsByTagName(name);
   for (let node of nodes) {
@@ -522,23 +519,23 @@ function beep() {
   snd.play();
 }
 
-// Timer - Refactor
+// Timer
 
 function startTimer() {
   if (Model && Model.hasOwnProperty("State")) {
-    if (Model.Tasks.length === 0) {
-      Model.Tasks.set(removeFrameAds);
-      Model.Tasks.set(muteYouTubeAds);
-      Model.Tasks.set(removeVideoAds);
-      Model.Tasks.set(removeComments);
-      Model.Tasks.set(autoScroll);
-      ///
-      Model.Tasks.set(Model.tick);
+    if (Model.Tasks.size === 0) {
+      Model.Tasks.add(removeFrameAds);
+      Model.Tasks.add(muteYouTubeAds);
+      Model.Tasks.add(removeVideoAds);
+      Model.Tasks.add(removeComments);
+      Model.Tasks.add(autoScroll);
     }
 
     for (let task of Model.Tasks) {
-      task.call();
+      task();
     }
+
+    Model.tick();
   }
 
   Timer = setTimeout(startTimer, interval);
