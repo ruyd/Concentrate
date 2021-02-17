@@ -51,6 +51,7 @@ function runtimeMessageHandler(request, sender, sendResponse) {
 
 function updateOptionSettings(payload) {
   Object.assign(Model.State, payload);
+  Model.bind();
 }
 
 // Composition
@@ -235,12 +236,16 @@ TabModel.prototype.toggleFullScreen = function () {
 };
 
 TabModel.prototype.bind = function () {
+  log("bind()");
   if (this.State.ContentDoubleClick) {
+    if (this.Bound) return;
+    this.Bound = true;
     document.documentElement.addEventListener(
       "dblclick",
       this.toggleFullScreen
     );
   } else {
+    this.Bound = false;
     document.documentElement.removeEventListener(
       "dblclick",
       this.toggleFullScreen
@@ -252,7 +257,7 @@ TabModel.prototype.bind = function () {
 
   mute.addEventListener("click", (e) => {
     if (this.State.Showing && e.isTrusted) {
-      //Model.toggleMute();
+      //this.toggleMute();
     }
   });
 };
