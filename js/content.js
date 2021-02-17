@@ -357,7 +357,7 @@ TabModel.prototype.GetDurationText = function () {
   return `${minutes}:${seconds} / ${duration}`;
 };
 
-// Visitors
+// Actions
 
 function removeVideoAds() {
   if (!Model.State.YouTubeMute) return;

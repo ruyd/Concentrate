@@ -4,6 +4,7 @@ var SavedSettings = {
   ContentDoubleClick: true,
   NewTabColor: "#242424",
   NewTabClick: true,
+  NewTabBookmarks: true,
   RemoveAds: true,
   RemoveComments: true,
   YouTubeMute: true,
@@ -25,6 +26,7 @@ keys.forEach((a) => {
 const colorInput = document.getElementById("color");
 const colorIndicator = document.getElementById("indicator");
 
+// Actions
 function get() {
   chrome.storage.sync.get("Settings", function (store) {
     if (store.Settings) {
