@@ -42,9 +42,12 @@ chrome.tabs.onActiveChanged.addListener(function (ot) {});
 chrome.runtime.onConnect.addListener(onConnect);
 
 function onConnect(port) {
-  log(port);
   port.onMessage.addListener(onMessageHandler);
-  port.onDisconnect.addListener(() => {});
+  port.onDisconnect.addListener(() => {
+    if (port) {
+      port.Closed = true;
+    }
+  });
 }
 
 function onMessageHandler(message, port) {

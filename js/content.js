@@ -34,7 +34,7 @@ function onMessageHandler(message) {
       setModel(payload);
       break;
     case "update":
-      updateOptionSettings(payload);
+      updateOptionsState(payload);
       break;
     default:
       break;
@@ -46,7 +46,7 @@ function runtimeMessageHandler(request, sender, sendResponse) {
   onMessageHandler(request);
 }
 
-function updateOptionSettings(payload) {
+function updateOptionsState(payload) {
   Object.assign(Model.State, payload);
   Model.bind();
 }
