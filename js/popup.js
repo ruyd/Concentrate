@@ -41,14 +41,12 @@ function init() {
 }
 
 chrome.runtime.onMessage.addListener(onMessageHandler);
-function onMessageHandler(message) {
-  console.log(message);
-  const { action, payload } = message;
+function onMessageHandler({ action, payload }) {
   switch (action) {
     case "state.set":
       setState(payload);
       break;
-      break;
+
     default:
       break;
   }
@@ -87,5 +85,5 @@ function send() {
   });
 }
 
-// Init
+//////
 init();

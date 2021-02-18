@@ -5,14 +5,37 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "ContentScript",
             "type": "edge",
             "request": "attach",
             "port": 9223,
-            "name": "Edge Attach 9223",
             "url": "https://www.youtube.com/watch?v=YQc4WT0yDH4",
-            "url2": "extension://pflhhidhafdpggilhocmlfbaogcgbnln/html/background.html",
-            "url23": "edge://newtab",
             "webRoot": "${workspaceFolder}/js"
-        }
+        },
+        {
+            "name": "Background",
+            "type": "edge",
+            "request": "attach",
+            "port": 9223,
+            "url": "extension://pflhhidhafdpggilhocmlfbaogcgbnln/html/background.html",
+            "webRoot": "${workspaceFolder}/js"
+        },
+        {
+            "name": "NewTab",
+            "type": "edge",
+            "request": "attach",
+            "port": 9223,
+            "url": "edge://newtab",
+            "webRoot": "${workspaceFolder}/js"
+        },
+        {
+            "name": "Popup",
+            "type": "edge",
+            "request": "attach",
+            "port": 9223,
+            "url": "extension://pflhhidhafdpggilhocmlfbaogcgbnln/html/popup.html",
+            "webRoot": "${workspaceFolder}/js"
+        },
+
     ]
 }

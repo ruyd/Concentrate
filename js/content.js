@@ -55,7 +55,7 @@ function updateOptionsState(payload) {
 function createElement(id, cls) {
   const node = document.createElement("div");
   node.setAttribute("id", id);
-  node.setAttribute("class", cls);
+  if (cls) node.setAttribute("class", cls);
   return node;
 }
 
@@ -431,7 +431,6 @@ function removeComments() {
 
 function inject() {
   if (!isYoutube || !document.body || !Model.IsReady()) return;
-  log("inject", Model.Greyout, Model.AudioButton, Model.PowerButton);
   document.body.appendChild(Model.Greyout.Node);
   document.body.appendChild(Model.AudioButton.Node);
   document.body.appendChild(Model.PowerButton.Node);
