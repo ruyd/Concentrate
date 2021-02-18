@@ -89,8 +89,7 @@ function isMuted(element) {
 
 function makeButton(id, label) {
   const node = createElement(id);
-  const btn = new Button(node);
-  btn.Label = label;
+  const btn = new Button(node, label);
   return btn;
 }
 
@@ -216,12 +215,6 @@ TabModel.prototype.unmute = function () {
   log("Content back -> unmuting");
 };
 
-TabModel.prototype.inject = function () {
-  document.body.appendChild(this.Greyout);
-  document.body.appendChild(this.AudioButton);
-  document.body.appendChild(this.PowerButton);
-};
-
 TabModel.prototype.toggleFullScreen = function () {
   if (!document.fullscreenElement) {
     document.documentElement.requestFullscreen();
@@ -233,6 +226,8 @@ TabModel.prototype.toggleFullScreen = function () {
 };
 
 TabModel.prototype.bind = function () {
+  inject();
+
   if (this.State.ContentDoubleClick) {
     if (this.DoubleClickBound) return;
     this.DoubleClickBound = true;
@@ -253,14 +248,9 @@ TabModel.prototype.bind = function () {
     this.KeyDownBound = true;
   }
 
-  if (isYoutube) {
-    this.inject();
-  }
-
   const mute = this.MuteButton;
-  if (!mute) return;
-
-  mute.addEventListener("click", (e) => {
+  if (!mute || mute.Node) return;
+  mute.Node.addEventListener("click", (e) => {
     if (this.State.Showing && e.isTrusted) {
       //this.toggleMute();
     }
@@ -332,8 +322,6 @@ TabModel.prototype.detect = function () {
 
   this.State.Playing =
     document.getElementsByClassName("paused-mode").length > 0;
-  //const label = PlayButton.getAttribute("title") ?? "";
-  //this.State.Playing = label.toLowerCase().indexOf("pause") > -1;
 };
 
 TabModel.prototype.GetDurationText = function () {
@@ -355,6 +343,10 @@ TabModel.prototype.GetDurationText = function () {
   }
 
   return `${minutes}:${seconds} / ${duration}`;
+};
+
+TabModel.prototype.IsReady = function () {
+  return this.hasOwnProperty("State");
 };
 
 // Actions
@@ -437,11 +429,19 @@ function removeComments() {
   }
 }
 
+function inject() {
+  if (!isYoutube || !document.body || !Model.IsReady()) return;
+  log("inject", Model.Greyout, Model.AudioButton, Model.PowerButton);
+  document.body.appendChild(Model.Greyout.Node);
+  document.body.appendChild(Model.AudioButton.Node);
+  document.body.appendChild(Model.PowerButton.Node);
+}
+
 // AutoScroll
 
 function autoScroll() {
   if (Model.State.EnableAutoScroll) {
-    if (!scrollInterval) {
+    if (!Model.ScrollInterval) {
       const delay = 0;
       Model.ScrollInterval = setInterval(
         () =>
@@ -508,7 +508,6 @@ function removeClassName(name) {
   const elements = document.getElementsByClassName(name);
   for (let el of elements) {
     el.remove();
-    log("class-");
   }
 }
 
@@ -522,7 +521,7 @@ function beep() {
 // Timer
 
 function startTimer() {
-  if (Model && Model.hasOwnProperty("State")) {
+  if (Model && Model.IsReady()) {
     if (Model.Tasks.size === 0) {
       Model.Tasks.add(removeFrameAds);
       Model.Tasks.add(muteYouTubeAds);

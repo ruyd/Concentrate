@@ -51,10 +51,10 @@ function onConnect(port) {
 }
 
 function onMessageHandler(message, port) {
-  const { action, payload } = message;
+  const { action, payload, id } = message;
   switch (action) {
     case "connected":
-      const model = port ? Tabs.get(port.sender.tab.id) : null;
+      let model = port ? Tabs.get(port.sender.tab.id) : null;
       if (!model) {
         console.error("tab without model - bug1", Tabs, message, port);
       }
@@ -62,10 +62,27 @@ function onMessageHandler(message, port) {
       break;
 
     case "update":
-      Object.assign(Context.Settings, payload);
-      Tabs.forEach((item) => {
-        Object.assign(item.SavedSettings, payload);
-      });
+      if (id) {
+        let modelUpdate = Tabs.get(id);
+        if (modelUpdate) Object.assign(modelUpdate.SavedSettings, payload);
+        log("state.set", modelUpdate);
+      } else {
+        Object.assign(Context.Settings, payload);
+        Tabs.forEach((item) => {
+          Object.assign(item.SavedSettings, payload);
+        });
+      }
+      break;
+
+    case "state.get":
+      let modelState = port ? Tabs.get(payload) : null;
+      log("state.get", message, port, modelState);
+      if (modelState) {
+        sendMessage({
+          action: "state.set",
+          payload: modelState,
+        });
+      }
       break;
 
     default:
@@ -76,6 +93,10 @@ function onMessageHandler(message, port) {
 chrome.runtime.onMessage.addListener(runtimeMessageHandler);
 function runtimeMessageHandler(message, sender, sendResponse) {
   onMessageHandler(message, sender);
+}
+
+function sendMessage(message) {
+  chrome.runtime.sendMessage(message);
 }
 
 function onNavigate() {}

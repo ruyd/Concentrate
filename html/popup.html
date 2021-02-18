@@ -7,11 +7,32 @@
 
 <body>
     <div style="text-align: center;color: gray;font-size: 80%;">
-        <label class="switch" id="DoubleClickToggle">
-            <input type="checkbox" value="true" id="DoubleClickInputCheckbox">
+        <div style="margin: 4px 0">FullScreen DoubleClick</div>
+        <label class="switch">
+            <input type="checkbox" value="true" id="ContentDoubleClickInputCheckbox">
             <span class="slider round"></span>
         </label>
-        <div style="margin: 4px 0">DoubleClick</div>
+        <div style="margin: 4px 0">Remove Banner Ads</div>
+        <label class="switch">
+            <input type="checkbox" value="true" id="RemoveAdsInputCheckbox">
+            <span class="slider round"></span>
+        </label>
+        <div style="margin: 4px 0">Mute YouTube Video Ads</div>
+        <label class="switch">
+            <input type="checkbox" value="true" id="YouTubeMuteInputCheckbox">
+            <span class="slider round"></span>
+        </label>
+        <div style="margin: 4px 0">Remove Comments</div>
+        <label class="switch">
+            <input type="checkbox" value="true" id="RemoveCommentsInputCheckbox">
+            <span class="slider round"></span>
+        </label>
+        <div style="margin: 4px 0">Keyboard</div>
+        <div style="margin: 4px 0">
+            AutoScroll: Ctrl + Space<br>
+            Faster: Ctrl + Down<br>
+            Slower: Ctrl + Up
+        </div>
     </div>
     <script src="../js/popup.js"></script>
 </body>

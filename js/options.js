@@ -27,7 +27,7 @@ const colorInput = document.getElementById("color");
 const colorIndicator = document.getElementById("indicator");
 
 // Actions
-function get() {
+function init() {
   chrome.storage.sync.get("Settings", function (store) {
     if (store.Settings) {
       SavedSettings = store.Settings;
@@ -64,6 +64,7 @@ function send() {
   let msg = {
     action: "update",
     payload: SavedSettings,
+    scope: "all",
   };
 
   // BgJS
@@ -91,5 +92,4 @@ colorInput.onkeyup = () => {
   colorIndicator.style.backgroundColor = colorInput.value;
 };
 
-// Init
-get();
+init();
