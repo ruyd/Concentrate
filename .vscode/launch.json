@@ -18,7 +18,8 @@
             "request": "attach",
             "port": 9223,
             "url": "extension://pflhhidhafdpggilhocmlfbaogcgbnln/html/background.html",
-            "webRoot": "${workspaceFolder}/js"
+            "webRoot": "${workspaceFolder}/js",
+            "preLaunchTask": "back"
         },
         {
             "name": "NewTab",

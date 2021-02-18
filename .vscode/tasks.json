@@ -6,7 +6,9 @@
         {
             "label": "back",
             "type": "shell",
-            "command": "extension://pflhhidhafdpggilhocmlfbaogcgbnln/html/background.html",
-        }
+            "command": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Microsoft Edge.lnk",
+            "commandxx": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --profile-directory=Default --remote-debugging-port=9223",
+            "args": ["chrome-extension://pflhhidhafdpggilhocmlfbaogcgbnln/html/background.html"],
+        } 
     ]
 }
