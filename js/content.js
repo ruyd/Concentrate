@@ -1,4 +1,4 @@
-"use strict";
+//"use strict";
 var Port;
 var Model;
 var Timer;
@@ -18,7 +18,7 @@ const removals_bannerAdWords = [
   "tree.com",
 ];
 
-const removals_classNames = ["OUTBRAIN", "mgbox", "IL_BASE"];
+const removals_classNames = ["OUTBRAIN", "mgbox", "IL_BASE", "ads", "ad"];
 const removals_commentTags = [];
 const removals_videoAdWords = [
   "video-ads",
@@ -415,18 +415,19 @@ TabModel.prototype.IsReady = function () {
 // Actions
 
 function removeVideoAds() {
-  if (!isYoutube) return;
+  if (!isYoutube) return false;
   for (let name of removals_videoAdWords) {
     removeClassName(name);
   }
+  return true;
 }
 
 function muteYouTubeAds() {
-  if (!isYoutube) return;
+  if (!isYoutube) return false;
 
   if (Model.SkipButton && Model.State.SkipAds) {
     Model.skip();
-    return;
+    return true;
   }
 
   if (!Model.State.Showing) {
@@ -447,10 +448,12 @@ function muteYouTubeAds() {
       Model.mute();
     }
   }
+
+  return true;
 }
 
 function removeBannerAds() {
-  if (!Model.State.RemoveAds) return;
+  if (!Model.State.RemoveAds) return false;
 
   const frames = document.getElementsByTagName("IFRAME");
   const match = (w, s) => s.indexOf(w) > -1;
@@ -473,10 +476,12 @@ function removeBannerAds() {
   for (let cname of removals_classNames) {
     removeClassName(cname);
   }
+
+  return true;
 }
 
 function removeComments() {
-  if (!Model.State.RemoveComments) return;
+  if (!Model.State.RemoveComments) return false;
   if (isYoutube) {
     emptyTagName("ytd-comments");
   }
@@ -487,6 +492,8 @@ function removeComments() {
     emptyTagName(word, true);
     removeNode(word);
   }
+
+  return true;
 }
 
 function inject() {
@@ -617,14 +624,22 @@ function startTimer() {
       Model.Tasks.add(removeComments);
     }
 
-    for (let task of Model.Tasks) {
-      task();
-    }
+    execute(Model.Tasks);
 
     Model.tick();
   }
 
   Timer = setTimeout(startTimer, interval);
+}
+
+async function execute(tasks) {
+  if (tasks.size === 0) return;
+  //sync
+  //for (let task of tasks) {
+  //  task();
+  //}
+  //parallel
+  Promise.all(Array.from(tasks));
 }
 
 /// INITIALIZATION

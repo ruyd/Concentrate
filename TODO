@@ -1,7 +1,7 @@
-responsive centering of display text
 popup redesign
-Manifest v3 serviceWorker
+responsive centering of display text
+content state saves
 refactor storage as single source of truth, start with saved url settings
-Hidden Favorites (ctrl+f to reveal o hover star reveal on top left, click to reveal) with delete and hide icons
+Hidden Favorites (hover star reveal on top left, click to reveal) with delete and hide icons
 New Readme and Visuals
 Options help style page
