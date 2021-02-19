@@ -654,12 +654,9 @@ async function executeParallel(tasks) {
   const wrapped = Array.from(tasks).map(
     (task) => new Promise((resolve) => resolve(task()))
   );
-  const t0 = performance.now();
   executing = true;
   const results = await Promise.all(wrapped);
   executing = false;
-  const t1 = performance.now();
-  log(`parallel ${t1 - t0} ms`, results);
 }
 
 /// INITIALIZATION
