@@ -335,7 +335,7 @@ TabModel.prototype.tick = function () {
 
   this.State.SecondCounter--;
 
-  if (this.State.SecondCounter < 0) {
+  if (this.State.SecondCounter < 1) {
     this.reset();
   }
 };
