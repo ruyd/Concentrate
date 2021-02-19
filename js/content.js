@@ -80,14 +80,7 @@ function GetPlayButton() {
   return node ? new Button(node) : null;
 }
 
-function isMuted(element) {
-  //change to class
-  //ytp-unmute
-  const label = element ? element.getAttribute("title") ?? "" : "";
-  return label.toLowerCase().indexOf("unmute") > -1;
-}
-
-function makeButton(id, label, action) {
+function CreateButton(id, label, action) {
   const node = createElement(id);
   const btn = new Button(node, label, action);
   return btn;
@@ -116,6 +109,11 @@ function Greyout() {
     node.style.display = "block";
   };
 
+  this.set = function (state) {
+    if (state) this.show();
+    else this.hide();
+  };
+
   this.setText = function (s) {
     remaining.innerText = s;
   };
@@ -129,8 +127,8 @@ function TabModel(chrome_tab, settings) {
   this.Tab = chrome_tab;
   this.State = new TabState(settings);
   this.Greyout = new Greyout();
-  this.AudioButton = makeButton("audio", "Sound", toggleMuting);
-  this.PowerButton = makeButton("power", "Graying", toggleGraying);
+  this.AudioButton = CreateButton("audio", "Sound", toggleMuting);
+  this.PowerButton = CreateButton("power", "Graying", toggleGraying);
   this.MuteButton = GetMuteButton();
   this.SkipButton = GetSkipButton();
   this.PlayButton = GetPlayButton();
@@ -207,7 +205,8 @@ function Button(node, label, action) {
 function MuteButton(node) {
   this.Node = node;
   this.isMuted = function () {
-    isMuted(node);
+    const label = node ? node.getAttribute("title") ?? "" : "";
+    return label.toLowerCase().indexOf("unmute") > -1;
   };
 
   this.click = () => node.click();
@@ -222,15 +221,20 @@ TabModel.prototype.skip = function () {
 };
 
 TabModel.prototype.mute = function () {
-  if (!this.MuteButton || this.MuteButton.isMuted()) return;
-
+  if (!this.MuteButton || this.MuteButton.isMuted()) {
+    log("aborted mute");
+    return;
+  }
   this.MuteButton.click();
   this.State.DidWeMute = true;
-  log("muted ad");
+  log("muted ad, bug");
 };
 
 TabModel.prototype.unmute = function () {
-  if (!this.MuteButton || !this.MuteButton.isMuted()) return;
+  if (!this.MuteButton || !this.MuteButton.isMuted()) {
+    log("aborted unmute, bug");
+    return;
+  }
   this.MuteButton.click();
   this.State.DidWeMute = false;
   log("Content back -> unmuting");
@@ -469,15 +473,20 @@ function save() {
 }
 
 function toggleMuting() {
+  const turningOff = Model.State.MutingOn;
   Model.State.MutingOn = !Model.State.MutingOn;
   Model.AudioButton.set(Model.State.MutingOn);
-  Model.MuteButton.click();
+  if (turningOff) {
+    Model.unmute();
+  } else {
+    Model.mute();
+  }
   save();
 }
 function toggleGraying() {
   Model.State.GrayingOn = !Model.State.GrayingOn;
   Model.PowerButton.set(Model.State.GrayingOn);
-  Model.Greyout.draw();
+  Model.Greyout.set(Model.State.GrayingOn);
   save();
 }
 
