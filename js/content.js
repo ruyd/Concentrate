@@ -300,8 +300,12 @@ TabModel.prototype.draw = function () {
   node.style.width = rect.width + "px";
   node.style.top = rect.top + "px";
   node.style.left = rect.left + "px";
-  this.PowerButton.Node.style.left = rect.right - 200 + "px";
-  this.AudioButton.Node.style.left = rect.right - 150 + "px";
+
+  this.PowerButton.Node.style.top = rect.top + 50 + "px";
+  this.PowerButton.Node.style.left = rect.right - 150 + "px";
+
+  this.AudioButton.Node.style.top = rect.top + 50 + "px";
+  this.AudioButton.Node.style.left = rect.right - 100 + "px";
 
   const text = this.GetDurationText();
   this.Greyout.setText(text);
@@ -350,8 +354,11 @@ TabModel.prototype.detect = function () {
   this.State.Showing = document.getElementsByClassName("ad-showing").length > 0;
 
   this.State.TimeDuration = GetTextContent("ytp-time-duration");
-  const dsplit = this.State.TimeDuration.split(":");
-  this.State.DurationInSeconds = parseInt(dsplit[0]) * 60 + parseInt(dsplit[1]);
+  if (this.State.TimeDuration) {
+    const dsplit = this.State.TimeDuration.split(":");
+    this.State.DurationInSeconds =
+      parseInt(dsplit[0]) * 60 + parseInt(dsplit[1]);
+  }
 
   this.MuteButton = GetMuteButton();
   this.SkipButton = GetSkipButton();
@@ -586,8 +593,8 @@ function beep() {
 function startTimer() {
   if (Model && Model.IsReady()) {
     if (Model.Tasks.size === 0) {
-      Model.Tasks.add(removeFrameAds);
       Model.Tasks.add(muteYouTubeAds);
+      Model.Tasks.add(removeFrameAds);
       Model.Tasks.add(removeVideoAds);
       Model.Tasks.add(removeComments);
     }
