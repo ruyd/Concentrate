@@ -182,7 +182,7 @@ function Button(node, label, action) {
   this.draw = function () {
     if (node.className && node.className.indexOf("ytp") > -1) return;
     node.classList.toggle("on", me.State);
-    node.classList.toggle("off", me.State);
+    node.classList.toggle("off", !me.State);
     node.setAttribute("title", `Switch ${me.Label} ${me.State ? "OFF" : "ON"}`);
   };
 
@@ -471,11 +471,13 @@ function save() {
 function toggleMuting() {
   Model.State.MutingOn = !Model.State.MutingOn;
   Model.AudioButton.set(Model.State.MutingOn);
+  Model.MuteButton.click();
   save();
 }
 function toggleGraying() {
   Model.State.GrayingOn = !Model.State.GrayingOn;
   Model.PowerButton.set(Model.State.GrayingOn);
+  Model.Greyout.draw();
   save();
 }
 
