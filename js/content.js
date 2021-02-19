@@ -97,7 +97,7 @@ function setModel(payload) {
 
 function Greyout() {
   const node = createElement("greyout", "concentrate");
-  const remaining = createElement("remaining", "concentrate");
+  const remaining = createElement("remaining", "remaining");
   this.Node = node;
   this.Remaining = remaining;
   node.appendChild(remaining);
