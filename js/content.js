@@ -616,7 +616,7 @@ function beep() {
 }
 
 // Timer
-
+// executing multiple times before it finishes hmm
 function startTimer() {
   if (Model && Model.IsReady()) {
     if (Model.Tasks.size === 0) {
@@ -626,7 +626,7 @@ function startTimer() {
       Model.Tasks.add(removeComments);
     }
 
-    execute(Model.Tasks);
+    executeParallel(Model.Tasks);
 
     Model.tick();
   }
@@ -634,20 +634,32 @@ function startTimer() {
   Timer = setTimeout(startTimer, interval);
 }
 
+var executing = false;
 function execute(tasks) {
   if (tasks.size === 0) return;
-
+  if (executing) return;
+  const t0 = performance.now();
+  executing = true;
   for (let task of tasks) {
     task();
   }
+  executing = false;
+  const t1 = performance.now();
+  log(`sync ${t1 - t0} ms`);
 }
 
-async function executeAsync(tasks) {
+async function executeParallel(tasks) {
   if (tasks.size === 0) return;
+  if (executing) return;
   const wrapped = Array.from(tasks).map(
     (task) => new Promise((resolve) => resolve(task()))
   );
-  await Promise.all(wrapped).then((results) => log("execute", results));
+  const t0 = performance.now();
+  executing = true;
+  const results = await Promise.all(wrapped);
+  executing = false;
+  const t1 = performance.now();
+  log(`parallel ${t1 - t0} ms`, results);
 }
 
 /// INITIALIZATION
