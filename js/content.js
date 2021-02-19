@@ -149,7 +149,8 @@ class TabState extends Settings {
     this.DurationInSeconds = 0;
     this.PreviousDuration = 0;
     this.isFullscreen = false;
-    this.isCountdownRunning = false;
+    this.isCounterRunning = false;
+    this.SecondCounter = 0;
     this.EnableAutoScroll = false;
     this.AutoScrollSpeed = 5;
   }
@@ -323,21 +324,21 @@ TabModel.prototype.hide = function () {
 TabModel.prototype.tick = function () {
   this.detect();
 
-  if (this.State.Showing) {
-    this.draw();
+  if (!this.State.Showing) return;
+
+  this.draw();
+
+  if (!this.State.isCounterRunning) {
+    this.State.isCounterRunning = true;
+    this.State.SecondCounter = this.State.DurationInSeconds;
   }
 
-  if (!this.State.isCountdownRunning) {
-    this.State.isCountdownRunning = true;
-    this.SecondCounter = this.DurationInSeconds;
-  }
-
-  this.SecondsCounter--;
+  this.State.SecondCounter--;
 };
 
 TabModel.prototype.reset = function () {
-  this.State.DurationInSeconds = 0;
-  this.State.isCountdownRunning = false;
+  this.State.SecondCounter = 0;
+  this.State.isCounterRunning = false;
 };
 
 TabModel.prototype.detect = function () {
@@ -357,7 +358,7 @@ TabModel.prototype.detect = function () {
 };
 
 TabModel.prototype.GetDurationText = function () {
-  const duration = this.State.DurationInSeconds;
+  const duration = this.State.SecondCounter;
 
   if (duration <= 0) return "Zero";
 
