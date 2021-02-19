@@ -1,6 +1,7 @@
-reposition buttons
-popup options
+responsive centering of display text
+popup redesign
 Manifest v3 serviceWorker
-refactor storage as single source of truth
+refactor storage as single source of truth, start with saved url settings
 Hidden Favorites (ctrl+f to reveal o hover star reveal on top left, click to reveal) with delete and hide icons
 New Readme and Visuals
+Options help style page
