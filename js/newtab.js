@@ -1,9 +1,6 @@
 var Settings = {
-  ContentDoubleClick: true,
   NewTabColor: "#242424",
   NewTabClick: true,
-  FrameAds: true,
-  YouTubeMute: true,
   ShowClock: true,
 };
 

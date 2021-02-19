@@ -32,7 +32,7 @@
         "newtab": "html/newtab.html"
     },
     "default_locale": "en",
-    "description": "Concentrate enables a clean Dark-Mode NewTab Page and removes distracting Ads and Social Comments",
+    "description": "True Dark-Mode NewTab and Distration Remover for Content: Ad Mute, Banner and Social Comment Removal",
     "permissions": [
         "tabs",
         "activeTab",

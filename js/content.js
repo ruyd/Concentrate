@@ -87,9 +87,9 @@ function isMuted(element) {
   return label.toLowerCase().indexOf("unmute") > -1;
 }
 
-function makeButton(id, label) {
+function makeButton(id, label, action) {
   const node = createElement(id);
-  const btn = new Button(node, label);
+  const btn = new Button(node, label, action);
   return btn;
 }
 
@@ -97,6 +97,8 @@ function setModel(payload) {
   const model = new TabModel(payload.Tab, payload.SavedSettings);
   Model = model;
   model.bind();
+  model.AudioButton.set(model.State.MutingOn);
+  model.PowerButton.set(model.State.GrayingOn);
 }
 // Objects
 
@@ -108,14 +110,18 @@ function Greyout() {
   node.appendChild(remaining);
 
   this.hide = function () {
-    this.Node.style.display = "none";
+    node.style.display = "none";
   };
   this.show = function () {
-    this.Node.style.display = "display";
+    node.style.display = "block";
   };
 
   this.setText = function (s) {
-    this.Remaining.innerText = s;
+    remaining.innerText = s;
+  };
+
+  node.onclick = function () {
+    node.style.display = "none";
   };
 }
 
@@ -123,8 +129,8 @@ function TabModel(chrome_tab, settings) {
   this.Tab = chrome_tab;
   this.State = new TabState(settings);
   this.Greyout = new Greyout();
-  this.AudioButton = makeButton("audio", "Sound");
-  this.PowerButton = makeButton("power", "Graying");
+  this.AudioButton = makeButton("audio", "Sound", toggleMuting);
+  this.PowerButton = makeButton("power", "Graying", toggleGraying);
   this.MuteButton = GetMuteButton();
   this.SkipButton = GetSkipButton();
   this.PlayButton = GetPlayButton();
@@ -141,7 +147,7 @@ class TabState extends Settings {
     this.isFullscreen = false;
     this.isTimerRunning = false;
     this.EnableAutoScroll = false;
-    this.AutoScrollSpeed = 1;
+    this.AutoScrollSpeed = 5;
   }
 }
 
@@ -158,38 +164,53 @@ function Settings(loaded) {
   }
 }
 
-function Button(node, label) {
+function Button(node, label, action) {
+  const me = this;
   this.Node = node;
   this.State = false;
   this.Label = label;
-  this.set = function () {
-    node.setAttribute("class", this.State ? "on" : "off");
-    node.setAttribute(
-      "title",
-      `Switch ${this.Label} ${this.State ? "OFF" : "ON"}`
-    );
+  this.toggle = function () {
+    me.State = !me.State;
+    me.draw();
+  };
+
+  this.set = function (state) {
+    me.State = state;
+    me.draw();
+  };
+
+  this.draw = function () {
+    if (node.className && node.className.indexOf("ytp") > -1) return;
+    node.classList.toggle("on", me.State);
+    node.classList.toggle("off", me.State);
+    node.setAttribute("title", `Switch ${me.Label} ${me.State ? "OFF" : "ON"}`);
   };
 
   this.hide = function () {
     node.style.display = "none";
   };
   this.show = function () {
-    node.style.display = "display";
+    node.style.display = "block";
   };
 
-  this.click = function () {
-    node.click();
-    this.set();
+  node.onclick = function () {
+    me.toggle();
+    if (action) action();
   };
+
+  this.click = () => node.click();
+
+  //init
+  me.draw();
 }
 
-function MuteButton(element) {
-  this.Node = element;
+function MuteButton(node) {
+  this.Node = node;
   this.isMuted = function () {
-    isMuted(element);
+    isMuted(node);
   };
 
-  this.click = () => this.Node.click();
+  this.click = () => node.click();
 }
 
 // Prototypes
@@ -201,17 +222,17 @@ TabModel.prototype.skip = function () {
 };
 
 TabModel.prototype.mute = function () {
-  if (!this.MuteButton) return;
-  muteButton.click();
-  Model.State.DidWeMute = true;
-  refresh(true);
-  log("muting ad");
+  if (!this.MuteButton || this.MuteButton.isMuted()) return;
+
+  this.MuteButton.click();
+  this.State.DidWeMute = true;
+  log("muted ad");
 };
 
 TabModel.prototype.unmute = function () {
   if (!this.MuteButton || !this.MuteButton.isMuted()) return;
   this.MuteButton.click();
-  this.reset();
+  this.State.DidWeMute = false;
   log("Content back -> unmuting");
 };
 
@@ -243,9 +264,9 @@ TabModel.prototype.bind = function () {
     );
   }
 
-  if (!this.KeyDownBound) {
-    document.documentElement.addEventListener("keydown", onKeyDown);
-    this.KeyDownBound = true;
+  if (!this.KeyBound) {
+    document.documentElement.addEventListener("keydown", onKey);
+    this.KeyBound = true;
   }
 
   const mute = this.MuteButton;
@@ -276,7 +297,6 @@ TabModel.prototype.draw = function () {
 };
 
 TabModel.prototype.show = function () {
-  this.draw();
   if (this.State.GrayingOn) {
     this.Greyout.show();
   }
@@ -292,6 +312,10 @@ TabModel.prototype.hide = function () {
 
 TabModel.prototype.tick = function () {
   this.detect();
+
+  if (this.State.Showing) {
+    this.draw();
+  }
 
   if (!this.State.isTimerRunning) {
     this.State.isTimerRunning = true;
@@ -314,7 +338,6 @@ TabModel.prototype.detect = function () {
   const duration = durations.length > 0 ? durations[0].textContent : null;
   const dsplit = (duration || "").split(":");
   this.State.DurationInSeconds = parseInt(dsplit[0]) * 60 + parseInt(dsplit[1]);
-  this.draw();
 
   this.MuteButton = GetMuteButton();
   this.SkipButton = GetSkipButton();
@@ -352,7 +375,7 @@ TabModel.prototype.IsReady = function () {
 // Actions
 
 function removeVideoAds() {
-  if (!Model.State.YouTubeMute) return;
+  if (!isYoutube) return;
   let names = [
     "video-ads",
     "ytd-player-legacy-desktop-watch-ads-renderer",
@@ -365,9 +388,9 @@ function removeVideoAds() {
 }
 
 function muteYouTubeAds() {
-  if (!Model.State.YouTubeMute) return;
+  if (!isYoutube) return;
 
-  if (Model.SkipButton && Model.State.SkipOn) {
+  if (Model.SkipButton && Model.State.SkipAds) {
     Model.skip();
     return;
   }
@@ -380,8 +403,13 @@ function muteYouTubeAds() {
   }
 
   if (Model.State.Showing) {
-    Model.show();
-    if (Model.State.MutingOn && !Model.State.Muted) {
+    if (Model.State.GrayingOn) {
+      Model.show();
+    } else {
+      Model.Greyout.hide();
+    }
+
+    if (Model.State.MutingOn && !Model.State.DidWeMute) {
       Model.mute();
     }
   }
@@ -436,12 +464,27 @@ function inject() {
   document.body.appendChild(Model.PowerButton.Node);
 }
 
+function save() {
+  log("save", Model);
+}
+
+function toggleMuting() {
+  Model.State.MutingOn = !Model.State.MutingOn;
+  Model.AudioButton.set(Model.State.MutingOn);
+  save();
+}
+function toggleGraying() {
+  Model.State.GrayingOn = !Model.State.GrayingOn;
+  Model.PowerButton.set(Model.State.GrayingOn);
+  save();
+}
+
 // AutoScroll
 
 function autoScroll() {
   if (Model.State.EnableAutoScroll) {
     if (!Model.ScrollInterval) {
-      const delay = 0;
+      const delay = 50;
       Model.ScrollInterval = setInterval(
         () =>
           window.scrollBy({
@@ -464,16 +507,16 @@ function stopScroll() {
   }
 }
 
-function onKeyDown(e) {
+function onKey(e) {
   const key = e.code;
   const shiftDown = e.shiftKey;
   const controlDown = e.ctrlKey;
+  log(key);
   if (controlDown && key === "Space") {
-    Model.State.EnableAutoScroll = !Model.State.EnableAutoScroll;
     e.preventDefault();
-    if (!Model.State.EnableAutoScroll) {
-      stopScroll();
-    }
+    Model.State.EnableAutoScroll = !Model.State.EnableAutoScroll;
+    if (Model.State.EnableAutoScroll) autoScroll();
+    else stopScroll();
   }
 
   if (Model.State.EnableAutoScroll && controlDown) {
@@ -526,7 +569,6 @@ function startTimer() {
       Model.Tasks.add(muteYouTubeAds);
       Model.Tasks.add(removeVideoAds);
       Model.Tasks.add(removeComments);
-      Model.Tasks.add(autoScroll);
     }
 
     for (let task of Model.Tasks) {

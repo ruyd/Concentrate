@@ -7,11 +7,10 @@ var SavedSettings = {
   NewTabBookmarks: true,
   RemoveAds: true,
   RemoveComments: true,
-  YouTubeMute: true,
   ShowClock: true,
   GrayingOn: true,
   MutingOn: true,
-  SkipAds: true,
+  SkipAds: false,
   LabelWindowNewTabs: true,
 };
 

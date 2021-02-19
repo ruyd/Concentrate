@@ -4,9 +4,9 @@ const Context = {
     ContentDoubleClick: true,
     RemoveAds: true,
     RemoveComments: true,
-    YouTubeMute: true,
-    SkipAds: true,
+    MutingOn: true,
     EnableAutoScroll: false,
+    SkipAds: false,
   },
 };
 

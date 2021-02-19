@@ -4,11 +4,10 @@ export function Settings(loaded) {
   this.NewTabClick = true;
   this.RemoveAds = true;
   this.RemoveComments = true;
-  this.YouTubeMute = true;
   this.ShowClock = true;
   this.GrayingOn = true;
   this.MutingOn = true;
-  this.SkipAds = true;
+  this.SkipAds = false;
   this.LabelWindowNewTabs = true;
 
   if (loaded) {
