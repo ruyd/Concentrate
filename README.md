@@ -4,13 +4,13 @@ Need to Concentrate?
 
 How About A Distration Remover for Content: Ad Mute, Banner and Social Comment Removal
 
-Concentrate endeavors to provide a cleaner and quieter browsing experience in a free and open source way
+Concentrate endeavors to provide a cleaner and quieter browsing experience in a free and open source way.
 
 Featuring:
 
 - Banner Ads and Comments Remover
 - Video Ad Mute with AutoSkip for Non-Premium YouTube Users
-- Clean NewTab Page with Hidden Goodies
+- True Dark-Mode Clean NewTab with Hidden Goodies
 - Speed Adjustable AutoScroll with Keyboard Shortcuts
 - FullScreen by Click and DoubleClick
 
