@@ -65,6 +65,12 @@ function GetButtonElement(cls) {
   return node;
 }
 
+function GetTextContent(cls) {
+  const nodes = document.getElementsByClassName(cls);
+  const result = nodes.length > 0 ? nodes[0].textContent : null;
+  return result;
+}
+
 function GetMuteButton() {
   const node = GetButtonElement("ytp-mute-button");
   return node ? new MuteButton(node) : null;
@@ -338,8 +344,7 @@ TabModel.prototype.detect = function () {
   if (!this.State) return;
   this.State.Showing = document.getElementsByClassName("ad-showing").length > 0;
 
-  const durations = document.getElementsByClassName("ytp-time-duration");
-  const duration = durations.length > 0 ? durations[0].textContent : null;
+  this.State.TimeDuration = GetTextContent("ytp-time-duration");
   const dsplit = (duration || "").split(":");
   this.State.DurationInSeconds = parseInt(dsplit[0]) * 60 + parseInt(dsplit[1]);
 
@@ -369,7 +374,7 @@ TabModel.prototype.GetDurationText = function () {
     seconds = "0" + seconds;
   }
 
-  return `${minutes}:${seconds} / ${duration}`;
+  return `${minutes}:${seconds} / ${this.State.TimeDuration}`;
 };
 
 TabModel.prototype.IsReady = function () {
