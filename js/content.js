@@ -345,7 +345,7 @@ TabModel.prototype.detect = function () {
   this.State.Showing = document.getElementsByClassName("ad-showing").length > 0;
 
   this.State.TimeDuration = GetTextContent("ytp-time-duration");
-  const dsplit = (duration || "").split(":");
+  const dsplit = this.State.TimeDuration.split(":");
   this.State.DurationInSeconds = parseInt(dsplit[0]) * 60 + parseInt(dsplit[1]);
 
   this.MuteButton = GetMuteButton();
