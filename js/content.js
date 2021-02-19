@@ -334,6 +334,10 @@ TabModel.prototype.tick = function () {
   }
 
   this.State.SecondCounter--;
+
+  if (this.State.SecondCounter < 0) {
+    this.reset();
+  }
 };
 
 TabModel.prototype.reset = function () {
@@ -360,7 +364,7 @@ TabModel.prototype.detect = function () {
 TabModel.prototype.GetDurationText = function () {
   const duration = this.State.SecondCounter;
 
-  if (duration <= 0) return "Zero";
+  if (duration <= 0) return "...";
 
   let minutes = 0;
   let seconds = duration > 0 ? duration : duration * -1;

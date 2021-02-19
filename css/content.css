@@ -32,6 +32,7 @@
 
 #power,
 #audio {
+  box-sizing: border-box;
   background: #242424;
   border: solid 1px #242424;
   cursor: pointer;
