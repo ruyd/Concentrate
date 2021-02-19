@@ -300,12 +300,13 @@ TabModel.prototype.bind = function () {
   }
 
   const mute = this.MuteButton;
-  if (!mute || mute.Node) return;
+  if (!mute || !mute.Node || this.MuteBound) return;
   mute.Node.addEventListener("click", (e) => {
     if (this.State.Showing && e.isTrusted) {
       //this.toggleMute();
     }
   });
+  this.MuteBound = true;
 };
 
 TabModel.prototype.draw = function () {
@@ -498,6 +499,7 @@ function removeComments() {
 
 function inject() {
   if (!isYoutube || !document.body || !Model.IsReady()) return;
+  if (document.body.hasChildNodes(Model.Greyout.Node)) return;
   document.body.appendChild(Model.Greyout.Node);
   document.body.appendChild(Model.AudioButton.Node);
   document.body.appendChild(Model.PowerButton.Node);
