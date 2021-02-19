@@ -632,14 +632,20 @@ function startTimer() {
   Timer = setTimeout(startTimer, interval);
 }
 
-async function execute(tasks) {
+function execute(tasks) {
   if (tasks.size === 0) return;
-  //sync
-  //for (let task of tasks) {
-  //  task();
-  //}
-  //parallel
-  Promise.all(Array.from(tasks));
+
+  for (let task of tasks) {
+    task();
+  }
+}
+
+async function executeAsync(tasks) {
+  if (tasks.size === 0) return;
+  const wrapped = Array.from(tasks).map(
+    (task) => new Promise((resolve) => resolve(task()))
+  );
+  await Promise.all(wrapped).then((results) => log("execute", results));
 }
 
 /// INITIALIZATION
