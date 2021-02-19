@@ -149,7 +149,7 @@ class TabState extends Settings {
     this.DurationInSeconds = 0;
     this.PreviousDuration = 0;
     this.isFullscreen = false;
-    this.isTimerRunning = false;
+    this.isCountdownRunning = false;
     this.EnableAutoScroll = false;
     this.AutoScrollSpeed = 5;
   }
@@ -228,12 +228,12 @@ TabModel.prototype.skip = function () {
 
 TabModel.prototype.mute = function () {
   if (!this.MuteButton || this.MuteButton.isMuted()) {
-    log("aborted mute");
+    log("aborted mute, bug");
     return;
   }
   this.MuteButton.click();
   this.State.DidWeMute = true;
-  log("muted ad, bug");
+  log("muted ad");
 };
 
 TabModel.prototype.unmute = function () {
@@ -327,17 +327,17 @@ TabModel.prototype.tick = function () {
     this.draw();
   }
 
-  if (!this.State.isTimerRunning) {
-    this.State.isTimerRunning = true;
-    this.SecondCounter = this.Duration;
+  if (!this.State.isCountdownRunning) {
+    this.State.isCountdownRunning = true;
+    this.SecondCounter = this.DurationInSeconds;
   }
 
   this.SecondsCounter--;
 };
 
 TabModel.prototype.reset = function () {
-  this.DidWeMute = false;
-  this.DurationInSeconds = 0;
+  this.State.DurationInSeconds = 0;
+  this.State.isCountdownRunning = false;
 };
 
 TabModel.prototype.detect = function () {
