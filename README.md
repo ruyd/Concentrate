@@ -9,9 +9,9 @@ Concentrate endeavors to provide a cleaner and quieter browsing experience in a 
 Featuring:
 
 - Banner Ads and Comments Remover
-- Video Ad Mute for Non-Premium YouTube Users
+- Video Ad Mute with AutoSkip for Non-Premium YouTube Users
 - Clean NewTab Page with Hidden Goodies
-- Adjustable AutoScroll with Keyboard Shortcuts
+- Speed Adjustable AutoScroll with Keyboard Shortcuts
 - FullScreen by Click and DoubleClick
 
 ![Image](visuals/Concentrate1280x800.png)
