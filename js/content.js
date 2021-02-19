@@ -528,7 +528,6 @@ function toggleGraying() {
 }
 
 // AutoScroll
-
 function autoScroll() {
   if (Model.State.EnableAutoScroll) {
     if (!Model.ScrollInterval) {
@@ -616,7 +615,6 @@ function beep() {
 }
 
 // Timer
-// executing multiple times before it finishes hmm
 function startTimer() {
   if (Model && Model.IsReady()) {
     if (Model.Tasks.size === 0) {
@@ -635,19 +633,6 @@ function startTimer() {
 }
 
 var executing = false;
-function execute(tasks) {
-  if (tasks.size === 0) return;
-  if (executing) return;
-  const t0 = performance.now();
-  executing = true;
-  for (let task of tasks) {
-    task();
-  }
-  executing = false;
-  const t1 = performance.now();
-  log(`sync ${t1 - t0} ms`);
-}
-
 async function executeParallel(tasks) {
   if (tasks.size === 0) return;
   if (executing) return;
@@ -659,6 +644,6 @@ async function executeParallel(tasks) {
   executing = false;
 }
 
-/// INITIALIZATION
+/// init
 connect();
 startTimer();
