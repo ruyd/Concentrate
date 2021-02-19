@@ -1,6 +1,18 @@
-# Concentrate Extension
+# Concentrate
 
-Concentrate enables a True Dark-Mode NewTab Page, Fullscreen Focus Enhancements and Noise Reductions 
+Need to Concentrate?
+
+How About A Distration Remover for Content: Ad Mute, Banner and Social Comment Removal
+
+Concentrate endeavors to provide a cleaner and quieter browsing experience in a free and open source way
+
+Featuring:
+
+- Banner Ads and Comments Remover
+- Video Ad Mute for Non-Premium YouTube Users
+- Clean NewTab Page with Hidden Goodies
+- Adjustable AutoScroll with Keyboard Shortcuts
+- FullScreen by Click and DoubleClick
 
 ![Image](visuals/Concentrate1280x800.png)
 
@@ -8,14 +20,13 @@ Concentrate enables a True Dark-Mode NewTab Page, Fullscreen Focus Enhancements 
 
 ![Image](visuals/Options.png)
 
-
 Store Link
 
 https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh
 
-Store ID:	0RDCKFWN7QDQ
+Store ID: 0RDCKFWN7QDQ
 
-CRX ID:	mmlolmfkhnilblibmnalmkinojfpcckh
+CRX ID: mmlolmfkhnilblibmnalmkinojfpcckh
 
 -----BEGIN PUBLIC KEY-----
 

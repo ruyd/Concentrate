@@ -1,5 +1,6 @@
 QA Greyout
 popup options
 Manifest v3 serviceWorker
+refactor storage as single source of truth
 Hidden Favorites (ctrl+f to reveal o hover star reveal on top left, click to reveal) with delete and hide icons
 New Readme and Visuals
