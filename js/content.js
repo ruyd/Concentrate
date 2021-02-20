@@ -280,12 +280,13 @@ TabModel.prototype.bind = function () {
   inject();
 
   if (this.State.ContentDoubleClick) {
-    if (this.DoubleClickBound) return;
-    this.DoubleClickBound = true;
-    document.documentElement.addEventListener(
-      "dblclick",
-      this.toggleFullScreen
-    );
+    if (!this.DoubleClickBound) {
+      this.DoubleClickBound = true;
+      document.documentElement.addEventListener(
+        "dblclick",
+        this.toggleFullScreen
+      );
+    }
   } else {
     this.DoubleClickBound = false;
     document.documentElement.removeEventListener(
@@ -298,6 +299,8 @@ TabModel.prototype.bind = function () {
     document.documentElement.addEventListener("keydown", onKey);
     this.KeyBound = true;
   }
+
+  autoScroll();
 
   const mute = this.MuteButton;
   if (!mute || !mute.Node || this.MuteBound) return;
