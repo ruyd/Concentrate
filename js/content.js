@@ -1,4 +1,4 @@
-//"use strict";
+"use strict";
 var Port;
 var Model;
 var Timer;
@@ -278,6 +278,7 @@ TabModel.prototype.toggleFullScreen = function () {
 
 TabModel.prototype.bind = function () {
   inject();
+  autoScroll();
 
   if (this.State.ContentDoubleClick) {
     if (!this.DoubleClickBound) {
@@ -299,8 +300,6 @@ TabModel.prototype.bind = function () {
     document.documentElement.addEventListener("keydown", onKey);
     this.KeyBound = true;
   }
-
-  autoScroll();
 
   const mute = this.MuteButton;
   if (!mute || !mute.Node || this.MuteBound) return;
@@ -349,8 +348,6 @@ TabModel.prototype.hide = function () {
 };
 
 TabModel.prototype.tick = function () {
-  this.detect();
-
   if (!this.State.Showing) return;
 
   this.draw();
@@ -434,23 +431,20 @@ function muteYouTubeAds() {
     return true;
   }
 
-  if (!Model.State.Showing) {
-    if (Model.State.DidWeMute) {
-      Model.unmute();
-    }
-    Model.hide();
-  }
-
   if (Model.State.Showing) {
+    if (Model.State.MutingOn && !Model.State.DidWeMute) {
+      Model.mute();
+    }
     if (Model.State.GrayingOn) {
       Model.show();
     } else {
       Model.Greyout.hide();
     }
-
-    if (Model.State.MutingOn && !Model.State.DidWeMute) {
-      Model.mute();
+  } else {
+    if (Model.State.DidWeMute) {
+      Model.unmute();
     }
+    Model.hide();
   }
 
   return true;
@@ -502,7 +496,7 @@ function removeComments() {
 
 function inject() {
   if (!isYoutube || !document.body || !Model.IsReady()) return;
-  if (document.body.hasChildNodes(Model.Greyout.Node)) return;
+  //if (document.body.hasChildNodes(Model.Greyout.Node)) return;
   document.body.appendChild(Model.Greyout.Node);
   document.body.appendChild(Model.AudioButton.Node);
   document.body.appendChild(Model.PowerButton.Node);
@@ -627,8 +621,8 @@ function startTimer() {
       Model.Tasks.add(removeComments);
     }
 
+    Model.detect();
     executeParallel(Model.Tasks);
-
     Model.tick();
   }
 

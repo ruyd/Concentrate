@@ -1,7 +1,7 @@
 popup redesign
 responsive centering of display text
+Quick Hidden Icons on NewTab
 content state saves
 refactor storage as single source of truth, start with saved url settings
-Hidden Favorites (hover star reveal on top left, click to reveal) with delete and hide icons
 New Readme and Visuals
 Options help style page
