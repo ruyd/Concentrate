@@ -426,7 +426,7 @@ function removeVideoAds() {
 function muteYouTubeAds() {
   if (!isYoutube) return false;
 
-  if (Model.SkipButton && Model.State.SkipAds && false) {
+  if (Model.SkipButton && Model.State.SkipAds) {
     Model.skip();
     return true;
   }
