@@ -2,7 +2,7 @@
 
 ![Image](visuals/Concentrate.svg)
 
-Studying on YouTube without Premium?
+Reading a lot and/or studying on YouTube without Premium?
 
 Features:
 
@@ -13,7 +13,7 @@ Features:
 - Speed Adjustable AutoScroll with Keyboard Shortcuts for Reading
 - FullScreen by Click and DoubleClick
 
-A modern add-on for a quieter and cleaner browsing experience
+A modern add-on for a quieter and focused browsing experience
 
 ![Image](visuals/Concentrate1280x800.png)
 
