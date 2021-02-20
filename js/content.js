@@ -239,6 +239,7 @@ function MuteButton(node) {
 }
 
 // Prototypes
+
 TabModel.prototype.skip = function () {
   if (!this.SkipButton) return;
   this.SkipButton.click();
@@ -277,7 +278,6 @@ TabModel.prototype.toggleFullScreen = function () {
 };
 
 TabModel.prototype.bind = function () {
-  inject();
   autoScroll();
 
   if (this.State.ContentDoubleClick) {
@@ -426,7 +426,7 @@ function removeVideoAds() {
 function muteYouTubeAds() {
   if (!isYoutube) return false;
 
-  if (Model.SkipButton && Model.State.SkipAds) {
+  if (Model.SkipButton && Model.State.SkipAds && false) {
     Model.skip();
     return true;
   }
@@ -496,10 +496,11 @@ function removeComments() {
 
 function inject() {
   if (!isYoutube || !document.body || !Model.IsReady()) return;
-  //if (document.body.hasChildNodes(Model.Greyout.Node)) return;
+  //if (document.body.contains(Model.Greyout.Node)) return;
   document.body.appendChild(Model.Greyout.Node);
   document.body.appendChild(Model.AudioButton.Node);
   document.body.appendChild(Model.PowerButton.Node);
+  Model.injected = true;
 }
 
 function save() {
@@ -619,6 +620,10 @@ function startTimer() {
       Model.Tasks.add(removeBannerAds);
       Model.Tasks.add(removeVideoAds);
       Model.Tasks.add(removeComments);
+    }
+
+    if (document.readyState === "complete" && !Model.injected) {
+      inject();
     }
 
     Model.detect();
