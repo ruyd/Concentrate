@@ -1,6 +1,6 @@
 ![Image](visuals/Concentrate.svg)
 
-# Need to Concentrate?
+# Concentrate
 
 Reading a lot and/or studying on YouTube without Premium?
 
