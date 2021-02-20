@@ -2,7 +2,7 @@ CONCENTRATE EXTENSION PRIVACY POLICY
 
 What happens on your browser stays on your browser 
 
-Don't trust us, best policy is transparency: 
+Don't trust, best policy is transparency: 
 - Open Source Readable Code 
 - Vanilla Javascript
 - No Packages or External Libraries
