@@ -146,6 +146,8 @@ function Greyout() {
   node.onclick = function () {
     node.style.display = "none";
   };
+
+  this.click = () => node.click();
 }
 
 function TabModel(chrome_tab, settings) {
@@ -158,7 +160,6 @@ function TabModel(chrome_tab, settings) {
   this.SkipButton = GetSkipButton();
   this.PlayButton = GetPlayButton();
   this.Tasks = new Set();
-  this.ScrollInterval;
 }
 
 class TabState extends Settings {
@@ -172,6 +173,7 @@ class TabState extends Settings {
     this.SecondCounter = 0;
     this.EnableAutoScroll = false;
     this.AutoScrollSpeed = 5;
+    this.ScrollInterval;
   }
 }
 
@@ -528,9 +530,9 @@ function toggleGraying() {
 // AutoScroll
 function autoScroll() {
   if (Model.State.EnableAutoScroll) {
-    if (!Model.ScrollInterval) {
+    if (!Model.State.ScrollInterval) {
       const delay = 50;
-      Model.ScrollInterval = setInterval(
+      Model.State.ScrollInterval = setInterval(
         () =>
           window.scrollBy({
             top: Model.State.AutoScrollSpeed,
@@ -546,9 +548,9 @@ function autoScroll() {
 }
 
 function stopScroll() {
-  if (Model.ScrollInterval) {
-    clearInterval(Model.ScrollInterval);
-    Model.ScrollInterval = null;
+  if (Model.State.ScrollInterval) {
+    clearInterval(Model.State.ScrollInterval);
+    Model.State.ScrollInterval = null;
   }
 }
 
