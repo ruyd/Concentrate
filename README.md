@@ -4,6 +4,8 @@
 
 Reading a lot and/or studying on YouTube without Premium?
 
+Me too but its incredibly hard with all the advertising competing desperately for your atention, out of necessity, this add-on was born. I really hope it helps your studies and peace of mind.
+
 Features:
 
 - Removes Flashy Ad Banners and Animated Images
