@@ -25,5 +25,5 @@ A modern add-on for a quieter and focused browsing experience
 
 ![Image](visuals/Options.png)
 
-This addon is forever free of charge with no interest in data collection and selling.
-[Privacy]("PRIVACY.TXT")
+This addon is forever free of charge with no interest in data collection or selling.
+[Privacy](PRIVACY.TXT)
