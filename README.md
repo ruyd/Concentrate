@@ -1,6 +1,4 @@
-# Concentrate
-
-Need to Concentrate?
+# Need to Concentrate?
 
 ![Image](visuals/Concentrate.svg)
 
