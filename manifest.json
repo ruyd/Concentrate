@@ -32,7 +32,7 @@
         "newtab": "html/newtab.html"
     },
     "default_locale": "en",
-    "description": "True Dark-Mode NewTab and Distration Remover for Content: Ad Mute, Banner and Social Comment Removal",
+    "description": "True Dark-Mode NewTab, Distration Remover and Focus Defender",
     "permissions": [
         "tabs",
         "activeTab",
