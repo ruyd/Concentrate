@@ -4,7 +4,9 @@
 
 Reading a lot and or studying a bit on YouTube without Premium?
 
-Me too but it's incredibly hard with all the advertising desperately competing for your attention, out of necessity, this add-on was born. I really hope it helps your studies and peace of mind.
+Me too but it's incredibly hard with all the advertising desperately competing for your attention.
+
+Out of necessity, this add-on was born, I really hope it helps your studies and peace of mind.
 
 Features:
 
