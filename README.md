@@ -13,7 +13,7 @@ Features:
 - Removes Flashy Ad Banners and Animated Images
 - Removes Social Media Links and Comments
 - YouTube Ad Defender - Auto Skips or Mutes before Ad playback
-- True Dark-Mode NewTab with Hidden Links and Clock
+- Low Brightness Dark-Mode NewTab with Hidden Links and Clock
 - Speed Adjustable AutoScroll with Keyboard Shortcuts for Reading
 - FullScreen by Click and DoubleClick
 
