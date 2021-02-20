@@ -32,7 +32,7 @@
         "newtab": "html/newtab.html"
     },
     "default_locale": "en",
-    "description": "A Modern Add-on for a Quieter and Focused Browsing Experience",
+    "description": "A Modern Add-on for a Quiet and Focused Browsing Experience",
     "permissions": [
         "tabs",
         "activeTab",
