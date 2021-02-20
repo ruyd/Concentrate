@@ -13,7 +13,7 @@ Features:
 - Speed Adjustable AutoScroll with Keyboard Shortcuts for Reading
 - FullScreen by Click and DoubleClick
 
-All together add up to a cleaner and quieter browsing experience, allowing focus on what matters.
+A modern browser add-on for a quieter and cleaner browsing experience
 
 ![Image](visuals/Concentrate1280x800.png)
 
