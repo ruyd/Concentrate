@@ -2,7 +2,7 @@
 
 ![Image](visuals/Concentrate.svg)
 
-Studying on YouTube without Premium? Concentrate detects Ads, Auto Skips if available, and Mutes Ad before it plays content designed to grab attention.
+Studying on YouTube without Premium?
 
 Features:
 
