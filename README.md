@@ -8,7 +8,7 @@ Me too but it's incredibly hard with all the advertising desperately competing f
 
 Out of necessity, this add-on was born, I really hope it helps your studies and peace of mind.
 
-Features:
+### Features
 
 - Removes Flashy Ad Banners and Animated Images
 - Removes Social Media Links and Comments
