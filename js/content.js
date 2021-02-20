@@ -120,7 +120,7 @@ function setModel(payload) {
 }
 // Objects
 
-function Greyout() {
+function Greyout(action) {
   const node = createElement("greyout", "concentrate");
   const remaining = createElement("remaining", "remaining");
   this.Node = node;
@@ -145,15 +145,14 @@ function Greyout() {
 
   node.onclick = function () {
     node.style.display = "none";
+    action();
   };
-
-  this.click = () => node.click();
 }
 
 function TabModel(chrome_tab, settings) {
   this.Tab = chrome_tab;
   this.State = new TabState(settings);
-  this.Greyout = new Greyout();
+  this.Greyout = new Greyout(toggleGraying);
   this.AudioButton = CreateButton("audio", "Sound", toggleMuting);
   this.PowerButton = CreateButton("power", "Graying", toggleGraying);
   this.MuteButton = GetMuteButton();

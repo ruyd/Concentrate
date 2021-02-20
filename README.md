@@ -2,17 +2,20 @@
 
 Need to Concentrate?
 
-How About A Distration Remover for Content: Ad Mute, Banner and Social Comment Removal
+![Image](visuals/Concentrate.svg)
 
-Concentrate endeavors to provide a cleaner and quieter browsing experience in a free and open source way.
+Studying on YouTube without Premium? Concentrate detects Ads, Auto Skips if available, and Mutes Ad before it plays content designed to grab attention.
 
-Featuring:
+Features:
 
-- Banner Ads and Comments Remover
-- Video Ad Mute with AutoSkip for Non-Premium YouTube Users
-- True Dark-Mode Clean NewTab with Hidden Goodies
-- Speed Adjustable AutoScroll with Keyboard Shortcuts
+- Removes Flashy Ad Banners and Animated Images
+- Removes Social Media Links and Comments
+- YouTube Ad Defender - Auto Skips or Mutes before Ad playback
+- True Dark-Mode NewTab with Hidden Links and Clock
+- Speed Adjustable AutoScroll with Keyboard Shortcuts for Reading
 - FullScreen by Click and DoubleClick
+
+All together add up to a cleaner and quieter browsing experience, allowing focus on what matters.
 
 ![Image](visuals/Concentrate1280x800.png)
 
