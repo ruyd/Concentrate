@@ -24,3 +24,6 @@ A modern add-on for a quieter and focused browsing experience
 ![Image](visuals/ConcentrateUI.gif)
 
 ![Image](visuals/Options.png)
+
+This addon is forever free of charge with no interest in data collection and selling.
+[Privacy]("PRIVACY.TXT")
