@@ -561,8 +561,7 @@ function onKey(e) {
   if (controlDown && key === "Space") {
     e.preventDefault();
     Model.State.EnableAutoScroll = !Model.State.EnableAutoScroll;
-    if (Model.State.EnableAutoScroll) autoScroll();
-    else stopScroll();
+    autoScroll();
   }
 
   if (Model.State.EnableAutoScroll && controlDown) {
