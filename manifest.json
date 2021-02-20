@@ -32,7 +32,7 @@
         "newtab": "html/newtab.html"
     },
     "default_locale": "en",
-    "description": "True Dark-Mode NewTab, Distration Remover and Focus Defender",
+    "description": "A Modern Add-on for a Quieter and Focused Browsing Experience",
     "permissions": [
         "tabs",
         "activeTab",
