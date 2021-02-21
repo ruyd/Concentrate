@@ -2,11 +2,11 @@ CONCENTRATE EXTENSION PRIVACY POLICY
 
 What happens on your browser stays on your browser 
 
-Don't trust, best policy is transparency: 
+Don't trust, transparency is best: 
 - Open Source Readable Code 
 - Vanilla Javascript
 - No Packages or External Libraries
-- No http calls or requests of any kind
-- No access of personal data of any kind
+- No Http Requests of any kind
+- No Access of Personal Data of any kind
 
 This addon is forever free of charge with no interest in data collection or selling. 
