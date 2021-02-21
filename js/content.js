@@ -239,6 +239,12 @@ function MuteButton(node) {
   this.click = () => node.click();
 }
 
+function CnnMute() {
+  //challenge, reuse
+  //pui_volume-controls_mute-toggle
+  ///sound-mute-icon or sound-full-icon
+}
+
 // Prototypes
 
 TabModel.prototype.skip = function () {

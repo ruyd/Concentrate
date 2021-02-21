@@ -7,37 +7,41 @@
 
 <body>
     <div style="text-align: center;color: gray;font-size: 80%;">
-        <div>site.com</div>
-        <div style="margin: 4px 0">FullScreen DoubleClick</div>
+        <div id="hostname" class="hostname">site.com</div>
+        <div class="title">DoubleClick</div>
         <label class="switch">
             <input type="checkbox" value="true" id="ContentDoubleClickInputCheckbox">
             <span class="slider round"></span>
         </label>
-        <div style="margin: 4px 0">Remove Banner Ads</div>
+        <div class="title">Remove Banner Ads</div>
         <label class="switch">
             <input type="checkbox" value="true" id="RemoveAdsInputCheckbox">
             <span class="slider round"></span>
         </label>
-        <div style="margin: 4px 0">Remove Comments</div>
+        <div class="title">Remove Comments</div>
         <label class="switch">
             <input type="checkbox" value="true" id="RemoveCommentsInputCheckbox">
             <span class="slider round"></span>
         </label>
-        <div style="background: purple; height:5px; margin: 20px 5px 20px 5px; border-radius: 5px;"></div>
-        <div style="margin: 4px 0 4px 0">Mute YouTube Video Ads</div>
+        <div class="title">Mute Video Ads</div>
         <label class="switch">
             <input type="checkbox" value="true" id="MutingOnInputCheckbox">
             <span class="slider round"></span>
         </label>
-        <div style="margin: 20px 0 4px 0;">AutoScroll</div>
+        <div class="divider"></div>
+        <div class="title">AutoScroll</div>
         <label class="switch">
             <input type="checkbox" value="true" id="EnableAutoScrollInputCheckbox">
             <span class="slider round"></span>
         </label>
-        <div style="margin: 4px 0">
+        <div class="title">
             On/Off: Ctrl + Space<br>
             Faster: Ctrl + Down<br>
             Slower: Ctrl + Up
+        </div>
+        <div>
+            <div>-</div>
+            <div>+</div>
         </div>
     </div>
     <script src="../js/popup.js"></script>

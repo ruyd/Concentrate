@@ -82,3 +82,17 @@ input {
   border-radius: 1px;
   margin: 5px auto;
 }
+
+.divider {
+  background: purple;
+  height: 5px;
+  margin: 20px 5px 20px 5px;
+  border-radius: 5px;
+}
+
+.title {
+  margin: 4px 0;
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: whitesmoke;
+}

@@ -24,7 +24,7 @@
             "matches": [
                 "*://*/*"
             ],
-            "run_at": "document_start"
+            "run_at": "document_end"
         }
     ],
     "options_page": "html/options.html",

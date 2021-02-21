@@ -57,7 +57,17 @@ function setState({ Tab, SavedSettings }) {
   checkboxes.forEach((checkbox, key) => {
     checkbox.checked = Context.State[key];
   });
+  setHostname();
   console.log("state", SavedSettings, Tab);
+}
+
+function setHostname() {
+  const node = document.getElementById("hostname");
+  const url = Context.Tab.pendingUrl ? Context.Tab.pendingUrl : Context.Tab.url;
+  if (!url) return;
+  const helper = document.createElement("a");
+  helper.setAttribute("href", url);
+  node.innerText = helper.hostname;
 }
 
 function background(message) {

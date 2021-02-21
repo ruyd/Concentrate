@@ -28,11 +28,9 @@ function TabModel(chrome_tab, settings) {
 }
 // Listeners
 
-chrome.tabs.onCreated.addListener(onChange);
-
-chrome.tabs.onRemoved.addListener(onChange);
-
-chrome.tabs.onActiveChanged.addListener(function (ot) {});
+chrome.tabs.onUpdated.addListener((tabId) => changeModel(tabId, "update"));
+chrome.tabs.onCreated.addListener((tab) => setModel(tab));
+chrome.tabs.onRemoved.addListener((tabId) => changeModel(tabId, "remove"));
 
 chrome.runtime.onConnect.addListener(onConnect);
 
@@ -109,10 +107,12 @@ function setModel(item) {
   Tabs.set(item.id, model);
 }
 
-function onChange(e) {
-  const item = e;
-  log("change", e);
-  setModel(item);
+function changeModel(id, action) {
+  if (action === "update")
+    chrome.tabs.get(id, (tab) => {
+      if (tab) setModel(tab);
+    });
+  else Tabs.delete(id);
 }
 
 function init() {
