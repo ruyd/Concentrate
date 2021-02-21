@@ -3,37 +3,13 @@ const Tabs = new Map();
 const Context = {};
 const log = console.log.bind(window.console);
 
-// Objects
-
-function Settings(loaded) {
-  this.ContentDoubleClick = true;
-  this.NewTabColor = "#242424";
-  this.NewTabClick = true;
-  this.RemoveAds = true;
-  this.RemoveComments = true;
-  this.ShowClock = true;
-  this.GrayingOn = true;
-  this.MutingOn = true;
-  this.SkipAds = false;
-  this.LabelWindowNewTabs = true;
-
-  if (loaded) {
-    Object.assign(this, loaded);
-  }
-}
-
-function TabModel(chrome_tab, settings) {
-  this.Tab = chrome_tab;
-  this.SavedSettings = new Settings(settings);
-}
 // Listeners
-
+/// Tab Events
 chrome.tabs.onUpdated.addListener((tabId) => changeModel(tabId, "update"));
 chrome.tabs.onCreated.addListener((tab) => setModel(tab));
 chrome.tabs.onRemoved.addListener((tabId) => changeModel(tabId, "remove"));
-
+/// Messaging
 chrome.runtime.onConnect.addListener(onConnect);
-
 function onConnect(port) {
   port.onMessage.addListener(onMessageHandler);
   port.onDisconnect.addListener(() => {
@@ -92,8 +68,30 @@ function sendMessage(message) {
   chrome.runtime.sendMessage(message);
 }
 
-// Actions
+// Objects
+function Settings(loaded) {
+  this.ContentDoubleClick = true;
+  this.NewTabColor = "#242424";
+  this.NewTabClick = true;
+  this.RemoveAds = true;
+  this.RemoveComments = true;
+  this.ShowClock = true;
+  this.GrayingOn = true;
+  this.MutingOn = true;
+  this.SkipAds = false;
+  this.LabelWindowNewTabs = true;
 
+  if (loaded) {
+    Object.assign(this, loaded);
+  }
+}
+
+function TabModel(chrome_tab, settings) {
+  this.Tab = chrome_tab;
+  this.SavedSettings = new Settings(settings);
+}
+
+// Actions
 function tabify() {
   Tabs.clear();
   return chrome.tabs.query({}, (list) => {
@@ -123,5 +121,4 @@ function init() {
 }
 
 /////
-
 init();
