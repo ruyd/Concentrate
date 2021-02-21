@@ -11,12 +11,7 @@ $files = New-Object System.Collections.ArrayList
         ".\.gitignore",
         ".\ZipPackage.ps1",
         ".\TODO",
-        ".\css\popup.css",
-        ".\js\background.js",
-        ".\js\content.js",
-        ".\js\newtab.js",
-        ".\js\options.js",
-        ".\js\popup.js",
+        ".\visuals"
     ))
 
 
