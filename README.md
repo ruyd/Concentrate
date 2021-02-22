@@ -6,7 +6,9 @@ Reading a lot and or studying a bit on YouTube without Premium?
 
 Me too but it's incredibly hard with all the advertising desperately competing for your attention.
 
-This add-on was born out of that necessity and I really hope it helps your studies and peace of mind.
+This add-on grew from that necessity and now it's incredibly helpful and satisfying.
+
+I really hope it helps your studies and peace of mind too.
 
 ### Features
 
@@ -16,8 +18,9 @@ This add-on was born out of that necessity and I really hope it helps your studi
 - Low Brightness Dark-Mode NewTab with Hidden Links and Clock
 - Speed Adjustable AutoScroll with Keyboard Shortcuts for Reading
 - FullScreen by Click and DoubleClick
+- Auto Mute - CNN and anything new that comes up
 
-A modern add-on for a quiet and focused browsing experience.
+A Modern Add-on for a Quiet and Focused Browsing Experience.
 
 ![Image](visuals/Concentrate1280x800.png)
 

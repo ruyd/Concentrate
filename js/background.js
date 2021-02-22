@@ -37,7 +37,6 @@ function onMessageHandler(message, port) {
       if (id) {
         let modelUpdate = Tabs.get(id);
         if (modelUpdate) Object.assign(modelUpdate.SavedSettings, payload);
-        log("state.set", modelUpdate);
       } else {
         Object.assign(Context.Settings, payload);
         Tabs.forEach((item) => {
@@ -48,7 +47,6 @@ function onMessageHandler(message, port) {
 
     case "state.get":
       let modelState = port ? Tabs.get(payload) : null;
-      log(action, message, port, modelState);
       if (modelState) {
         sendMessage({
           action: "state.set",

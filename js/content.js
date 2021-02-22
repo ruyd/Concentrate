@@ -18,7 +18,14 @@ const removals_bannerAdWords = [
   "tree.com",
 ];
 
-const removals_classNames = ["OUTBRAIN", "mgbox", "IL_BASE", "ads", "ad"];
+const removals_classNames = [
+  "OUTBRAIN",
+  "mgbox",
+  "IL_BASE",
+  "ads[mail.google.com]",
+  "ad",
+  "contentText",
+];
 const removals_commentTags = [];
 const removals_videoAdWords = [
   "video-ads",
@@ -467,7 +474,7 @@ function muteYouTubeAds() {
   return true;
 }
 
-function removeBannerAds() {
+function removeFrameAds() {
   if (!Model.State.RemoveAds) return false;
 
   const frames = document.getElementsByTagName("IFRAME");
@@ -488,10 +495,20 @@ function removeBannerAds() {
     }
   }
 
+  return true;
+}
+
+function removeClassAds() {
+  if (!Model.State.RemoveAds) return false;
   for (let cname of removals_classNames) {
+    const start = cname.indexOf("[") + 1;
+    const except = cname.substring(start).replace("]", "").split(",");
+    const url = getUrl();
+    if (except && except.find((hostname) => url.indexOf(hostname) > -1)) {
+      continue;
+    }
     removeClassName(cname);
   }
-
   return true;
 }
 
@@ -521,7 +538,7 @@ function inject() {
 }
 
 function save() {
-  log("save", Model);
+  //log("save", Model);
 }
 
 function toggleMuting() {
@@ -629,12 +646,17 @@ function beep() {
   snd.play();
 }
 
+function getUrl() {
+  return Model.Tab.pendingUrl ? Model.Tab.pendingUrl : Model.Tab.url;
+}
+
 // Timer
 function startTimer() {
   if (Model && Model.IsReady()) {
     if (Model.Tasks.size === 0) {
       Model.Tasks.add(muteYouTubeAds);
-      Model.Tasks.add(removeBannerAds);
+      Model.Tasks.add(removeFrameAds);
+      Model.Tasks.add(removeClassAds);
       Model.Tasks.add(removeVideoAds);
       Model.Tasks.add(removeComments);
     }
