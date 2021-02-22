@@ -88,7 +88,7 @@ function Settings(loaded) {
   this.GrayingOn = true;
   this.MutingOn = true;
   this.SkipAds = false;
-  this.LabelWindowNewTabs = true;
+  this.LabelWindows = true;
 
   if (loaded) {
     Object.assign(this, loaded);

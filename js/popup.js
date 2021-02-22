@@ -6,7 +6,9 @@ const Context = {
     RemoveComments: true,
     MutingOn: true,
     EnableAutoScroll: false,
-    SkipAds: false,
+    SkipAds: true,
+    NewTabClick: true,
+    ShowClock: true,
   },
 };
 const log = console.log.bind(window.console);
@@ -78,6 +80,7 @@ function setState({ Tab, SavedSettings }) {
     checkbox.checked = Context.State[key];
   });
   setHostname();
+  setBody();
   console.log("state", SavedSettings, Tab);
 }
 
@@ -88,6 +91,12 @@ function setHostname() {
   const helper = document.createElement("a");
   helper.setAttribute("href", url);
   node.innerText = helper.hostname;
+  Context.isNewTab = helper.hostname === "newtab";
+}
+
+function setBody() {
+  document.getElementById("content").classList.toggle("hide", Context.isNewTab);
+  document.getElementById("newtab").classList.toggle("hide", !Context.isNewTab);
 }
 
 function setScroll(state) {

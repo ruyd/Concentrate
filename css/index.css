@@ -4,6 +4,10 @@
   --lighter: #8187ce;
 }
 
+html {
+  height: 200px;
+}
+
 body {
   background-color: var(--lighter);
   color: gray;
@@ -112,7 +116,7 @@ input {
 }
 
 .pedal {
-  margin-top: 15px;
+  margin: 15px 0 20px 0;
   display: flex;
   justify-content: center;
 }
@@ -152,4 +156,18 @@ input {
     transform: scale(0.001, 0.001);
     opacity: 1;
   }
+}
+
+.popup {
+  text-align: center;
+  color: gray;
+  font-size: 80%;
+}
+
+.hide {
+  display: none;
+}
+
+.noselect {
+  user-select: none;
 }
