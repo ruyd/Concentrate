@@ -33,6 +33,22 @@ const removals_videoAdWords = [
   "ytd-watch-next-secondary-results-renderer sparkles-light-cta",
 ];
 
+const muteTypes = {
+  YouTube: {
+    button: "ytp-mute-button",
+    isMuted: (node) =>
+      (node ? node.getAttribute("title") : "").toLowerCase().indexOf("unmute") >
+      -1,
+  },
+  CNN: {
+    button: "pui_volume-controls_mute-toggle",
+    isMuted: (node) => {
+      if (node.getElementById("sound-mute-icon")) return true;
+      else return false;
+    },
+  },
+};
+
 // Messaging
 function connect(message) {
   Port = chrome.runtime.connect({
@@ -107,9 +123,17 @@ function GetTextContent(cls) {
   return result;
 }
 
-function GetMuteButton() {
-  const node = GetButtonElement("ytp-mute-button");
-  return node ? new MuteButton(node) : null;
+function GetMuteButton(cls, type) {
+  const node = GetButtonElement(cls);
+  return node ? new MuteButton(node, type) : null;
+}
+
+function GetUrlMuteType() {
+  let result = muteTypes.YouTube;
+  if (getUrl().indexOf("cnn.com") > -1) {
+    result = muteTypes.CNN;
+  }
+  return result;
 }
 
 function GetSkipButton() {
@@ -190,6 +214,7 @@ class TabState extends Settings {
     this.EnableAutoScroll = false;
     this.AutoScrollSpeed = 5;
     this.ScrollInterval;
+    this.MuteType = GetUrlMuteType();
   }
 }
 
@@ -246,20 +271,10 @@ function Button(node, label, action) {
   me.draw();
 }
 
-function MuteButton(node) {
+function MuteButton(node, type) {
   this.Node = node;
-  this.isMuted = function () {
-    const label = node ? node.getAttribute("title") ?? "" : "";
-    return label.toLowerCase().indexOf("unmute") > -1;
-  };
-
+  this.isMuted = type.isMuted(node);
   this.click = () => node.click();
-}
-
-function CnnMute() {
-  //challenge, reuse
-  //pui_volume-controls_mute-toggle
-  ///sound-mute-icon or sound-full-icon
 }
 
 // Prototypes
@@ -278,7 +293,7 @@ TabModel.prototype.mute = function () {
   }
   this.MuteButton.click();
   this.State.DidWeMute = true;
-  log("muted ad");
+  log("Muted ad");
 };
 
 TabModel.prototype.unmute = function () {
@@ -404,7 +419,8 @@ TabModel.prototype.detect = function () {
       parseInt(dsplit[0]) * 60 + parseInt(dsplit[1]);
   }
 
-  this.MuteButton = GetMuteButton();
+  this.State.MuteType = GetUrlMuteType();
+  this.MuteButton = GetMuteButton(this.State.MuteType);
   this.SkipButton = GetSkipButton();
   this.PlayButton = GetPlayButton();
 

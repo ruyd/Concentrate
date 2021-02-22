@@ -2,6 +2,7 @@
   --darker: #2e1551;
   --dark: #7555c4;
   --lighter: #8187ce;
+  --alt: #4da996;
 }
 
 html {
@@ -59,6 +60,14 @@ h3 {
 
 input:checked + .slider {
   background-color: var(--dark);
+}
+
+input:checked:hover + .slider {
+  background-color: var(--alt);
+}
+
+.slider:hover {
+  background-color: var(--alt);
 }
 
 input:focus + .slider {
@@ -135,7 +144,7 @@ input {
 }
 
 .btn:hover {
-  background-color: #4da996;
+  background-color: var(--alt);
   box-shadow: rgb(0 0 0 / 0%) 0px 0px 1px;
 }
 
