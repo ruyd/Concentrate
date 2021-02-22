@@ -2,8 +2,20 @@ var Settings = {
   NewTabColor: "#242424",
   NewTabClick: true,
   ShowClock: true,
+  WindowLabels: false,
 };
 
+//Listener
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.Refresh && request.Settings) {
+    Settings = request.Settings;
+
+    if (Settings.NewTabClick) bind();
+    else unbind();
+  }
+});
+
+// Actions
 function toggleFullScreen() {
   if (!document.fullscreenElement) {
     document.documentElement.requestFullscreen();
@@ -50,16 +62,6 @@ function unbind() {
   );
 }
 
-//Listener
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.Refresh && request.Settings) {
-    Settings = request.Settings;
-
-    if (Settings.NewTabClick) bind();
-    else unbind();
-  }
-});
-
 function startTime() {
   if (Settings.ShowClock) {
     document.getElementById("txt").innerHTML = formatAMPM(new Date());
@@ -80,13 +82,10 @@ function formatAMPM(date) {
   return strTime;
 }
 
-//Initial State
-bind();
-
 function title() {
+  if (!Settings.EnableWindowLabels) return;
   chrome.windows.getCurrent({ populate: true }, (info) => {
     if (!info) return;
-
     chrome.windows.getAll({ populate: true }, (list) => {
       let index = list.findIndex((i) => i.id === info.id);
       if (index > -1) document.title = "" + String.fromCharCode(index + 65);
@@ -94,4 +93,5 @@ function title() {
   });
 }
 
-title();
+//Initial State
+bind();

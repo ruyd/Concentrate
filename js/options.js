@@ -14,7 +14,7 @@ var SavedSettings = {
   LabelWindowNewTabs: true,
 };
 
-// Form
+// Form - AutoChange for NewTab Options
 const checkboxes = new Map();
 const keys = Object.keys(SavedSettings);
 keys.forEach((a) => {

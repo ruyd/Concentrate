@@ -1,12 +1,18 @@
+:root {
+  --darker: #2e1551;
+  --dark: #7555c4;
+  --lighter: #8187ce;
+}
+
 body {
-  background-color: #242424;
+  background-color: var(--lighter);
   color: gray;
   font-size: 110%;
   min-width: 170px;
 }
 
 h3 {
-  color: #43acff;
+  color: var(--darker);
   margin: 5px;
 }
 
@@ -48,11 +54,11 @@ h3 {
 }
 
 input:checked + .slider {
-  background-color: #2196f3;
+  background-color: var(--dark);
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196f3;
+  box-shadow: 0 0 1px var(--dark);
 }
 
 input:checked + .slider:before {
@@ -84,10 +90,9 @@ input {
 }
 
 .divider {
-  background: purple;
-  height: 5px;
+  border-bottom: dashed 1px var(--darker);
+  height: 1px;
   margin: 20px 5px 20px 5px;
-  border-radius: 5px;
 }
 
 .title {
@@ -95,4 +100,56 @@ input {
   font-weight: 500;
   letter-spacing: 1px;
   color: whitesmoke;
+}
+
+.hostname {
+  color: var(--darker);
+  font-size: larger;
+  font-weight: 500;
+  border-bottom: dashed 2px var(--darker);
+  margin: 0 10px 15px 10px;
+  padding: 5px;
+}
+
+.pedal {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.btn {
+  background-color: var(--dark);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  color: white;
+  font-size: 2rem;
+  margin: 0 5px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.4s ease-in;
+}
+
+.btn:hover {
+  background-color: #4da996;
+  box-shadow: rgb(0 0 0 / 0%) 0px 0px 1px;
+}
+
+.btn:active {
+  animation: ripple 0.8s ease-out;
+}
+
+@keyframes ripple {
+  50% {
+    transform: scale(1.5, 1.5);
+    opacity: 0;
+  }
+  99% {
+    transform: scale(0.001, 0.001);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.001, 0.001);
+    opacity: 1;
+  }
 }
