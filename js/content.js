@@ -27,7 +27,7 @@ const removals_videoAdWords = [
 ];
 
 // Messaging
-function connect() {
+function connect(message) {
   Port = chrome.runtime.connect({
     name: "content",
   });
@@ -36,13 +36,20 @@ function connect() {
 
   Port.onDisconnect.addListener(function () {
     if (Port) {
-      Port.Closed = true;
+      Port = null;
     }
   });
 
-  Port.postMessage({
-    action: "connected",
-  });
+  Port.postMessage(
+    message || {
+      action: "connected",
+    }
+  );
+}
+
+function sendToBackground(message) {
+  if (Port) Port.postMessage(message);
+  else connect(message);
 }
 
 function onMessageHandler(message) {
@@ -53,6 +60,9 @@ function onMessageHandler(message) {
       break;
     case "update":
       updateOptionsState(payload);
+      break;
+    case "scroll.speed":
+      updateScrollSpeed(payload);
       break;
     default:
       break;
@@ -561,31 +571,32 @@ function stopScroll() {
 
 function onKey(e) {
   const key = e.code;
-  const shiftDown = e.shiftKey;
   const controlDown = e.ctrlKey;
-  log(key);
+
   if (controlDown && key === "Space") {
     e.preventDefault();
     Model.State.EnableAutoScroll = !Model.State.EnableAutoScroll;
     autoScroll();
+    sendToBackground({
+      action: "scroll.set",
+      payload: Model.State.EnableAutoScroll,
+    });
   }
 
   if (Model.State.EnableAutoScroll && controlDown) {
     if (key === "ArrowDown") {
-      Model.State.AutoScrollSpeed += 1;
       e.preventDefault();
+      updateScrollSpeed(1);
     }
     if (key === "ArrowUp") {
-      if (Model.State.AutoScrollSpeed > 1) {
-        Model.State.AutoScrollSpeed -= 1;
-      } else {
-        beep();
-      }
       e.preventDefault();
+      updateScrollSpeed(-1);
     }
-
-    //toast "AutoScroll Speed: x" + Model.State.AutoScrollSpeed;
   }
+}
+
+function updateScrollSpeed(speed) {
+  Model.State.AutoScrollSpeed += speed;
 }
 
 // Utils

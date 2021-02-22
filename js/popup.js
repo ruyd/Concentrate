@@ -9,30 +9,61 @@ const Context = {
     SkipAds: false,
   },
 };
+const log = console.log.bind(window.console);
+
+// Listeners
+chrome.runtime.onMessage.addListener(onMessageHandler);
+function onMessageHandler({ action, payload }) {
+  log(action, payload);
+  switch (action) {
+    case "state.set":
+      setState(payload);
+      break;
+    case "scroll.set":
+      setScroll(payload);
+      break;
+    default:
+      break;
+  }
+}
 
 // Form
 const checkboxes = new Map();
 const keys = Object.keys(Context.State);
-keys.forEach((a) => {
-  const el = document.getElementById(a + "InputCheckbox");
-  if (el) checkboxes.set(a, el);
+keys.forEach((key) => {
+  const el = document.getElementById(key + "InputCheckbox");
+  if (el) checkboxes.set(key, el);
 });
 
-//Bind
-checkboxes.forEach((input) => (input.onclick = onClickHandler));
-function onClickHandler(e) {
-  checkboxes.forEach((checkbox, key) => {
-    Context.State[key] = checkbox.checked;
-  });
+// Bind
+function bind() {
+  // Form
+  checkboxes.forEach((input) => (input.onclick = onClickHandler));
+  function onClickHandler(e) {
+    checkboxes.forEach((checkbox, key) => {
+      Context.State[key] = checkbox.checked;
+    });
 
-  send();
+    send();
+  }
+
+  // AutoScroll
+  document.getElementById("slower").onclick = () => scrollSpeed(-1);
+  document.getElementById("faster").onclick = () => scrollSpeed(1);
 }
 
 // Actions
+function scrollSpeed(move) {
+  sendToTab({
+    action: "scroll.speed",
+    payload: move,
+  });
+}
+
 function init() {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     for (let tab of tabs) {
-      background({
+      sendToBackground({
         action: "state.get",
         payload: tab.id,
       });
@@ -40,17 +71,6 @@ function init() {
   });
 }
 
-chrome.runtime.onMessage.addListener(onMessageHandler);
-function onMessageHandler({ action, payload }) {
-  switch (action) {
-    case "state.set":
-      setState(payload);
-      break;
-
-    default:
-      break;
-  }
-}
 function setState({ Tab, SavedSettings }) {
   Context.Tab = Tab;
   Object.assign(Context.State, SavedSettings);
@@ -70,7 +90,13 @@ function setHostname() {
   node.innerText = helper.hostname;
 }
 
-function background(message) {
+function setScroll(state) {
+  Context.State.EnableAutoScroll = state;
+  const checkbox = checkboxes.get("EnableAutoScroll");
+  checkbox.checked = state;
+}
+
+function sendToBackground(message) {
   chrome.runtime.sendMessage(message);
 }
 
@@ -86,8 +112,11 @@ function send() {
     id: Context.Tab.id,
   };
 
-  background(msg);
+  sendToBackground(msg);
+  sendToTab(msg);
+}
 
+function sendToTab(msg) {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     for (let tab of tabs) {
       chrome.tabs.sendMessage(tab.id, msg);
@@ -96,4 +125,5 @@ function send() {
 }
 
 //////
+bind();
 init();

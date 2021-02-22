@@ -21,13 +21,16 @@ function onConnect(port) {
 
 function onMessageHandler(message, port) {
   const { action, payload, id } = message;
+  const senderModel =
+    port && port.sender && port.sender.tab
+      ? Tabs.get(port.sender.tab.id)
+      : null;
   switch (action) {
     case "connected":
-      let model = port ? Tabs.get(port.sender.tab.id) : null;
-      if (!model) {
+      if (!senderModel) {
         console.error("tab without model - bug1", Tabs, message, port);
       }
-      if (port) port.postMessage({ action: "model", payload: model });
+      if (port) port.postMessage({ action: "model", payload: senderModel });
       break;
 
     case "update":
@@ -45,7 +48,7 @@ function onMessageHandler(message, port) {
 
     case "state.get":
       let modelState = port ? Tabs.get(payload) : null;
-      log("state.get", message, port, modelState);
+      log(action, message, port, modelState);
       if (modelState) {
         sendMessage({
           action: "state.set",
@@ -53,7 +56,13 @@ function onMessageHandler(message, port) {
         });
       }
       break;
-
+    case "scroll.set":
+      senderModel.SavedSettings.EnableAutoScroll = payload;
+      sendMessage({
+        action: "scroll.set",
+        payload: payload,
+      });
+      break;
     default:
       break;
   }
