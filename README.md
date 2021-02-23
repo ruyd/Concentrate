@@ -23,6 +23,7 @@ I really hope it helps your studies and peace of mind too.
 A Modern Add-on for a Quiet and Focused Browsing Experience.
 
 ![Image](visuals/ConcentrateUI.gif)
+NewTab Options to FullScreen to Amazon to AutoScroll in Guest
 
 ![Image](visuals/Options.png)
 
