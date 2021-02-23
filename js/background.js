@@ -20,6 +20,7 @@ function onConnect(port) {
 }
 
 function onMessageHandler(message, port) {
+  log(message, port);
   const { action, payload, id, scope } = message;
   const senderModel =
     port && port.sender && port.sender.tab
@@ -47,20 +48,20 @@ function onMessageHandler(message, port) {
       break;
 
     case "state.get":
-      let modelState = port ? Tabs.get(payload) : null;
+      const modelState = port ? Tabs.get(payload) : null;
       if (modelState) {
         sendMessage({
-          action: "state.set",
+          action: "background.state.set",
           payload: modelState,
         });
       }
       break;
     case "scroll.set":
-      //this is more state hmmm
-      senderModel.SavedSettings.EnableAutoScroll = payload.EnableAutoScroll;
+      if (!senderModel) return;
+      Object.assign(senderModel.State, payload);
       sendMessage({
         action: "background.scroll.set",
-        payload: payload,
+        payload: senderModel,
       });
       break;
     default:
@@ -98,6 +99,7 @@ function Settings(loaded) {
 function TabModel(chrome_tab, settings) {
   this.Tab = chrome_tab;
   this.SavedSettings = new Settings(settings);
+  this.State = {};
 }
 
 // Actions

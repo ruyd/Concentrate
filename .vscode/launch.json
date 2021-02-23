@@ -34,7 +34,7 @@
             "type": "edge",
             "request": "attach",
             "port": 9223,
-            "url": "extension://pflhhidhafdpggilhocmlfbaogcgbnln/html/popup.html",
+            "url": "chrome-extension://pflhhidhafdpggilhocmlfbaogcgbnln/html/popup.html",
             "webRoot": "${workspaceFolder}/js"
         },
 

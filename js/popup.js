@@ -20,11 +20,11 @@ chrome.runtime.onMessage.addListener(onMessageHandler);
 function onMessageHandler({ action, payload }) {
   log(action, payload);
   switch (action) {
-    case "state.set":
+    case "background.state.set":
       setState(payload);
       break;
     case "background.scroll.set":
-      setScroll(payload);
+      setState(payload);
       break;
     default:
       break;
@@ -47,7 +47,6 @@ function bind() {
     checkboxes.forEach((checkbox, key) => {
       Context.State[key] = checkbox.checked;
     });
-
     send();
   }
 
@@ -58,6 +57,7 @@ function bind() {
 
 // Actions
 function scrollSpeed(move) {
+  setScroll();
   sendToTab({
     action: "scroll.speed",
     payload: move,
@@ -75,9 +75,9 @@ function init() {
   });
 }
 
-function setState({ Tab, SavedSettings }) {
+function setState({ Tab, SavedSettings, State }) {
   Context.Tab = Tab;
-  Object.assign(Context.State, SavedSettings);
+  Object.assign(Context.State, State);
   checkboxes.forEach((checkbox, key) => {
     checkbox.checked = Context.State[key];
   });
@@ -125,8 +125,7 @@ function setBody() {
     .classList.toggle("hide", Context.isAllowed);
 }
 
-function setScroll(state) {
-  if (state) Object.assign(Context.State, state);
+function setScroll() {
   const checkbox = checkboxes.get("EnableAutoScroll");
   checkbox.checked = Context.State.EnableAutoScroll;
   document.getElementById("speed").innerText =
