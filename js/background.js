@@ -20,7 +20,6 @@ function onConnect(port) {
 }
 
 function onMessageHandler(message, port) {
-  log(message, port);
   const { action, payload, id, scope } = message;
   const senderModel =
     port && port.sender && port.sender.tab

@@ -101,7 +101,7 @@ function onMessageHandler(message, sender) {
       setModel(payload);
       break;
     case "update":
-      updateOptionsState(payload);
+      updateState(payload);
       break;
     case "scroll.speed":
       updateScrollSpeed(payload);
@@ -116,7 +116,7 @@ function runtimeMessageHandler(request, sender, sendResponse) {
   onMessageHandler(request);
 }
 
-function updateOptionsState(payload) {
+function updateState(payload) {
   Object.assign(Model.State, payload);
   Model.bind();
 }
