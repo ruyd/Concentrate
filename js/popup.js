@@ -57,7 +57,6 @@ function bind() {
 
 // Actions
 function scrollSpeed(move) {
-  setScroll();
   sendToTab({
     action: "scroll.speed",
     payload: move,
@@ -75,9 +74,9 @@ function init() {
   });
 }
 
-function setState({ Tab, SavedSettings, State }) {
-  Context.Tab = Tab;
+function setState({ State, Tab, SavedSettings }) {
   Object.assign(Context.State, State);
+  Context.Tab = Tab;
   checkboxes.forEach((checkbox, key) => {
     checkbox.checked = Context.State[key];
   });
@@ -85,7 +84,6 @@ function setState({ Tab, SavedSettings, State }) {
   setHostname();
   setBody();
   setScroll();
-  console.log("setState", SavedSettings, Tab);
 }
 function getUrl() {
   return Context.Tab.pendingUrl ? Context.Tab.pendingUrl : Context.Tab.url;
