@@ -1,19 +1,26 @@
-var Settings = {
-  NewTabColor: "#242424",
-  NewTabClick: true,
-  ShowClock: true,
-  WindowLabels: false,
+const Context = {
+  Settings: {
+    NewTabColor: "#242424",
+    NewTabClick: true,
+    ShowClock: true,
+    WindowLabels: false,
+  },
 };
 
 //Listener
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.Refresh && request.Settings) {
-    Settings = request.Settings;
-
-    if (Settings.NewTabClick) bind();
-    else unbind();
-  }
-});
+chrome.runtime.onMessage.addListener(onMessageHandler);
+function onMessageHandler({ action, payload }, sender) {
+  console.trace(
+    "action",
+    action,
+    "payload",
+    payload.NewTabClick,
+    "sender",
+    sender
+  );
+  Context.Settings = payload;
+  bind();
+}
 
 // Actions
 function toggleFullScreen() {
@@ -28,44 +35,45 @@ function toggleFullScreen() {
 
 function bind() {
   chrome.storage.sync.get("Settings", function (data) {
+    console.log("storage", data.Settings.NewTabClick);
     if (data.Settings) {
-      Settings = data.Settings;
+      Context.Settings = data.Settings;
     } else {
       //FirstRun Commit Default Settings
-      chrome.storage.sync.set({ Settings });
+      chrome.storage.sync.set({ Settings: Context.Settings });
     }
 
-    if (Settings.NewTabClick) {
-      document.documentElement.addEventListener(
+    if (Context.Settings.NewTabClick) {
+      if (!Context.ClickBound) {
+        Context.ClickBound = true;
+        document.documentElement.addEventListener(
+          "click",
+          toggleFullScreen,
+          false
+        );
+      }
+    } else {
+      Context.ClickBound = false;
+      document.documentElement.removeEventListener(
         "click",
         toggleFullScreen,
         false
       );
     }
 
-    if (Settings.NewTabColor) {
-      document.body.style.backgroundColor = Settings.NewTabColor;
-      document.body.style.color = Settings.NewTabColor;
+    if (Context.Settings.NewTabColor) {
+      document.body.style.backgroundColor = Context.Settings.NewTabColor;
+      document.body.style.color = Context.Settings.NewTabColor;
     }
 
-    if (Settings.ShowClock) {
-      startTime();
-    }
+    startTime();
   });
 }
 
-function unbind() {
-  document.documentElement.removeEventListener(
-    "click",
-    toggleFullScreen,
-    false
-  );
-}
-
 function startTime() {
-  if (Settings.ShowClock) {
+  if (Context.Settings.ShowClock) {
     document.getElementById("txt").innerHTML = formatAMPM(new Date());
-    var t = setTimeout(startTime, 500);
+    Context.timeout = setTimeout(startTime, 500);
   } else {
     document.getElementById("txt").innerHTML = "";
   }
@@ -83,7 +91,7 @@ function formatAMPM(date) {
 }
 
 function title() {
-  if (!Settings.EnableWindowLabels) return;
+  if (!Context.Settings.EnableWindowLabels) return;
   chrome.windows.getCurrent({ populate: true }, (info) => {
     if (!info) return;
     chrome.windows.getAll({ populate: true }, (list) => {

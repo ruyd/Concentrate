@@ -1,3 +1,4 @@
+"use strict";
 const Context = {
   Tab: null,
   State: {
@@ -79,6 +80,7 @@ function setState({ Tab, SavedSettings }) {
   checkboxes.forEach((checkbox, key) => {
     checkbox.checked = Context.State[key];
   });
+
   setHostname();
   setBody();
   console.log("state", SavedSettings, Tab);
@@ -87,33 +89,38 @@ function getUrl() {
   return Context.Tab.pendingUrl ? Context.Tab.pendingUrl : Context.Tab.url;
 }
 
-function setHostname() {
-  const node = document.getElementById("hostname");
-  const url = getUrl();
-  if (!url) return;
-
+function getHostname(url) {
   if (
     url.indexOf("extension://") > -1 &&
     url.indexOf("html/options.html") > -1
   ) {
-    return "Options";
+    return "options";
   }
-
   const helper = document.createElement("a");
   helper.setAttribute("href", url);
-  node.innerText = helper.hostname;
-  Context.isNewTab = helper.hostname === "newtab";
-  Context.isRestricted = helper.hostname != "newtab" && !url.startsWith("http");
+  return helper.hostname;
+}
+
+function setHostname() {
+  const url = getUrl();
+  if (!url) return;
+  const allowed = ["newtab"];
+  Context.Hostname = getHostname(url);
+  Context.isNewTab = Context.Hostname === "newtab";
+  Context.isAllowed =
+    allowed.find((host) => Context.Hostname === host) || url.startsWith("http");
+
+  document.getElementById("hostname").innerText = Context.Hostname;
 }
 
 function setBody() {
   document
     .getElementById("content")
-    .classList.toggle("hide", Context.isNewTab || Context.isRestricted);
+    .classList.toggle("hide", !Context.isAllowed || Context.isNewTab);
   document.getElementById("newtab").classList.toggle("hide", !Context.isNewTab);
   document
     .getElementById("restricted")
-    .classList.toggle("hide", !Context.isRestricted);
+    .classList.toggle("hide", Context.isAllowed);
 }
 
 function setScroll(state) {
@@ -124,11 +131,6 @@ function setScroll(state) {
 
 function sendToBackground(message) {
   chrome.runtime.sendMessage(message);
-}
-
-// Think, persist by site? or always in-memory
-function commitToStorage() {
-  chrome.storage.sync.set({ Settings: Context.State });
 }
 
 function send() {

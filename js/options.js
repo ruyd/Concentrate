@@ -44,19 +44,23 @@ function init() {
   });
 }
 
-function save() {
+async function save() {
   checkboxes.forEach((checkbox, key) => {
     SavedSettings[key] = checkbox.checked;
   });
 
   SavedSettings.NewTabColor = colorInput.value;
-
-  commitToStorage();
+  await commitToStorage();
   send();
 }
 
 function commitToStorage() {
-  chrome.storage.sync.set({ Settings: SavedSettings });
+  return new Promise((resolve) =>
+    chrome.storage.sync.set({ Settings: SavedSettings }, function (result) {
+      console.log("Saved", SavedSettings, result);
+      resolve(result);
+    })
+  );
 }
 
 function send() {

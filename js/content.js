@@ -46,6 +46,7 @@ const playerTypes = {
     },
   },
   CNN: {
+    match: "cnn.com",
     player: "pui-wrapper",
     button: "pui_volume-controls_mute-toggle",
     isMuted: function (node) {
@@ -142,10 +143,11 @@ function GetMuteButton(type) {
   return node ? new MuteButton(node, type) : null;
 }
 
+// Future[]?
 function GetUrlPlayerType() {
   let result = playerTypes.YouTube;
   const url = getUrl();
-  if (url && url.indexOf("cnn.com") > -1) {
+  if (url && url.indexOf(playerTypes.CNN.match) > -1) {
     result = playerTypes.CNN;
   }
   return result;
@@ -297,12 +299,11 @@ TabModel.prototype.skip = function () {
   if (!this.SkipButton) return;
   this.SkipButton.click();
   this.reset();
-  log("Skip ad!");
+  log("Skipped ad!");
 };
 
 TabModel.prototype.mute = function () {
   if (!this.MuteButton || this.MuteButton.isMuted()) {
-    log("aborted mute, bug");
     return;
   }
   this.MuteButton.click();
@@ -312,12 +313,11 @@ TabModel.prototype.mute = function () {
 
 TabModel.prototype.unmute = function () {
   if (!this.MuteButton || !this.MuteButton.isMuted()) {
-    log("aborted unmute, bug");
     return;
   }
   this.MuteButton.click();
   this.State.DidWeMute = false;
-  log("Content back -> unmuting");
+  log("Content's back -> unmuting");
 };
 
 TabModel.prototype.toggleFullScreen = function () {
@@ -359,6 +359,7 @@ TabModel.prototype.bind = function () {
   mute.Node.addEventListener("click", (e) => {
     if (this.State.Showing && e.isTrusted) {
       //this.toggleMute();
+      //hmm
     }
   });
   this.MuteBound = true;
@@ -370,7 +371,6 @@ TabModel.prototype.draw = function () {
 
   const rect = panel.getBoundingClientRect();
   const node = this.Greyout.Node;
-  node.style.height = rect.height - 0.5 + "px"; //nice yellow strip
   node.style.height = rect.height + "px";
   node.style.width = rect.width + "px";
   node.style.top = rect.top + "px";
@@ -469,7 +469,6 @@ TabModel.prototype.IsReady = function () {
 };
 
 // Actions
-
 function removeVideoAds() {
   if (!Model.State.HasVideo) return false;
   for (const name of removals_videoAdWords) {
