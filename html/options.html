@@ -9,47 +9,88 @@
 </head>
 
 <body>
-    <div style="text-align: center; margin-top: 5%;">
-        <h2>Content</h2>
-        <h3>FullScreen DoubleClick</h3>
-        <label class="switch">
-            <input type="checkbox" value="true" id="ContentDoubleClickInputCheckbox">
-            <span class="slider round"></span>
-        </label>
-        <h3>Remove Banner Ads</h3>
-        <label class="switch">
-            <input type="checkbox" value="true" id="RemoveAdsInputCheckbox">
-            <span class="slider round"></span>
-        </label>
-        <h3>Mute YouTube Video Ads</h3>
-        <label class="switch">
-            <input type="checkbox" value="true" id="MutingOnInputCheckbox">
-            <span class="slider round"></span>
-        </label>
-        <h3>Remove Comments</h3>
-        <label class="switch">
-            <input type="checkbox" value="true" id="RemoveCommentsInputCheckbox">
-            <span class="slider round"></span>
-        </label>
-        <h2>New Tab</h2>
-        <h3>FullScreen Click</h3>
-        <label class="switch">
-            <input type="checkbox" value="true" id="NewTabClickInputCheckbox">
-            <span class="slider round"></span>
-        </label>
-        <h3>Hover to Reveal Time</h3>
-        <label class="switch">
-            <input type="checkbox" value="true" id="ShowClockInputCheckbox">
-            <span class="slider round"></span>
-        </label>
-        <h3>Color</h3>
-        <input type="text" id="color" name="color" />
-        <div id="indicator" class="color-indicator"></div>
-    </div>
-    <div style="text-align: right; margin-top: 2%; padding-right: 10%;position: fixed; top:80%; left: 80%;">
-        <h1>Concentrate</h1>
+    <div class="flex">
+        <div>
+            <div class="visual">
+                <h2>Content</h2>
+                <div>
+                    <div class="card">
+                        <div class="card-inner content-placeholder"></div>
+                    </div>
+                </div>
+                <svg height="0" width="0">
+                    <defs>
+                        <clipPath id="svgPath">
+                            <rect x="74" y="5" width="200" height="12"></rect>
+                            <rect x="74" y="25" width="150" height="12"></rect>
+                            <rect x="0" y="75" width="320" height="12"></rect>
+                            <rect x="0" y="95" width="320" height="12"></rect>
+                            <circle id="Oval" cx="30" cy="30" r="30"></circle>
+                        </clipPath>
+                    </defs>
+                </svg>
+            </div>
+            <div class="form">
+
+                <div>
+                    <h3>FullScreen DoubleClick</h3>
+                </div>
+                <div>
+                    <label class="switch">
+                        <input type="checkbox" value="true" id="ContentDoubleClickInputCheckbox">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <h3>Remove Banner Ads</h3>
+
+                <label class="switch">
+                    <input type="checkbox" value="true" id="RemoveAdsInputCheckbox">
+                    <span class="slider round"></span>
+                </label>
+
+                <h3>Mute YouTube Video Ads</h3>
+                <label class="switch">
+                    <input type="checkbox" value="true" id="MutingOnInputCheckbox">
+                    <span class="slider round"></span>
+                </label>
+
+                <h3>Remove Comments</h3>
+                <label class="switch">
+                    <input type="checkbox" value="true" id="RemoveCommentsInputCheckbox">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+        <div>
+            <div class="visual">
+                <h2>New Tab</h2>
+                <div id="indicator" class="color-indicator"></div>
+            </div>
+            <div class="form">
+                <h3>Color</h3>
+                <input type="text" id="color" name="color" />
+
+
+                <h3>FullScreen Click</h3>
+                <label class="switch">
+                    <input type="checkbox" value="true" id="NewTabClickInputCheckbox">
+                    <span class="slider round"></span>
+                </label>
+                <h3>Hover to Reveal Time</h3>
+                <label class="switch">
+                    <input type="checkbox" value="true" id="ShowClockInputCheckbox">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
     </div>
     <script src="../js/options.js"></script>
 </body>
 
 </html>
+
+<!-- 
+<div style="text-align: right; margin-top: 2%; padding-right: 10%;position: fixed; top:80%; left: 80%;">
+    <h1>Concentrate</h1>
+</div> -->

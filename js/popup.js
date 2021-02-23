@@ -83,20 +83,37 @@ function setState({ Tab, SavedSettings }) {
   setBody();
   console.log("state", SavedSettings, Tab);
 }
+function getUrl() {
+  return Context.Tab.pendingUrl ? Context.Tab.pendingUrl : Context.Tab.url;
+}
 
 function setHostname() {
   const node = document.getElementById("hostname");
-  const url = Context.Tab.pendingUrl ? Context.Tab.pendingUrl : Context.Tab.url;
+  const url = getUrl();
   if (!url) return;
+
+  if (
+    url.indexOf("extension://") > -1 &&
+    url.indexOf("html/options.html") > -1
+  ) {
+    return "Options";
+  }
+
   const helper = document.createElement("a");
   helper.setAttribute("href", url);
   node.innerText = helper.hostname;
   Context.isNewTab = helper.hostname === "newtab";
+  Context.isRestricted = helper.hostname != "newtab" && !url.startsWith("http");
 }
 
 function setBody() {
-  document.getElementById("content").classList.toggle("hide", Context.isNewTab);
+  document
+    .getElementById("content")
+    .classList.toggle("hide", Context.isNewTab || Context.isRestricted);
   document.getElementById("newtab").classList.toggle("hide", !Context.isNewTab);
+  document
+    .getElementById("restricted")
+    .classList.toggle("hide", !Context.isRestricted);
 }
 
 function setScroll(state) {
