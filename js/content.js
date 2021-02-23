@@ -608,6 +608,7 @@ function autoScroll() {
   if (Model.State.EnableAutoScroll) {
     if (!Model.State.ScrollInterval) {
       const delay = 50;
+      if (Model.State.AutoScrollSpeed === 0) Model.State.AutoScrollSpeed = 1;
       Model.State.ScrollInterval = setInterval(
         () =>
           window.scrollBy({
