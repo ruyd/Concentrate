@@ -1,4 +1,4 @@
-![Image](visuals/Concentrate.svg)
+![Image](images/Concentrate.svg)
 
 # Concentrate
 
