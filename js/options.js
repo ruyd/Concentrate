@@ -10,8 +10,8 @@ var SavedSettings = {
   ShowClock: true,
   GrayingOn: true,
   MutingOn: true,
-  SkipAds: false,
-  LabelWindowNewTabs: true,
+  SkipAds: true,
+  LabelWindow: true,
 };
 
 // Form - AutoChange for NewTab Options

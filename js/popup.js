@@ -10,6 +10,7 @@ const Context = {
     SkipAds: true,
     NewTabClick: true,
     ShowClock: true,
+    AutoScrollSpeed: 5,
   },
 };
 const log = console.log.bind(window.console);
@@ -22,7 +23,7 @@ function onMessageHandler({ action, payload }) {
     case "state.set":
       setState(payload);
       break;
-    case "scroll.set":
+    case "background.scroll.set":
       setScroll(payload);
       break;
     default:
@@ -83,7 +84,8 @@ function setState({ Tab, SavedSettings }) {
 
   setHostname();
   setBody();
-  console.log("state", SavedSettings, Tab);
+  setScroll();
+  console.log("setState", SavedSettings, Tab);
 }
 function getUrl() {
   return Context.Tab.pendingUrl ? Context.Tab.pendingUrl : Context.Tab.url;
@@ -124,9 +126,11 @@ function setBody() {
 }
 
 function setScroll(state) {
-  Object.assign(Context.State, state);
+  if (state) Object.assign(Context.State, state);
   const checkbox = checkboxes.get("EnableAutoScroll");
-  checkbox.checked = state;
+  checkbox.checked = Context.State.EnableAutoScroll;
+  document.getElementById("speed").innerText =
+    Context.State.AutoScrollSpeed || "";
 }
 
 function sendToBackground(message) {

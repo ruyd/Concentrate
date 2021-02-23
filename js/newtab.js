@@ -10,14 +10,6 @@ const Context = {
 //Listener
 chrome.runtime.onMessage.addListener(onMessageHandler);
 function onMessageHandler({ action, payload }, sender) {
-  console.trace(
-    "action",
-    action,
-    "payload",
-    payload.NewTabClick,
-    "sender",
-    sender
-  );
   Context.Settings = payload;
   bind();
 }
@@ -35,7 +27,6 @@ function toggleFullScreen() {
 
 function bind() {
   chrome.storage.sync.get("Settings", function (data) {
-    console.log("storage", data.Settings.NewTabClick);
     if (data.Settings) {
       Context.Settings = data.Settings;
     } else {

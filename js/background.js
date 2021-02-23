@@ -59,7 +59,7 @@ function onMessageHandler(message, port) {
       //this is more state hmmm
       senderModel.SavedSettings.EnableAutoScroll = payload.EnableAutoScroll;
       sendMessage({
-        action: "scroll.set",
+        action: "background.scroll.set",
         payload: payload,
       });
       break;
