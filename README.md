@@ -22,8 +22,6 @@ I really hope it helps your studies and peace of mind too.
 
 A Modern Add-on for a Quiet and Focused Browsing Experience.
 
-![Image](visuals/Concentrate1280x800.png)
-
 ![Image](visuals/ConcentrateUI.gif)
 
 ![Image](visuals/Options.png)
