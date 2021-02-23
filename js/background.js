@@ -19,7 +19,7 @@ function onConnect(port) {
   });
 }
 
-function onMessageHandler(message, port) {
+async function onMessageHandler(message, port) {
   const { action, payload, id, scope } = message;
   const senderModel =
     port && port.sender && port.sender.tab
@@ -42,7 +42,7 @@ function onMessageHandler(message, port) {
         Tabs.forEach((item) => {
           Object.assign(item.SavedSettings, payload);
         });
-        commitToStorage();
+        await commitToStorage();
       }
       break;
 

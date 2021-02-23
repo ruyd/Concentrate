@@ -2,6 +2,7 @@
 var Port;
 var Timer;
 var Model = new TabModel();
+var IntervalId = -1;
 
 const interval = 1000;
 const isYouTube = window.location.hostname.indexOf("youtube") > -1;
@@ -223,7 +224,6 @@ class TabState extends Settings {
     this.SecondCounter = 0;
     this.EnableAutoScroll = false;
     this.AutoScrollSpeed = 5;
-    this.ScrollInterval;
     this.PlayerType = GetUrlPlayerType();
   }
 }
@@ -606,10 +606,11 @@ function toggleGraying() {
 // AutoScroll
 function autoScroll() {
   if (Model.State.EnableAutoScroll) {
-    if (!Model.State.ScrollInterval) {
+    if (IntervalId < 0) {
+      clearInterval(IntervalId);
       const delay = 50;
       if (Model.State.AutoScrollSpeed === 0) Model.State.AutoScrollSpeed = 1;
-      Model.State.ScrollInterval = setInterval(
+      IntervalId = setInterval(
         () =>
           window.scrollBy({
             top: Model.State.AutoScrollSpeed,
@@ -618,6 +619,7 @@ function autoScroll() {
           }),
         delay
       );
+      log("i", IntervalId);
     }
   } else {
     stopScroll();
@@ -625,10 +627,8 @@ function autoScroll() {
 }
 
 function stopScroll() {
-  if (Model.State.ScrollInterval) {
-    clearInterval(Model.State.ScrollInterval);
-    Model.State.ScrollInterval = null;
-  }
+  clearInterval(IntervalId);
+  IntervalId = -1;
 }
 
 function onKey(e) {

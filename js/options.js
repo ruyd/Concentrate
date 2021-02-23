@@ -14,6 +14,14 @@ var SavedSettings = {
   LabelWindow: true,
 };
 
+// Listeners
+chrome.runtime.onMessage.addListener(onMessageHandler);
+function onMessageHandler({ action, scope }) {
+  if (action === "update" && scope === "all") {
+    init();
+  }
+}
+
 // Form - AutoChange for NewTab Options
 const checkboxes = new Map();
 const keys = Object.keys(SavedSettings);
