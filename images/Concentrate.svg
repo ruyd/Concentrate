@@ -192,7 +192,7 @@
 		}
 	</style>
 	<g id="Layer_1">
-		<rect x="0" class="st0" width="1417.3" height="1133.9" />
+		<rect x="0" class="st0" width="1417.3" height="1133.9" rx="10" ry="10" />
 	</g>
 	<g id="Layer_2">
 		<g>
