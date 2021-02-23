@@ -1,7 +1,7 @@
 :root {
   --darker: #2e1551;
   --dark: #7555c4;
-  --lighter: #9ba2f8;
+  --lighter: #8f95e5;
   --alt: #4da996;
   --slider-speed: 0.4s;
 }
@@ -127,8 +127,9 @@ input:focus {
 .title {
   margin: 4px 0;
   font-weight: 500;
+  font-size: 110%;
   letter-spacing: 1px;
-  color: whitesmoke;
+  color: var(--darker);
 }
 
 .hostname {
