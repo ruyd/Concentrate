@@ -37,15 +37,19 @@ const playerTypes = {
   YouTube: {
     player: "html5-video-player",
     button: "ytp-mute-button",
-    isMuted: (node) =>
-      (node ? node.getAttribute("title") : "").toLowerCase().indexOf("unmute") >
-      -1,
+    isMuted: function (node) {
+      return (
+        (node ? node.getAttribute("title") : "")
+          .toLowerCase()
+          .indexOf("unmute") > -1
+      );
+    },
   },
   CNN: {
     player: "pui-wrapper",
     button: "pui_volume-controls_mute-toggle",
-    isMuted: (node) => {
-      if (node.getElementById("sound-mute-icon")) return true;
+    isMuted: function (node) {
+      if (document.getElementById("sound-mute-icon")) return true;
       else return false;
     },
   },
@@ -132,8 +136,9 @@ function GetTextContent(cls) {
   return result;
 }
 
-function GetMuteButton(cls, type) {
-  const node = GetButtonElement(cls);
+function GetMuteButton(type) {
+  if (!type) return null;
+  const node = GetButtonElement(type.button);
   return node ? new MuteButton(node, type) : null;
 }
 
@@ -234,7 +239,7 @@ function TabModel(chrome_tab, settings) {
   this.Greyout = new Greyout(toggleGraying);
   this.AudioButton = CreateButton("audio", "Sound", toggleMuting);
   this.PowerButton = CreateButton("power", "Graying", toggleGraying);
-  this.MuteButton = GetMuteButton(this.State.PlayerType);
+  this.MuteButton = GetMuteButton();
   this.SkipButton = GetSkipButton();
   this.PlayButton = GetPlayButton();
   this.Tasks = new Set();
@@ -282,7 +287,7 @@ function Button(node, label, action) {
 
 function MuteButton(node, type) {
   this.Node = node;
-  this.isMuted = type.isMuted(node);
+  this.isMuted = () => type.isMuted(node);
   this.click = () => node.click();
 }
 
@@ -473,10 +478,21 @@ function removeVideoAds() {
   return true;
 }
 
-function muteCnnBang() {}
+// Public Service
+function muteCnnBang() {
+  if (Model.State.PlayerType != playerTypes.CNN) return false;
 
+  if (Model.MuteButton && !Model.MuteButton.isMuted()) {
+    if (Model.State.DidWeMute) return false; // User unmuted
+    Model.mute();
+  }
+  return true;
+}
+
+// What happens with embeds?
 function muteYouTubeAds() {
   if (!Model.State.HasVideo) return false;
+  if (Model.State.PlayerType != playerTypes.YouTube) return false;
 
   if (Model.SkipButton && Model.State.SkipAds) {
     Model.skip();
@@ -509,7 +525,7 @@ function removeFrameAds() {
   const match = (w, s) => s.indexOf(w) > -1;
   const attrib = (o, s) => o.getAttribute(s) || "xxxxx";
 
-  for (const f = 0; f < frames.length; f++) {
+  for (let f = 0; f < frames.length; f++) {
     const frame = frames[f];
     const id = attrib(frame, "id");
     const name = attrib(frame, "name");

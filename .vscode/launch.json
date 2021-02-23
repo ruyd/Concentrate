@@ -9,7 +9,7 @@
             "type": "edge",
             "request": "attach",
             "port": 9223,
-            "url": "https://www.youtube.com/watch?v=YQc4WT0yDH4",
+            "url": "https://us.cnn.com/2021/02/22/us/el-chapo-wife-arrest-dulles-airport/index.html",
             "webRoot": "${workspaceFolder}/js"
         },
         {
