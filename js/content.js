@@ -1,10 +1,10 @@
 "use strict";
 var Port;
-var Model;
 var Timer;
+var Model = new TabModel();
 
 const interval = 1000;
-const isYoutube = window.location.hostname.indexOf("youtube") > -1;
+const isYouTube = window.location.hostname.indexOf("youtube") > -1;
 const log = console.log.bind(window.console);
 const removals_bannerAdWords = [
   "adserve",
@@ -33,20 +33,29 @@ const removals_videoAdWords = [
   "ytd-watch-next-secondary-results-renderer sparkles-light-cta",
 ];
 
-const muteTypes = {
+const playerTypes = {
   YouTube: {
+    player: "html5-video-player",
     button: "ytp-mute-button",
     isMuted: (node) =>
       (node ? node.getAttribute("title") : "").toLowerCase().indexOf("unmute") >
       -1,
   },
   CNN: {
+    player: "pui-wrapper",
     button: "pui_volume-controls_mute-toggle",
     isMuted: (node) => {
       if (node.getElementById("sound-mute-icon")) return true;
       else return false;
     },
   },
+};
+
+const hasVideoPlayers = () => {
+  for (const key in playerTypes) {
+    if (document.getElementsByClassName(playerTypes[key].player)) return true;
+  }
+  return false;
 };
 
 // Messaging
@@ -128,10 +137,11 @@ function GetMuteButton(cls, type) {
   return node ? new MuteButton(node, type) : null;
 }
 
-function GetUrlMuteType() {
-  let result = muteTypes.YouTube;
-  if (getUrl().indexOf("cnn.com") > -1) {
-    result = muteTypes.CNN;
+function GetUrlPlayerType() {
+  let result = playerTypes.YouTube;
+  const url = getUrl();
+  if (url && url.indexOf("cnn.com") > -1) {
+    result = playerTypes.CNN;
   }
   return result;
 }
@@ -190,18 +200,6 @@ function Greyout(action) {
   };
 }
 
-function TabModel(chrome_tab, settings) {
-  this.Tab = chrome_tab;
-  this.State = new TabState(settings);
-  this.Greyout = new Greyout(toggleGraying);
-  this.AudioButton = CreateButton("audio", "Sound", toggleMuting);
-  this.PowerButton = CreateButton("power", "Graying", toggleGraying);
-  this.MuteButton = GetMuteButton();
-  this.SkipButton = GetSkipButton();
-  this.PlayButton = GetPlayButton();
-  this.Tasks = new Set();
-}
-
 class TabState extends Settings {
   constructor(loaded) {
     super(loaded);
@@ -214,7 +212,7 @@ class TabState extends Settings {
     this.EnableAutoScroll = false;
     this.AutoScrollSpeed = 5;
     this.ScrollInterval;
-    this.MuteType = GetUrlMuteType();
+    this.PlayerType = GetUrlPlayerType();
   }
 }
 
@@ -229,6 +227,17 @@ function Settings(loaded) {
   if (loaded) {
     Object.assign(this, loaded);
   }
+}
+function TabModel(chrome_tab, settings) {
+  this.Tab = chrome_tab;
+  this.State = settings ? new TabState(settings) : {};
+  this.Greyout = new Greyout(toggleGraying);
+  this.AudioButton = CreateButton("audio", "Sound", toggleMuting);
+  this.PowerButton = CreateButton("power", "Graying", toggleGraying);
+  this.MuteButton = GetMuteButton(this.State.PlayerType);
+  this.SkipButton = GetSkipButton();
+  this.PlayButton = GetPlayButton();
+  this.Tasks = new Set();
 }
 
 function Button(node, label, action) {
@@ -419,8 +428,9 @@ TabModel.prototype.detect = function () {
       parseInt(dsplit[0]) * 60 + parseInt(dsplit[1]);
   }
 
-  this.State.MuteType = GetUrlMuteType();
-  this.MuteButton = GetMuteButton(this.State.MuteType);
+  this.State.HasVideo = hasVideoPlayers();
+  this.State.PlayerType = GetUrlPlayerType();
+  this.MuteButton = GetMuteButton(this.State.PlayerType);
   this.SkipButton = GetSkipButton();
   this.PlayButton = GetPlayButton();
 
@@ -450,21 +460,23 @@ TabModel.prototype.GetDurationText = function () {
 };
 
 TabModel.prototype.IsReady = function () {
-  return this.hasOwnProperty("State");
+  return this.hasOwnProperty("State") && this.Tab;
 };
 
 // Actions
 
 function removeVideoAds() {
-  if (!isYoutube) return false;
-  for (let name of removals_videoAdWords) {
+  if (!Model.State.HasVideo) return false;
+  for (const name of removals_videoAdWords) {
     removeClassName(name);
   }
   return true;
 }
 
+function muteCnnBang() {}
+
 function muteYouTubeAds() {
-  if (!isYoutube) return false;
+  if (!Model.State.HasVideo) return false;
 
   if (Model.SkipButton && Model.State.SkipAds) {
     Model.skip();
@@ -497,7 +509,7 @@ function removeFrameAds() {
   const match = (w, s) => s.indexOf(w) > -1;
   const attrib = (o, s) => o.getAttribute(s) || "xxxxx";
 
-  for (let f = 0; f < frames.length; f++) {
+  for (const f = 0; f < frames.length; f++) {
     const frame = frames[f];
     const id = attrib(frame, "id");
     const name = attrib(frame, "name");
@@ -516,7 +528,7 @@ function removeFrameAds() {
 
 function removeClassAds() {
   if (!Model.State.RemoveAds) return false;
-  for (let cname of removals_classNames) {
+  for (const cname of removals_classNames) {
     const start = cname.indexOf("[") + 1;
     const except = cname.substring(start).replace("]", "").split(",");
     const url = getUrl();
@@ -530,13 +542,10 @@ function removeClassAds() {
 
 function removeComments() {
   if (!Model.State.RemoveComments) return false;
-  if (isYoutube) {
-    emptyTagName("ytd-comments");
-  }
-
+  emptyTagName("ytd-comments");
   removeNode("disqus_thread");
 
-  for (let word in removals_commentTags) {
+  for (const word in removals_commentTags) {
     emptyTagName(word, true);
     removeNode(word);
   }
@@ -545,12 +554,11 @@ function removeComments() {
 }
 
 function inject() {
-  if (!isYoutube || !document.body || !Model.IsReady()) return;
-  //if (document.body.contains(Model.Greyout.Node)) return;
+  if (!document.body || !Model.IsReady() || !Model.State.HasVideo) return false;
   document.body.appendChild(Model.Greyout.Node);
   document.body.appendChild(Model.AudioButton.Node);
   document.body.appendChild(Model.PowerButton.Node);
-  Model.injected = true;
+  return true;
 }
 
 function save() {
@@ -635,7 +643,7 @@ function updateScrollSpeed(speed) {
 // Utils
 function emptyTagName(name, removeNode) {
   const nodes = document.getElementsByTagName(name);
-  for (let node of nodes) {
+  for (const node of nodes) {
     if (node.innerHTML.length > 0) node.innerHTML = "";
     if (removeNode) node.remove();
   }
@@ -643,7 +651,7 @@ function emptyTagName(name, removeNode) {
 
 function removeClassName(name) {
   const elements = document.getElementsByClassName(name);
-  for (let el of elements) {
+  for (const el of elements) {
     el.remove();
   }
 }
@@ -663,22 +671,24 @@ function beep() {
 }
 
 function getUrl() {
+  if (!Model.IsReady()) return null;
   return Model.Tab.pendingUrl ? Model.Tab.pendingUrl : Model.Tab.url;
 }
 
 // Timer
 function startTimer() {
-  if (Model && Model.IsReady()) {
+  if (Model.IsReady()) {
     if (Model.Tasks.size === 0) {
       Model.Tasks.add(muteYouTubeAds);
       Model.Tasks.add(removeFrameAds);
       Model.Tasks.add(removeClassAds);
       Model.Tasks.add(removeVideoAds);
       Model.Tasks.add(removeComments);
+      Model.Tasks.add(muteCnnBang);
     }
 
     if (document.readyState === "complete" && !Model.injected) {
-      inject();
+      Model.injected = inject();
     }
 
     Model.detect();
