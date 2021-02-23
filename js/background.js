@@ -20,7 +20,7 @@ function onConnect(port) {
 }
 
 function onMessageHandler(message, port) {
-  const { action, payload, id } = message;
+  const { action, payload, id, scope } = message;
   const senderModel =
     port && port.sender && port.sender.tab
       ? Tabs.get(port.sender.tab.id)
@@ -34,7 +34,7 @@ function onMessageHandler(message, port) {
       break;
 
     case "update":
-      if (id) {
+      if (scope != "all") {
         let modelUpdate = Tabs.get(id);
         if (modelUpdate) Object.assign(modelUpdate.SavedSettings, payload);
       } else {
@@ -42,6 +42,7 @@ function onMessageHandler(message, port) {
         Tabs.forEach((item) => {
           Object.assign(item.SavedSettings, payload);
         });
+        commitToStorage();
       }
       break;
 
@@ -118,6 +119,14 @@ function changeModel(id, action) {
       if (tab) setModel(tab);
     });
   else Tabs.delete(id);
+}
+
+function commitToStorage() {
+  return new Promise((resolve) =>
+    chrome.storage.sync.set({ Settings: Context.Settings }, function (result) {
+      resolve(result);
+    })
+  );
 }
 
 function init() {

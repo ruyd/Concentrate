@@ -50,17 +50,7 @@ async function save() {
   });
 
   SavedSettings.NewTabColor = colorInput.value;
-  await commitToStorage();
   send();
-}
-
-function commitToStorage() {
-  return new Promise((resolve) =>
-    chrome.storage.sync.set({ Settings: SavedSettings }, function (result) {
-      console.log("Saved", SavedSettings, result);
-      resolve(result);
-    })
-  );
 }
 
 function send() {

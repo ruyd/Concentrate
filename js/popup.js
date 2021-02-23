@@ -138,6 +138,7 @@ function send() {
     action: "update",
     payload: Context.State,
     id: Context.Tab.id,
+    scope: Context.isNewTab ? "all" : "tab",
   };
 
   sendToBackground(msg);
