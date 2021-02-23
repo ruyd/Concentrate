@@ -194,16 +194,8 @@ input:focus {
   user-select: none;
 }
 
-.center {
-  height: 50vw;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .hide {
-  display: none;
+  display: none !important;
 }
 
 .lighten {
@@ -243,12 +235,22 @@ input:focus {
     background-position: 468px 0;
   }
 }
-
+.center {
+  height: 50vw;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .flex {
   display: flex;
   justify-content: space-evenly;
   height: 100%;
   text-align: center;
+}
+
+.col {
+  flex-direction: column !important;
 }
 
 .visual {
@@ -261,4 +263,10 @@ input:focus {
   background-size: 40%;
   background-attachment: fixed;
   background-position: center bottom;
+}
+
+.help {
+  text-decoration: none;
+  font-size: 1.1rem;
+  user-select: none;
 }

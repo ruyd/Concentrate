@@ -108,7 +108,7 @@ function setHostname() {
   Context.Hostname = getHostname(url);
   Context.isNewTab = Context.Hostname === "newtab";
   Context.isAllowed =
-    allowed.find((host) => Context.Hostname === host) || url.startsWith("http");
+    allowed.includes(Context.Hostname) || url.startsWith("http");
 
   document.getElementById("hostname").innerText = Context.Hostname;
 }
