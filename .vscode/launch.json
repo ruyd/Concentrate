@@ -9,7 +9,7 @@
             "type": "edge",
             "request": "attach",
             "port": 9223,
-            "url": "https://us.cnn.com/2021/02/22/us/el-chapo-wife-arrest-dulles-airport/index.html",
+            "url": "https://github.com/ruyd/ConcentrateExtension",
             "webRoot": "${workspaceFolder}/js"
         },
         {

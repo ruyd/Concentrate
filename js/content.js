@@ -84,12 +84,17 @@ function connect(message) {
   );
 }
 
-function sendToBackground(message) {
+function stateToBackground(action) {
+  const message = {
+    action,
+    payload: Model.State,
+  };
   if (Port) Port.postMessage(message);
   else connect(message);
 }
 
-function onMessageHandler(message) {
+function onMessageHandler(message, sender) {
+  log(message, sender);
   const { action, payload } = message;
   switch (action) {
     case "model":
@@ -633,10 +638,7 @@ function onKey(e) {
     e.preventDefault();
     Model.State.EnableAutoScroll = !Model.State.EnableAutoScroll;
     autoScroll();
-    sendToBackground({
-      action: "scroll.set",
-      payload: Model.State.EnableAutoScroll,
-    });
+    stateToBackground("scroll.set");
   }
 
   if (Model.State.EnableAutoScroll && controlDown) {
@@ -653,6 +655,7 @@ function onKey(e) {
 
 function updateScrollSpeed(speed) {
   Model.State.AutoScrollSpeed += speed;
+  stateToBackground("scroll.set");
 }
 
 // Utils

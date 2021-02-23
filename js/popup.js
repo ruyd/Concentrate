@@ -124,7 +124,7 @@ function setBody() {
 }
 
 function setScroll(state) {
-  Context.State.EnableAutoScroll = state;
+  Object.assign(Context.State, state);
   const checkbox = checkboxes.get("EnableAutoScroll");
   checkbox.checked = state;
 }
