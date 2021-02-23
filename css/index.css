@@ -1,7 +1,7 @@
 :root {
   --darker: #2e1551;
   --dark: #7555c4;
-  --lighter: #8187ce;
+  --lighter: #9ba2f8;
   --alt: #4da996;
   --slider-speed: 0.4s;
 }
@@ -102,13 +102,13 @@ input {
   font-size: 120%;
   text-align: center;
   border-radius: 10px;
-  border: solid 1px var(--darker);
+  border: solid 1px var(--dark);
   transition: all var(--slider-speed);
 }
 
 input:focus {
   outline: none;
-  border: solid 1px var(--dark);
+  border: solid 1px var(--darker);
 }
 
 .color-indicator {
@@ -252,4 +252,12 @@ input:focus {
 
 .visual {
   height: 200px;
+}
+
+.options {
+  background-image: url("../images/ConcentrateBg.svg");
+  background-repeat: no-repeat;
+  background-size: 40%;
+  background-attachment: fixed;
+  background-position: center bottom;
 }
