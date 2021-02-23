@@ -181,6 +181,7 @@
 
 		.st43 {
 			font-family: 'Arial';
+			letter-spacing: 1px;
 		}
 
 		.st44 {
