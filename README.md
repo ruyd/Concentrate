@@ -4,7 +4,7 @@
 
 Reading a lot and studying a bit on YouTube?
 
-Me too but it's hard with so much competing for attention.
+Me too but it's harder than it has to be with so much competing for your attention.
 
 This add-on grew from a safe way to fight distractions and interruptions to a surprisingly helpful companion.
 
