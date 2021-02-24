@@ -10,6 +10,7 @@ const Context = {
 //Listener
 chrome.runtime.onMessage.addListener(onMessageHandler);
 function onMessageHandler({ action, payload }, sender) {
+  console.log(action, payload);
   Context.Settings = payload;
   bind();
 }

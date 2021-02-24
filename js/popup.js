@@ -100,14 +100,15 @@ function requestState(scope) {
   });
 }
 
-async function setState({ State, Tab, SavedState }, scope) {
+async function setState({ State, Tab, SavedState, SavedSettings }, scope) {
   Context.Tab = Tab;
 
-  if (scope === "init" && SavedState) {
-    State = SavedState;
+  let state = State;
+  if (scope === "init" || Object.keys(State).length === 0) {
+    state = SavedState || SavedSettings;
   }
 
-  Object.assign(Context.State, State);
+  Object.assign(Context.State, state);
 
   checkboxes.forEach((checkbox, key) => {
     checkbox.checked = Context.State[key];

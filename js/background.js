@@ -166,7 +166,7 @@ function fromStorageAsync(request) {
 async function CommitSavedStateAsync(model) {
   const url = GetUrl.apply(model);
   const host = getHostname(url);
-  if (!host) return;
+  if (!host || host === "newtab") return;
   return await commitToStorage({
     [host]: model.State,
   });
@@ -175,7 +175,7 @@ async function CommitSavedStateAsync(model) {
 async function LoadSavedStateAsync(model) {
   const url = GetUrl.apply(model);
   const host = getHostname(url);
-  if (!host) return null;
+  if (!host || host === "newtab") return null;
   const saved = await fromStorageAsync(host);
   model.SavedState = saved[host];
   return saved;
