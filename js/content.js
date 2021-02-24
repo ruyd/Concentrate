@@ -613,6 +613,7 @@ function autoScroll() {
       clearInterval(IntervalId);
       const delay = 50;
       if (Model.State.AutoScrollSpeed === 0) Model.State.AutoScrollSpeed = 1;
+      window.focus(); //testing
       IntervalId = setInterval(
         () =>
           window.scrollBy({
