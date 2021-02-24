@@ -9,9 +9,12 @@ $files = New-Object System.Collections.ArrayList
         ".\.vscode",
         ".\.zipignore",
         ".\.gitignore",
-        ".\ZipPackage.ps1",
+        ".\.github",
+        ".\PS_ZipPackage.ps1",
         ".\TODO",
-        ".\visuals"
+        ".\visuals\*.psd",
+        ".\visuals\*.ai",
+        ".\tempCodeRunnerFile.ps1"
     ))
  
 Write-Host "Copying..."
