@@ -31,7 +31,6 @@
     "chrome_url_overrides": {
         "newtab": "html/newtab.html"
     },
-    "default_locale": "en",
     "description": "A Modern Add-on for a Quiet and Focused Browsing Experience",
     "permissions": [
         "tabs",

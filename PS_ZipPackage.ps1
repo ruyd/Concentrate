@@ -12,8 +12,7 @@ $files = New-Object System.Collections.ArrayList
         ".\.github",
         ".\PS_ZipPackage.ps1",
         ".\TODO",
-        ".\visuals\*.psd",
-        ".\visuals\*.ai",
+        ".\visuals\",
         ".\tempCodeRunnerFile.ps1"
     ))
  
