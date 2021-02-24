@@ -8,7 +8,7 @@ Me too but it's difficult with so much advertising.
 
 This add-on grew from defending against distractions to a surprisingly helpful tool.
 
-I really hope it helps your studies and peace of mind also.
+I really hope it also helps your studies and peace of mind.
 
 ### Features
 
@@ -23,7 +23,6 @@ I really hope it helps your studies and peace of mind also.
 A Modern Add-on for a Quiet and Focused Browsing Experience.
 
 ![Image](visuals/ConcentrateUI.gif)
-NewTab de-fullscreen then Clock to popup to url type then popup auOptions to FullScreen to Amazon to AutoScroll in Guest
 
 ![Image](visuals/Options.png)
 
