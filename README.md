@@ -4,7 +4,7 @@
 
 Reading a lot and studying a bit?
 
-It's harder than it has to be with so much competition for your attention.
+It's harder than it has to be with so much competition for attention.
 
 This add-on grew from a safe way to fight distractions and interruptions to a surprisingly helpful companion.
 
