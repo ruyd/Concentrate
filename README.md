@@ -27,11 +27,13 @@ A Modern Add-on for a Quiet and Focused Browsing Experience.
 ![Image](visuals/Options.png)
 
 This addon is forever free of charge with no interest in data collection or selling.
+
 [Privacy](PRIVACY.TXT)
 
 http://github.com/ruyd/ConcentrateAddon
 
 \*Updating...
+
 https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj
 
 https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh
