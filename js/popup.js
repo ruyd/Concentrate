@@ -17,14 +17,14 @@ const log = console.log.bind(window.console);
 
 // Listeners
 chrome.runtime.onMessage.addListener(onMessageHandler);
-function onMessageHandler({ action, payload }) {
+function onMessageHandler({ action, payload, scope }) {
   log(action, payload);
   switch (action) {
     case "background.state.set":
-      setState(payload);
+      setState(payload, scope);
       break;
     case "background.scroll.set":
-      setState(payload);
+      setState(payload, scope);
       break;
     default:
       break;
@@ -47,7 +47,7 @@ function bind() {
     checkboxes.forEach((checkbox, key) => {
       Context.State[key] = checkbox.checked;
     });
-    send();
+    sendUpdate();
   }
 
   // AutoScroll
@@ -64,19 +64,30 @@ function scrollSpeed(move) {
 }
 
 function init() {
+  requestState("init");
+}
+
+function requestState(scope) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     for (let tab of tabs) {
       sendToBackground({
         action: "state.get",
         payload: tab.id,
+        scope,
       });
     }
   });
 }
 
-function setState({ State, Tab, SavedSettings }) {
-  Object.assign(Context.State, State);
+async function setState({ State, Tab, SavedState }, scope) {
   Context.Tab = Tab;
+
+  if (scope === "init" && SavedState) {
+    State = SavedState;
+  }
+
+  Object.assign(Context.State, State);
+
   checkboxes.forEach((checkbox, key) => {
     checkbox.checked = Context.State[key];
   });
@@ -85,6 +96,7 @@ function setState({ State, Tab, SavedSettings }) {
   setBody();
   setScroll();
 }
+
 function getUrl() {
   return Context.Tab.pendingUrl ? Context.Tab.pendingUrl : Context.Tab.url;
 }
@@ -134,7 +146,7 @@ function sendToBackground(message) {
   chrome.runtime.sendMessage(message);
 }
 
-function send() {
+function sendUpdate() {
   let msg = {
     action: "update",
     payload: Context.State,

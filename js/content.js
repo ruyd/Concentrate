@@ -619,7 +619,6 @@ function autoScroll() {
           }),
         delay
       );
-      log("i", IntervalId);
     }
   } else {
     stopScroll();

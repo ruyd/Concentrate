@@ -36,22 +36,28 @@ async function onMessageHandler(message, port) {
     case "update":
       if (scope != "all") {
         let modelUpdate = Tabs.get(id);
-        if (modelUpdate) Object.assign(modelUpdate.SavedSettings, payload);
+        if (!modelUpdate) return;
+        Object.assign(modelUpdate.State, payload);
+        await CommitSavedStateAsync(modelUpdate);
       } else {
         Object.assign(Context.Settings, payload);
         Tabs.forEach((item) => {
           Object.assign(item.SavedSettings, payload);
         });
-        await commitToStorage();
+        await commitToStorage({ Settings: Context.Settings });
       }
       break;
 
     case "state.get":
       const modelState = port ? Tabs.get(payload) : null;
       if (modelState) {
+        if (scope === "init") {
+          await LoadSavedStateAsync(modelState);
+        }
         sendMessage({
           action: "background.state.set",
           payload: modelState,
+          scope,
         });
       }
       break;
@@ -101,6 +107,26 @@ function TabModel(chrome_tab, settings) {
   this.State = {};
 }
 
+function GetUrl() {
+  if (!this.Tab) {
+    log("abort");
+    return;
+  }
+  return this.Tab.pendingUrl ? this.Tab.pendingUrl : this.Tab.url;
+}
+
+function getHostname(url) {
+  if (
+    url.indexOf("extension://") > -1 &&
+    url.indexOf("html/options.html") > -1
+  ) {
+    return "options";
+  }
+  const helper = document.createElement("a");
+  helper.setAttribute("href", url);
+  return helper.hostname;
+}
+
 // Actions
 function tabify() {
   Tabs.clear();
@@ -123,12 +149,37 @@ function changeModel(id, action) {
   else Tabs.delete(id);
 }
 
-function commitToStorage() {
+function commitToStorage(request) {
+  log(request);
   return new Promise((resolve) =>
-    chrome.storage.sync.set({ Settings: Context.Settings }, function (result) {
+    chrome.storage.sync.set(request, function (result) {
       resolve(result);
     })
   );
+}
+
+function fromStorageAsync(request) {
+  return new Promise((resolve) =>
+    chrome.storage.sync.get(request, (result) => resolve(result))
+  );
+}
+
+async function CommitSavedStateAsync(model) {
+  const url = GetUrl.apply(model);
+  const host = getHostname(url);
+  if (!host) return;
+  return await commitToStorage({
+    [host]: model.State,
+  });
+}
+
+async function LoadSavedStateAsync(model) {
+  const url = GetUrl.apply(model);
+  const host = getHostname(url);
+  if (!host) return null;
+  const saved = await fromStorageAsync(host);
+  model.SavedState = saved[host];
+  return saved;
 }
 
 function init() {
