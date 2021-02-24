@@ -6,7 +6,7 @@ Reading a lot and studying a bit?
 
 It's harder than it has to be with so much competing for attention, no?
 
-This add-on grew from a safe way to fight distractions and interruptions to a surprisingly helpful companion.
+This add-on grew from a safe way to fight distractions and interruptions into a surprisingly helpful companion.
 
 I really hope it also helps your studies and peace of mind.
 
