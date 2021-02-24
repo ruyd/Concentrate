@@ -4,9 +4,9 @@
 
 Reading a lot and studying a bit on YouTube?
 
-Me too but it's hard with so much advertising.
+Me too but it's hard with so much competing for attention.
 
-This add-on grew from a safe way to fight distractions to a surprisingly helpful companion.
+This add-on grew from a safe way to fight distractions and interruptions to a surprisingly helpful companion.
 
 I really hope it also helps your studies and peace of mind.
 
