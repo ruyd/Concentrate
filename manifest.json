@@ -1,7 +1,7 @@
 {
     "name": "Concentrate",
     "version": "3.0.0.0",
-    "author": "SolverApps",
+    "author": "GoodSpeedApps",
     "browser_action": {
         "default_icon": {
             "20": "images/icon_20.png"

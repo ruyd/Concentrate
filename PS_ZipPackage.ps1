@@ -1,6 +1,6 @@
 
-if (Test-Path C:\Deploy\ConcentrateExtensionPub.zip) {
-    Remove-Item C:\Deploy\ConcentrateExtensionPub.zip
+if (Test-Path C:\Deploy\ConcentrateAddonPub.zip) {
+    Remove-Item C:\Deploy\ConcentrateAddonPub.zip
 }
 
 $files = New-Object System.Collections.ArrayList
@@ -13,27 +13,19 @@ $files = New-Object System.Collections.ArrayList
         ".\TODO",
         ".\visuals"
     ))
-
-
-#check popup.html for popup.min.js
-# if ((Get-Content $file | %{$_ -match $wordToFind}) -contains $true) {
-#     Add-Content log.txt $_.FullName
-#     ($file) | ForEach-Object { $_ -replace $wordToFind , $wordToReplace } | 
-#     Set-Content $_.FullName
-# }
-
+ 
 Write-Host "Copying..."
-Copy-Item C:\Sources\ConcentrateExtension -Destination C:\Deploy -Recurse -Force
+Copy-Item C:\Sources\ConcentrateAddon -Destination C:\Deploy -Recurse -Force
 
 Write-Host "Removing files..."
 foreach ($file in $files) {
     if (Test-Path $file) {
-        Remove-Item C:\Deploy\ConcentrateExtension\$file -Recurse -Force
+        Remove-Item C:\Deploy\ConcentrateAddon\$file -Recurse -Force
     }
 }
 
-#Rename-Item C:\Deploy\ConcentrateExtension\manifest.deploy.json C:\Deploy\ConcentrateExtension\manifest.json
+#Rename-Item C:\Deploy\ConcentrateAddon\manifest.deploy.json C:\Deploy\ConcentrateAddon\manifest.json
 
 Write-Host "Zipping..."
-Compress-Archive -Path C:\Deploy\ConcentrateExtension -DestinationPath C:\Deploy\ConcentrateExtensionPub.zip
+Compress-Archive -Path C:\Deploy\ConcentrateAddon -DestinationPath C:\Deploy\ConcentrateAddonPub.zip
 Write-Host "Package Ready C:\Deploy"
