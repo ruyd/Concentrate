@@ -2,7 +2,7 @@
 
 # Concentrate
 
-Reading a lot of sites and studying a bit on YouTube?
+Reading a lot of sites and studying a bit?
 
 It's harder than it has to be with so much competition for your attention.
 
