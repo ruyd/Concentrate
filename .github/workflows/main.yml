@@ -1,0 +1,13 @@
+name: Chrome Addon Action
+uses: ruyd/ConcentrateAddon
+with:
+# ID of the extension that you are updating
+extension: mmlolmfkhnilblibmnalmkinojfpcckh
+# Path to a .zip of your addon
+zip: # optional
+# Google OAuth2 client id
+client-id: # optional
+# Google OAuth2 client secret
+client-secret: # optional
+# Google OAuth2 refresh token
+refresh-token: # optional
