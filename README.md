@@ -14,7 +14,7 @@ I really hope it also helps your studies and peace of mind.
 
 - Removes Flashy Ad Banners and Animated Images
 - Removes Social Media Links and Comments
-- YouTube Ad Defender - Auto Skips or Mutes before Ad playback
+- YouTube Video Ads - Auto Skips or Mutes before Ad playback
 - Low Brightness Dark-Mode NewTab with Hidden Links and Clock
 - Speed Adjustable AutoScroll with Keyboard Shortcuts for Reading
 - FullScreen by Click and DoubleClick
