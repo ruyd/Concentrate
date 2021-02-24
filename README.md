@@ -4,7 +4,7 @@
 
 Reading a lot and studying a bit on YouTube?
 
-Me too but it's difficult with so many advertising gimmicks.
+Me too but it's difficult with so much advertising.
 
 This add-on grew from defending against distractions to a surprisingly helpful tool.
 
