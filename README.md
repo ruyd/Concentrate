@@ -30,7 +30,7 @@ This addon is forever free of charge with no interest in data collection or sell
 
 [Privacy](PRIVACY.TXT)
 
-http://github.com/ruyd/ConcentrateAddon
+http://github.com/ruyd/Concentrate
 
 \*Updating...
 
