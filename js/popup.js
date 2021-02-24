@@ -51,11 +51,32 @@ function bind() {
   }
 
   // AutoScroll
-  document.getElementById("slower").onclick = () => scrollSpeed(-1);
-  document.getElementById("faster").onclick = () => scrollSpeed(1);
+
+  const slower = document.getElementById("slower");
+  slower.onmousedown = (e) => {
+    log(e);
+    Context.IsMouseDown = true;
+    mouseTimer(-1);
+  };
+  slower.onmouseup = () => (Context.IsMouseDown = false);
+
+  const faster = document.getElementById("faster");
+  faster.onmousedown = (e) => {
+    log(e);
+    Context.IsMouseDown = true;
+    mouseTimer(1);
+  };
+  faster.onmouseup = () => (Context.IsMouseDown = false);
 }
 
 // Actions
+function mouseTimer(move) {
+  if (Context.IsMouseDown) {
+    scrollSpeed(move);
+    setTimeout(() => mouseTimer(move), 500);
+  }
+}
+
 function scrollSpeed(move) {
   sendToTab({
     action: "scroll.speed",
