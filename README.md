@@ -2,13 +2,13 @@
 
 # Concentrate
 
-Reading a lot and or studying a bit on YouTube without Premium?
+Reading a lot and studying a bit on YouTube?
 
-Me too but it's incredibly hard with all the advertising desperately competing for your attention.
+Me too but it's difficult with so many advertising gimmicks.
 
-This add-on grew from that necessity until it became an incredibly helpful tool.
+This add-on grew from defending against distractions to a surprisingly helpful tool.
 
-I really hope it helps your studies and peace of mind too.
+I really hope it helps your studies and peace of mind also.
 
 ### Features
 
