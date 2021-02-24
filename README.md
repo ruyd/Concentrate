@@ -6,7 +6,7 @@ Reading a lot and studying a bit on YouTube?
 
 Me too but it's hard with so much advertising.
 
-This add-on grew from defending against distractions to a surprisingly helpful tool.
+This add-on grew from a safe way to fight distractions to a surprisingly helpful companion.
 
 I really hope it also helps your studies and peace of mind.
 
@@ -30,3 +30,8 @@ This addon is forever free of charge with no interest in data collection or sell
 [Privacy](PRIVACY.TXT)
 
 http://github.com/ruyd/ConcentrateAddon
+
+\*Updating...
+https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj
+
+https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh
