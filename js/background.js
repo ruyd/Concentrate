@@ -110,7 +110,6 @@ function TabModel(chrome_tab, settings) {
 
 function GetUrl() {
   if (!this.Tab) {
-    log("abort");
     return;
   }
   return this.Tab.pendingUrl ? this.Tab.pendingUrl : this.Tab.url;
@@ -151,7 +150,6 @@ function changeModel(id, action) {
 }
 
 function commitToStorage(request) {
-  log(request);
   return new Promise((resolve) =>
     chrome.storage.sync.set(request, function (result) {
       resolve(result);

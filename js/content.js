@@ -95,7 +95,7 @@ function stateToBackground(action) {
 }
 
 function onMessageHandler(message, sender) {
-  log(message, sender);
+  //  log(message, sender);
   const { action, payload } = message;
   switch (action) {
     case "model":
