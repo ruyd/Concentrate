@@ -176,7 +176,10 @@ function CreateButton(id, label, action) {
 }
 
 function setModel(payload) {
-  const model = new TabModel(payload.Tab, payload.SavedSettings);
+  const model = new TabModel(
+    payload.Tab,
+    payload.SavedState || payload.SavedSettings
+  );
   Model = model;
   model.bind();
   model.AudioButton.set(model.State.MutingOn);

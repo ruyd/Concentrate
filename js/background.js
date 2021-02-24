@@ -30,6 +30,7 @@ async function onMessageHandler(message, port) {
       if (!senderModel) {
         console.error("tab without model - bug1", Tabs, message, port);
       }
+      await LoadSavedStateAsync(senderModel);
       if (port) port.postMessage({ action: "model", payload: senderModel });
       break;
 
