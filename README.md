@@ -6,7 +6,7 @@ Reading a lot and or studying a bit on YouTube without Premium?
 
 Me too but it's incredibly hard with all the advertising desperately competing for your attention.
 
-This add-on grew from that necessity and now it's incredibly helpful and satisfying.
+This add-on grew from that necessity until it became an incredibly helpful tool.
 
 I really hope it helps your studies and peace of mind too.
 
@@ -23,7 +23,7 @@ I really hope it helps your studies and peace of mind too.
 A Modern Add-on for a Quiet and Focused Browsing Experience.
 
 ![Image](visuals/ConcentrateUI.gif)
-NewTab Options to FullScreen to Amazon to AutoScroll in Guest
+NewTab de-fullscreen then Clock to popup to url type then popup auOptions to FullScreen to Amazon to AutoScroll in Guest
 
 ![Image](visuals/Options.png)
 
