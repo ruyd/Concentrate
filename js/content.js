@@ -485,13 +485,15 @@ function removeVideoAds() {
 
 // Public Service
 function muteCnnBang() {
-  if (!Model.State.MutingOn) return false;
   if (Model.State.PlayerType != playerTypes.CNN) return false;
 
-  if (Model.MuteButton && !Model.MuteButton.isMuted()) {
-    if (Model.State.DidWeMute) return false; // User unmuted
-    Model.mute();
+  if (Model.State.MutingOn) {
+    if (Model.MuteButton && !Model.MuteButton.isMuted()) {
+      if (Model.State.DidWeMute) return false; // User unmuted
+      Model.mute();
+    }
   }
+
   return true;
 }
 
