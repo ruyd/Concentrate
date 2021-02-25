@@ -91,9 +91,6 @@ function BackgroundState(loaded) {
   if (loaded) {
     Object.assign(this, loaded);
   }
-
-  //Should not be persisted hmm
-  this.EnableAutoScroll = false;
 }
 
 function TabModel(chrome_tab, settings) {
