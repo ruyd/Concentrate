@@ -1,7 +1,7 @@
 "use strict";
 var Port;
 var Timer;
-var Model = new TabModel();
+var Model = new ConcentrateModel();
 var IntervalId = -1;
 
 const interval = 1000;
@@ -176,7 +176,7 @@ function CreateButton(id, label, action) {
 }
 
 function setModel(payload) {
-  const model = new TabModel(payload.Tab, payload.State);
+  const model = new ConcentrateModel(payload.Tab, payload.State);
   Model = model;
   model.bind();
   model.AudioButton.set(model.State.MutingOn);
@@ -240,7 +240,7 @@ function Settings(loaded) {
     Object.assign(this, loaded);
   }
 }
-function TabModel(chrome_tab, settings) {
+function ConcentrateModel(chrome_tab, settings) {
   this.Tab = chrome_tab;
   this.State = settings ? new ContentState(settings) : {};
   this.Greyout = new Greyout(toggleGraying);
@@ -300,14 +300,14 @@ function MuteButton(node, type) {
 
 // Prototypes
 
-TabModel.prototype.skip = function () {
+ConcentrateModel.prototype.skip = function () {
   if (!this.SkipButton) return;
   this.SkipButton.click();
   this.reset();
   log("Skipped ad!");
 };
 
-TabModel.prototype.mute = function () {
+ConcentrateModel.prototype.mute = function () {
   if (!this.MuteButton || this.MuteButton.isMuted()) {
     return;
   }
@@ -316,7 +316,7 @@ TabModel.prototype.mute = function () {
   log("Muted ad");
 };
 
-TabModel.prototype.unmute = function () {
+ConcentrateModel.prototype.unmute = function () {
   if (!this.MuteButton || !this.MuteButton.isMuted()) {
     return;
   }
@@ -325,7 +325,7 @@ TabModel.prototype.unmute = function () {
   log("Content's back -> unmuting");
 };
 
-TabModel.prototype.toggleFullScreen = function () {
+ConcentrateModel.prototype.toggleFullScreen = function () {
   if (!document.fullscreenElement) {
     document.documentElement.requestFullscreen();
   } else {
@@ -335,7 +335,7 @@ TabModel.prototype.toggleFullScreen = function () {
   }
 };
 
-TabModel.prototype.bind = function () {
+ConcentrateModel.prototype.bind = function () {
   autoScroll();
 
   if (this.State.ContentDoubleClick) {
@@ -370,7 +370,7 @@ TabModel.prototype.bind = function () {
   this.MuteBound = true;
 };
 
-TabModel.prototype.draw = function () {
+ConcentrateModel.prototype.draw = function () {
   const panel = document.getElementById("movie_player");
   if (!panel) return;
 
@@ -391,7 +391,7 @@ TabModel.prototype.draw = function () {
   this.Greyout.setText(text);
 };
 
-TabModel.prototype.show = function () {
+ConcentrateModel.prototype.show = function () {
   if (this.State.GrayingOn) {
     this.Greyout.show();
   }
@@ -399,13 +399,13 @@ TabModel.prototype.show = function () {
   this.AudioButton.show();
 };
 
-TabModel.prototype.hide = function () {
+ConcentrateModel.prototype.hide = function () {
   this.Greyout.hide();
   this.PowerButton.hide();
   this.AudioButton.hide();
 };
 
-TabModel.prototype.tick = function () {
+ConcentrateModel.prototype.tick = function () {
   if (!this.State.Showing) return;
 
   this.draw();
@@ -422,12 +422,12 @@ TabModel.prototype.tick = function () {
   }
 };
 
-TabModel.prototype.reset = function () {
+ConcentrateModel.prototype.reset = function () {
   this.State.SecondCounter = 0;
   this.State.isCounterRunning = false;
 };
 
-TabModel.prototype.detect = function () {
+ConcentrateModel.prototype.detect = function () {
   if (!this.State) return;
   this.State.Showing = document.getElementsByClassName("ad-showing").length > 0;
 
@@ -448,7 +448,7 @@ TabModel.prototype.detect = function () {
     document.getElementsByClassName("paused-mode").length > 0;
 };
 
-TabModel.prototype.GetDurationText = function () {
+ConcentrateModel.prototype.GetDurationText = function () {
   const duration = this.State.SecondCounter;
 
   if (duration <= 0) return "...";
@@ -469,7 +469,7 @@ TabModel.prototype.GetDurationText = function () {
   return `${minutes}:${seconds} / ${this.State.TimeDuration}`;
 };
 
-TabModel.prototype.IsReady = function () {
+ConcentrateModel.prototype.IsReady = function () {
   return this.hasOwnProperty("State") && this.Tab;
 };
 
