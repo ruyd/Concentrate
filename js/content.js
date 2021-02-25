@@ -40,7 +40,7 @@ const playerTypes = {
     button: "ytp-mute-button",
     isMuted: function (node) {
       return (
-        (node ? node.getAttribute("title") : "")
+        (node ? node.getAttribute("title") || "" : "")
           .toLowerCase()
           .indexOf("unmute") > -1
       );

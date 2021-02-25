@@ -8,6 +8,7 @@ chrome.tabs.onUpdated.addListener((tabId) => changeModel(tabId, "update"));
 chrome.tabs.onCreated.addListener((tab) => setModel(tab));
 chrome.tabs.onRemoved.addListener((tabId) => changeModel(tabId, "remove"));
 chrome.runtime.onConnect.addListener(onConnect);
+chrome.runtime.onMessage.addListener(runtimeMessageHandler);
 
 // Objects
 function BackgroundState(loaded) {
@@ -42,25 +43,28 @@ function onConnect(port) {
 async function onMessageHandler(message, port) {
   log(message, port);
   const { action, payload, id, scope } = message;
-  const senderModel =
-    port && port.sender && port.sender.tab
-      ? Tabs.get(port.sender.tab.id)
-      : null;
+  const { sender } = port;
+  const tabId = sender && sender.tab ? sender.tab.id : id;
+  const model = Tabs.get(tabId);
   switch (action) {
     case "connected":
-      if (!senderModel) {
-        console.error("bug1", Tabs, message, port);
-      }
-      await LoadSavedStateAsync(senderModel);
-      if (port) port.postMessage({ action: "model", payload: senderModel });
+      await LoadSavedStateAsync(model);
+      if (port) port.postMessage({ action: "model", payload: model });
+      break;
+
+    case "state.get":
+      await LoadSavedStateAsync(model);
+      sendMessage({
+        action: "background.state.set",
+        payload: model,
+        scope,
+      });
       break;
 
     case "update":
       if (scope != "all") {
-        let modelUpdate = Tabs.get(id);
-        if (!modelUpdate) return;
-        Object.assign(modelUpdate.State, payload);
-        await CommitSavedStateAsync(modelUpdate);
+        Object.assign(model.State, payload);
+        await CommitSavedStateAsync(model);
       } else {
         Object.assign(Context.Settings, payload);
         Tabs.forEach((item) => {
@@ -70,23 +74,12 @@ async function onMessageHandler(message, port) {
       }
       break;
 
-    case "state.get":
-      const modelState = port ? Tabs.get(payload) : null;
-      if (modelState) {
-        await LoadSavedStateAsync(modelState);
-        sendMessage({
-          action: "background.state.set",
-          payload: modelState,
-          scope,
-        });
-      }
-      break;
     case "scroll.set":
-      if (!senderModel) return;
-      Object.assign(senderModel.State, payload);
+      Object.assign(model.State, payload);
+      await CommitSavedStateAsync(model);
       sendMessage({
         action: "background.scroll.set",
-        payload: senderModel,
+        payload: model,
       });
       break;
     default:
@@ -94,7 +87,6 @@ async function onMessageHandler(message, port) {
   }
 }
 
-chrome.runtime.onMessage.addListener(runtimeMessageHandler);
 function runtimeMessageHandler(message, sender, sendResponse) {
   onMessageHandler(message, sender);
 }
@@ -105,7 +97,7 @@ function sendMessage(message) {
 
 // Actions
 
-// First Binding on New Sites
+// Defaults for New Sites
 function checkDefaults(model) {
   if (model.State.hasOwnProperty("ContentDoubleClick")) return;
   model.State.ContentDoubleClick = true;
@@ -153,22 +145,21 @@ function fromStorageAsync(request) {
 }
 
 async function CommitSavedStateAsync(model) {
-  const url = GetUrl.apply(model);
-  const host = getHostname(url);
-  if (!host || host === "newtab") return;
+  if (model.State.isNewTab) return false;
+  const host = model.State.Hostname;
   return await commitToStorage({
     [host]: model.State,
   });
 }
 
 async function LoadSavedStateAsync(model) {
-  const url = GetUrl.apply(model);
-  const host = getHostname(url);
-  if (!host || host === "newtab") return false;
+  if (model.State.isNewTab) return false;
+  const host = model.State.Hostname;
   const saved = await fromStorageAsync(host);
-  if (saved) {
+  if (saved[host]) {
     log(model, saved);
     Object.assign(model.State, saved[host]);
+    model.State.fromStorage = true;
   }
   return true;
 }

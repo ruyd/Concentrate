@@ -98,7 +98,7 @@ function requestState(scope) {
     for (let tab of tabs) {
       sendToBackground({
         action: "state.get",
-        payload: tab.id,
+        id: tab.id,
         scope,
       });
     }
