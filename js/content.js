@@ -95,7 +95,7 @@ function stateToBackground(action) {
 }
 
 function onMessageHandler(message, sender) {
-  //  log(message, sender);
+  log(message, sender);
   const { action, payload } = message;
   switch (action) {
     case "model":
@@ -176,7 +176,7 @@ function CreateButton(id, label, action) {
 }
 
 function setModel(payload) {
-  const model = new TabModel(payload.Tab, payload.SavedState);
+  const model = new TabModel(payload.Tab, payload.State);
   Model = model;
   model.bind();
   model.AudioButton.set(model.State.MutingOn);

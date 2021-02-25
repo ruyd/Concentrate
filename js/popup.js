@@ -153,7 +153,6 @@ function sendUpdate() {
     scope: Context.State.isNewTab ? "all" : "tab",
   };
 
-  log(msg);
   sendToBackground(msg);
   sendToTab(msg);
 }
