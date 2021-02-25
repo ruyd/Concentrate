@@ -32,8 +32,7 @@ This addon is forever free of charge with no interest in data collection or sell
 
 http://github.com/ruyd/Concentrate
 
-\*Updating...
-
+_Updating_
 https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj
 
 https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh
