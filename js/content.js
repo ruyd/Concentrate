@@ -410,6 +410,8 @@ ConcentrateModel.prototype.tick = function () {
 
   this.draw();
 
+  if (this.State.Paused) return;
+
   if (!this.State.isCounterRunning) {
     this.State.isCounterRunning = true;
     this.State.SecondCounter = this.State.DurationInSeconds;
@@ -444,8 +446,7 @@ ConcentrateModel.prototype.detect = function () {
   this.SkipButton = GetSkipButton();
   this.PlayButton = GetPlayButton();
 
-  this.State.Playing =
-    document.getElementsByClassName("paused-mode").length > 0;
+  this.State.Paused = document.getElementsByClassName("paused-mode").length > 0;
 };
 
 ConcentrateModel.prototype.GetDurationText = function () {
@@ -496,9 +497,7 @@ function muteCnnBang() {
 
 // What happens with embeds?
 function muteYouTubeAds() {
-  if (!Model.State.MutingOn) return false;
   if (Model.State.PlayerType != playerTypes.YouTube) {
-    log("player problem");
     return false;
   }
 

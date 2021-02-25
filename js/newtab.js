@@ -1,17 +1,18 @@
 const Context = {
-  Settings: {
-    NewTabColor: "#242424",
-    NewTabClick: true,
-    ShowClock: true,
-    WindowLabels: false,
-  },
+  State: new NewTabState(),
 };
+
+function NewTabState() {
+  this.NewTabColor = "#242424";
+  this.NewTabClick = true;
+  this.ShowClock = true;
+}
 
 //Listener
 chrome.runtime.onMessage.addListener(onMessageHandler);
 function onMessageHandler({ action, payload }, sender) {
   console.log(action, payload);
-  Context.Settings = payload;
+  Context.State = payload;
   bind();
 }
 
@@ -29,13 +30,13 @@ function toggleFullScreen() {
 function bind() {
   chrome.storage.sync.get("Settings", function (data) {
     if (data.Settings) {
-      Context.Settings = data.Settings;
+      Context.State = data.Settings;
     } else {
       //FirstRun Commit Default Settings
-      chrome.storage.sync.set({ Settings: Context.Settings });
+      chrome.storage.sync.set({ Settings: Context.State });
     }
 
-    if (Context.Settings.NewTabClick) {
+    if (Context.State.NewTabClick) {
       if (!Context.ClickBound) {
         Context.ClickBound = true;
         document.documentElement.addEventListener(
@@ -53,9 +54,9 @@ function bind() {
       );
     }
 
-    if (Context.Settings.NewTabColor) {
-      document.body.style.backgroundColor = Context.Settings.NewTabColor;
-      document.body.style.color = Context.Settings.NewTabColor;
+    if (Context.State.NewTabColor) {
+      document.body.style.backgroundColor = Context.State.NewTabColor;
+      document.body.style.color = Context.State.NewTabColor;
     }
 
     startTime();
@@ -63,7 +64,7 @@ function bind() {
 }
 
 function startTime() {
-  if (Context.Settings.ShowClock) {
+  if (Context.State.ShowClock) {
     document.getElementById("txt").innerHTML = formatAMPM(new Date());
     Context.timeout = setTimeout(startTime, 500);
   } else {
@@ -80,17 +81,6 @@ function formatAMPM(date) {
   minutes = minutes < 10 ? "0" + minutes : minutes;
   var strTime = hours + ":" + minutes + " " + ampm;
   return strTime;
-}
-
-function title() {
-  if (!Context.Settings.EnableWindowLabels) return;
-  chrome.windows.getCurrent({ populate: true }, (info) => {
-    if (!info) return;
-    chrome.windows.getAll({ populate: true }, (list) => {
-      let index = list.findIndex((i) => i.id === info.id);
-      if (index > -1) document.title = "" + String.fromCharCode(index + 65);
-    });
-  });
 }
 
 //Initial State

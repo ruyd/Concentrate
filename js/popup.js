@@ -48,6 +48,10 @@ function bind() {
     checkboxes.forEach((checkbox, key) => {
       Context.State[key] = checkbox.checked;
     });
+
+    //Hackish hmm
+    Context.State.GrayingOn = Context.State.MutingOn;
+
     sendUpdate();
   }
 
@@ -155,6 +159,7 @@ function sendUpdate() {
 
   sendToBackground(msg);
   sendToTab(msg);
+  log(msg);
 }
 
 function sendToTab(msg) {
