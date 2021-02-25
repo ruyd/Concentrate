@@ -39,11 +39,8 @@ const playerTypes = {
     player: "html5-video-player",
     button: "ytp-mute-button",
     isMuted: function (node) {
-      return (
-        (node ? node.getAttribute("title") || "" : "")
-          .toLowerCase()
-          .indexOf("unmute") > -1
-      );
+      const title = (node ? node.getAttribute("title") : "") || "";
+      return title.toLowerCase().indexOf("unmute") > -1;
     },
   },
   CNN: {
@@ -699,24 +696,37 @@ function getUrl() {
   return Model.Tab.pendingUrl ? Model.Tab.pendingUrl : Model.Tab.url;
 }
 
+function addtask(task) {
+  Model.Tasks.add(task);
+}
+
+var executing = false;
+async function executeParallel(tasks) {
+  if (tasks.size === 0) return;
+  if (executing) return;
+  //why does it only work like this, closure? block scope? versus window hmmm
+  const wrapped = Array.from(tasks).map(
+    (task) => new Promise((resolve) => resolve(task()))
+  );
+  executing = true;
+  const results = await Promise.all(wrapped);
+  executing = false;
+}
+
 // Timer
 function startTimer() {
   if (Model.IsReady()) {
     if (Model.Tasks.size === 0) {
-      Model.Tasks.add(muteYouTubeAds);
-      Model.Tasks.add(removeFrameAds);
-      Model.Tasks.add(removeClassAds);
-      Model.Tasks.add(removeVideoAds);
-      Model.Tasks.add(removeComments);
-      Model.Tasks.add(muteCnnBang);
+      addtask(muteYouTubeAds);
+      addtask(removeFrameAds);
+      addtask(removeClassAds);
+      addtask(removeVideoAds);
+      addtask(removeComments);
+      addtask(muteCnnBang);
     }
 
     if (document.readyState === "complete" && !Model.injected) {
       Model.injected = inject();
-      setTimeout(() => {
-        log(Model.State);
-        autoScroll();
-      }, 2000);
     }
 
     Model.detect();
@@ -725,18 +735,6 @@ function startTimer() {
   }
 
   Timer = setTimeout(startTimer, interval);
-}
-
-var executing = false;
-async function executeParallel(tasks) {
-  if (tasks.size === 0) return;
-  if (executing) return;
-  const wrapped = Array.from(tasks).map(
-    (task) => new Promise((resolve) => resolve(task()))
-  );
-  executing = true;
-  const results = await Promise.all(wrapped);
-  executing = false;
 }
 
 /// init
