@@ -3,7 +3,7 @@ const Context = {
   Tab: null,
   State: new PopupState(),
 };
-const log = false ? console.trace.bind(window.console) : function () {};
+const log = true ? console.trace.bind(window.console) : function () {};
 
 // Listeners
 chrome.runtime.onMessage.addListener(onMessageHandler);
@@ -28,6 +28,7 @@ function PopupState() {
   this.RemoveComments = false;
   this.MutingOn = false;
   this.EnableAutoScroll = false;
+  this.AutoScrollSpeed = -1;
   this.NewTabClick = false;
   this.ShowClock = false;
 }
@@ -56,7 +57,6 @@ function bind() {
   }
 
   // AutoScroll
-
   const slower = document.getElementById("slower");
   slower.onmousedown = (e) => {
     log(e);
@@ -142,7 +142,7 @@ function setScroll() {
   const checkbox = checkboxes.get("EnableAutoScroll");
   checkbox.checked = Context.State.EnableAutoScroll;
   document.getElementById("speed").innerText =
-    Context.State.AutoScrollSpeed || "";
+    Context.State.AutoScrollSpeed || "?";
 }
 
 function sendToBackground(message) {

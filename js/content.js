@@ -4,7 +4,7 @@ var Timer;
 var Model = new ConcentrateModel();
 var IntervalId = -1;
 
-const log = false ? console.trace.bind(window.console) : function () {};
+const log = true ? console.trace.bind(window.console) : function () {};
 const interval = 1000;
 const isYouTube = window.location.hostname.indexOf("youtube") > -1;
 const removals_bannerAdWords = [
@@ -611,8 +611,8 @@ function autoScroll() {
   log("autoScroll");
   if (Model.State.EnableAutoScroll) {
     if (IntervalId < 0) {
-      clearInterval(IntervalId);
       const delay = 50;
+      clearInterval(IntervalId);
       if (Model.State.AutoScrollSpeed === 0) Model.State.AutoScrollSpeed = 1;
       IntervalId = setInterval(
         () =>
@@ -660,7 +660,7 @@ function onKey(e) {
 }
 
 function updateScrollSpeed(speed) {
-  Model.State.AutoScrollSpeed += speed;
+  if (speed) Model.State.AutoScrollSpeed += speed;
   stateToBackground("scroll.set");
 }
 

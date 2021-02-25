@@ -1,7 +1,7 @@
 "use strict";
 const Tabs = new Map();
 const Context = {};
-const log = false ? console.trace.bind(window.console) : function () {};
+const log = true ? console.trace.bind(window.console) : function () {};
 
 // Listeners
 chrome.tabs.onUpdated.addListener((tabId) => changeModel(tabId, "update"));
@@ -40,6 +40,7 @@ function onConnect(port) {
 }
 
 async function onMessageHandler(message, port) {
+  log(message, port);
   const { action, payload, id, scope } = message;
   const senderModel =
     port && port.sender && port.sender.tab
@@ -103,6 +104,17 @@ function sendMessage(message) {
 }
 
 // Actions
+
+// First Binding on New Sites
+function checkDefaults(model) {
+  if (model.State.hasOwnProperty("ContentDoubleClick")) return;
+  model.State.ContentDoubleClick = true;
+  model.State.RemoveAds = true;
+  model.State.RemoveComments = true;
+  model.State.MutingOn = true;
+  model.State.AutoScrollSpeed = 5;
+}
+
 function tabify() {
   Tabs.clear();
   return chrome.tabs.query({}, (list) => {
@@ -113,8 +125,8 @@ function tabify() {
 }
 function setModel(item) {
   const model = new TabModel(item, Context.Settings);
+  checkDefaults(model);
   Tabs.set(item.id, model);
-  log(item, model, Context.Settings);
 }
 
 function changeModel(id, action) {
