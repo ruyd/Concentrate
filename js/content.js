@@ -213,31 +213,21 @@ function Greyout(action) {
   };
 }
 
-class ContentState extends Settings {
-  constructor(loaded) {
-    super(loaded);
-    this.DidWeMute = false;
-    this.DurationInSeconds = 0;
-    this.PreviousDuration = 0;
-    this.isFullscreen = false;
-    this.isCounterRunning = false;
-    this.SecondCounter = 0;
-    this.PlayerType = GetUrlPlayerType();
-  }
-}
-
-function Settings(loaded) {
-  this.ContentDoubleClick = false;
-  this.RemoveAds = false;
-  this.RemoveComments = false;
-  this.GrayingOn = false;
-  this.MutingOn = false;
-  this.SkipAds = false;
+function ContentState(loaded) {
+  this.DidWeMute = false;
+  this.DurationInSeconds = 0;
+  this.PreviousDuration = 0;
+  this.isFullscreen = false;
+  this.isCounterRunning = false;
+  this.SecondCounter = 0;
 
   if (loaded) {
     Object.assign(this, loaded);
   }
+
+  this.PlayerType = GetUrlPlayerType();
 }
+
 function ConcentrateModel(chrome_tab, settings) {
   this.Tab = chrome_tab;
   this.State = settings ? new ContentState(settings) : {};
