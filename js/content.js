@@ -4,7 +4,7 @@ var Timer;
 var Model = new ConcentrateModel();
 var IntervalId = -1;
 
-const log = false ? console.trace.bind(window.console) : function () {};
+const log = true ? console.trace.bind(window.console) : function () {};
 const interval = 1000;
 const isYouTube = window.location.hostname.indexOf("youtube") > -1;
 const removals_bannerAdWords = [
@@ -222,8 +222,6 @@ class ContentState extends Settings {
     this.isFullscreen = false;
     this.isCounterRunning = false;
     this.SecondCounter = 0;
-    this.EnableAutoScroll = false;
-    this.AutoScrollSpeed = 5;
     this.PlayerType = GetUrlPlayerType();
   }
 }
@@ -620,12 +618,12 @@ function toggleGraying() {
 
 // AutoScroll
 function autoScroll() {
+  log("autoScroll");
   if (Model.State.EnableAutoScroll) {
     if (IntervalId < 0) {
       clearInterval(IntervalId);
       const delay = 50;
       if (Model.State.AutoScrollSpeed === 0) Model.State.AutoScrollSpeed = 1;
-      window.focus(); //testing
       IntervalId = setInterval(
         () =>
           window.scrollBy({
@@ -635,6 +633,8 @@ function autoScroll() {
           }),
         delay
       );
+    } else {
+      console.log(IntervalId);
     }
   } else {
     stopScroll();
@@ -723,6 +723,10 @@ function startTimer() {
 
     if (document.readyState === "complete" && !Model.injected) {
       Model.injected = inject();
+      setTimeout(() => {
+        log(Model.State);
+        autoScroll();
+      }, 2000);
     }
 
     Model.detect();
