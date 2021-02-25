@@ -4,12 +4,32 @@ const Context = {};
 const log = false ? console.trace.bind(window.console) : function () {};
 
 // Listeners
-/// Tab Events
 chrome.tabs.onUpdated.addListener((tabId) => changeModel(tabId, "update"));
 chrome.tabs.onCreated.addListener((tab) => setModel(tab));
 chrome.tabs.onRemoved.addListener((tabId) => changeModel(tabId, "remove"));
-/// Messaging
 chrome.runtime.onConnect.addListener(onConnect);
+
+// Objects
+function BackgroundState(loaded) {
+  this.Hostname = null;
+  this.isNewTab = false;
+  this.isAllowed = false;
+
+  if (loaded) {
+    Object.assign(this, loaded);
+  }
+}
+
+function TabModel(chrome_tab, settings) {
+  this.Tab = chrome_tab;
+  this.State = new BackgroundState(settings);
+  const url = GetUrl.apply(this);
+  this.State.Hostname = getHostname(url);
+  this.State.isNewTab = this.State.Hostname === "newtab";
+  this.State.isAllowed = this.State.isNewTab || url.startsWith("http");
+}
+
+/// Messaging
 function onConnect(port) {
   port.onMessage.addListener(onMessageHandler);
   port.onDisconnect.addListener(() => {
@@ -82,45 +102,6 @@ function sendMessage(message) {
   chrome.runtime.sendMessage(message);
 }
 
-// Objects
-function BackgroundState(loaded) {
-  this.Hostname = null;
-  this.isNewTab = false;
-  this.isAllowed = false;
-
-  if (loaded) {
-    Object.assign(this, loaded);
-  }
-}
-
-function TabModel(chrome_tab, settings) {
-  this.Tab = chrome_tab;
-  this.State = new BackgroundState(settings);
-  const url = GetUrl.apply(this);
-  this.State.Hostname = getHostname(url);
-  this.State.isNewTab = this.State.Hostname === "newtab";
-  this.State.isAllowed = this.State.isNewTab || url.startsWith("http");
-}
-
-function GetUrl() {
-  if (!this.Tab) {
-    return;
-  }
-  return this.Tab.pendingUrl ? this.Tab.pendingUrl : this.Tab.url;
-}
-
-function getHostname(url) {
-  if (
-    url.indexOf("extension://") > -1 &&
-    url.indexOf("html/options.html") > -1
-  ) {
-    return "options";
-  }
-  const helper = document.createElement("a");
-  helper.setAttribute("href", url);
-  return helper.hostname;
-}
-
 // Actions
 function tabify() {
   Tabs.clear();
@@ -178,6 +159,25 @@ async function LoadSavedStateAsync(model) {
     Object.assign(model.State, saved[host]);
   }
   return true;
+}
+
+function GetUrl() {
+  if (!this.Tab) {
+    return;
+  }
+  return this.Tab.pendingUrl ? this.Tab.pendingUrl : this.Tab.url;
+}
+
+function getHostname(url) {
+  if (
+    url.indexOf("extension://") > -1 &&
+    url.indexOf("html/options.html") > -1
+  ) {
+    return "options";
+  }
+  const helper = document.createElement("a");
+  helper.setAttribute("href", url);
+  return helper.hostname;
 }
 
 function init() {
