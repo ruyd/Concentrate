@@ -213,7 +213,7 @@ function Greyout(action) {
   };
 }
 
-class TabState extends Settings {
+class ContentState extends Settings {
   constructor(loaded) {
     super(loaded);
     this.DidWeMute = false;
@@ -225,9 +225,6 @@ class TabState extends Settings {
     this.EnableAutoScroll = false;
     this.AutoScrollSpeed = 5;
     this.PlayerType = GetUrlPlayerType();
-    this.Hostname;
-    this.isNewTab = false;
-    this.isAllowed = false;
   }
 }
 
@@ -245,7 +242,7 @@ function Settings(loaded) {
 }
 function TabModel(chrome_tab, settings) {
   this.Tab = chrome_tab;
-  this.State = settings ? new TabState(settings) : {};
+  this.State = settings ? new ContentState(settings) : {};
   this.Greyout = new Greyout(toggleGraying);
   this.AudioButton = CreateButton("audio", "Sound", toggleMuting);
   this.PowerButton = CreateButton("power", "Graying", toggleGraying);
@@ -500,7 +497,10 @@ function muteCnnBang() {
 // What happens with embeds?
 function muteYouTubeAds() {
   if (!Model.State.MutingOn) return false;
-  if (Model.State.PlayerType != playerTypes.YouTube) return false;
+  if (Model.State.PlayerType != playerTypes.YouTube) {
+    log("player problem");
+    return false;
+  }
 
   if (Model.SkipButton && Model.State.SkipAds) {
     Model.skip();
@@ -508,15 +508,25 @@ function muteYouTubeAds() {
   }
 
   if (Model.State.Showing) {
-    if (Model.State.MutingOn && !Model.State.DidWeMute) {
-      Model.mute();
+    if (Model.State.MutingOn) {
+      if (!Model.State.DidWeMute || !Model.State.PlayerType.isMuted()) {
+        Model.mute();
+      }
+    } else {
+      // Turned off
+      if (Model.State.DidWeMute && Model.State.PlayerType.isMuted()) {
+        Model.unmute();
+      }
     }
+
+    // Turned off
     if (Model.State.GrayingOn) {
       Model.show();
     } else {
       Model.Greyout.hide();
     }
   } else {
+    // Ad Finished
     if (Model.State.DidWeMute) {
       Model.unmute();
     }

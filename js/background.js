@@ -84,17 +84,6 @@ function sendMessage(message) {
 
 // Objects
 function BackgroundState(loaded) {
-  this.ContentDoubleClick = true;
-  this.NewTabColor = "#242424";
-  this.NewTabClick = true;
-  this.RemoveAds = true;
-  this.RemoveComments = true;
-  this.ShowClock = true;
-  this.GrayingOn = true;
-  this.MutingOn = true;
-  this.SkipAds = false;
-  this.LabelWindows = true;
-
   this.Hostname = null;
   this.isNewTab = false;
   this.isAllowed = false;

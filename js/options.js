@@ -1,16 +1,18 @@
 "use strict";
-// Defaults
 const Context = {
-  State: {
-    NewTabColor: "#242424",
-    NewTabClick: true,
-    ShowClock: true,
-    ContentDoubleClick: true,
-    RemoveAds: true,
-    RemoveComments: true,
-    MutingOn: true,
-  },
+  State: new OptionsState(),
 };
+
+//Defaults True
+function OptionsState() {
+  this.NewTabColor = "#242424";
+  this.NewTabClick = true;
+  this.ShowClock = true;
+  this.ContentDoubleClick = true;
+  this.RemoveAds = true;
+  this.RemoveComments = true;
+  this.MutingOn = true;
+}
 
 // Listeners
 chrome.runtime.onMessage.addListener(onMessageHandler);
