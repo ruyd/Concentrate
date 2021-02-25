@@ -47,21 +47,17 @@ async function onMessageHandler(message, port) {
   const tabId = sender && sender.tab ? sender.tab.id : id;
   const model = Tabs.get(tabId);
   switch (action) {
-    case "connected":
+    case "content.connected":
       await LoadSavedStateAsync(model);
-      if (port) port.postMessage({ action: "model", payload: model });
-      break;
+      port.postMessage({ action: "model", payload: model });
+      return;
 
     case "state.get":
       await LoadSavedStateAsync(model);
-      sendMessage({
-        action: "background.state.set",
-        payload: model,
-        scope,
-      });
-      break;
+      stateToOthers(model);
+      return;
 
-    case "update":
+    case ("update", "content.state"):
       if (scope != "all") {
         Object.assign(model.State, payload);
         await CommitSavedStateAsync(model);
@@ -72,18 +68,9 @@ async function onMessageHandler(message, port) {
         });
         await commitToStorage({ Settings: Context.Settings });
       }
-      break;
 
-    case "scroll.set":
-      Object.assign(model.State, payload);
-      await CommitSavedStateAsync(model);
-      sendMessage({
-        action: "background.scroll.set",
-        payload: model,
-      });
-      break;
-    default:
-      break;
+    case "content.state":
+      stateToOthers(model);
   }
 }
 
@@ -93,6 +80,13 @@ function runtimeMessageHandler(message, sender, sendResponse) {
 
 function sendMessage(message) {
   chrome.runtime.sendMessage(message);
+}
+
+function stateToOthers(model) {
+  sendMessage({
+    action: "background.state",
+    payload: model,
+  });
 }
 
 // Actions

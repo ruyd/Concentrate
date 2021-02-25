@@ -10,13 +10,8 @@ chrome.runtime.onMessage.addListener(onMessageHandler);
 function onMessageHandler({ action, payload, scope }) {
   log(action, payload);
   switch (action) {
-    case "background.state.set":
+    case "background.state":
       setState(payload, scope);
-      break;
-    case "background.scroll.set":
-      setState(payload, scope);
-      break;
-    default:
       break;
   }
 }

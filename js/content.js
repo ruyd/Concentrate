@@ -77,15 +77,16 @@ function connect(message) {
 
   Port.postMessage(
     message || {
-      action: "connected",
+      action: "content.connected",
     }
   );
 }
 
-function stateToBackground(action) {
+function stateToBackground(action = "content.state") {
   const message = {
     action,
     payload: Model.State,
+    scope: "tab",
   };
   if (Port) Port.postMessage(message);
   else connect(message);
@@ -103,8 +104,6 @@ function onMessageHandler(message, sender) {
       break;
     case "scroll.speed":
       updateScrollSpeed(payload);
-      break;
-    default:
       break;
   }
 }
@@ -582,7 +581,7 @@ function inject() {
 }
 
 function save() {
-  //log("save", Model);
+  stateToBackground();
 }
 
 function toggleMuting() {
@@ -620,8 +619,6 @@ function autoScroll() {
           }),
         delay
       );
-    } else {
-      console.log(IntervalId);
     }
   } else {
     stopScroll();
@@ -641,7 +638,7 @@ function onKey(e) {
     e.preventDefault();
     Model.State.EnableAutoScroll = !Model.State.EnableAutoScroll;
     autoScroll();
-    stateToBackground("scroll.set");
+    stateToBackground();
   }
 
   if (Model.State.EnableAutoScroll && controlDown) {
@@ -658,7 +655,7 @@ function onKey(e) {
 
 function updateScrollSpeed(speed) {
   if (speed) Model.State.AutoScrollSpeed += speed;
-  stateToBackground("scroll.set");
+  stateToBackground();
 }
 
 // Utils
@@ -704,7 +701,7 @@ var executing = false;
 async function executeParallel(tasks) {
   if (tasks.size === 0) return;
   if (executing) return;
-  //why does it only work like this, closure? block scope? versus window hmmm
+  //why does it only work like this, closure? block scope? sandboxed windows hmmm
   const wrapped = Array.from(tasks).map(
     (task) => new Promise((resolve) => resolve(task()))
   );
