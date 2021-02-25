@@ -52,9 +52,7 @@ async function onMessageHandler(message, port) {
     case "state.get":
       const modelState = port ? Tabs.get(payload) : null;
       if (modelState) {
-        if (scope === "init") {
-          await LoadSavedStateAsync(modelState);
-        }
+        await LoadSavedStateAsync(modelState);
         sendMessage({
           action: "background.state.set",
           payload: modelState,
@@ -97,9 +95,9 @@ function BackgroundState(loaded) {
   this.SkipAds = false;
   this.LabelWindows = true;
 
-  this.Hostname;
-  this.isNewTab;
-  this.isAllowed;
+  this.Hostname = null;
+  this.isNewTab = false;
+  this.isAllowed = false;
 
   if (loaded) {
     Object.assign(this, loaded);
@@ -184,10 +182,13 @@ async function CommitSavedStateAsync(model) {
 async function LoadSavedStateAsync(model) {
   const url = GetUrl.apply(model);
   const host = getHostname(url);
-  if (!host || host === "newtab") return null;
+  if (!host || host === "newtab") return false;
   const saved = await fromStorageAsync(host);
-  if (saved) model.State = saved[host];
-  return saved;
+  if (saved) {
+    log(model, saved);
+    Object.assign(model.State, saved[host]);
+  }
+  return true;
 }
 
 function init() {

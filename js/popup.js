@@ -1,18 +1,19 @@
 "use strict";
 const Context = {
   Tab: null,
-  State: {
-    ContentDoubleClick: true,
-    RemoveAds: true,
-    RemoveComments: true,
-    MutingOn: true,
-    EnableAutoScroll: false,
-    SkipAds: true,
-    NewTabClick: true,
-    ShowClock: true,
-    AutoScrollSpeed: 5,
-  },
+  State: new PopupState(),
 };
+
+function PopupState() {
+  this.ContentDoubleClick = false;
+  this.RemoveAds = false;
+  this.RemoveComments = false;
+  this.MutingOn = false;
+  this.EnableAutoScroll = false;
+  this.NewTabClick = false;
+  this.ShowClock = false;
+}
+
 const log = console.trace.bind(window.console);
 
 // Listeners
@@ -103,9 +104,13 @@ function requestState(scope) {
 async function setState({ State, Tab }, scope) {
   Context.Tab = Tab;
 
+  if (!State) {
+    log("bug", scope, Tab);
+  }
   Object.assign(Context.State, State);
 
   checkboxes.forEach((checkbox, key) => {
+    log(checkbox, key, Context.State[key]);
     checkbox.checked = Context.State[key];
   });
 
@@ -145,9 +150,10 @@ function sendUpdate() {
     action: "update",
     payload: Context.State,
     id: Context.Tab.id,
-    scope: Context.isNewTab ? "all" : "tab",
+    scope: Context.State.isNewTab ? "all" : "tab",
   };
 
+  log(msg);
   sendToBackground(msg);
   sendToTab(msg);
 }
