@@ -186,7 +186,7 @@ async function LoadSavedStateAsync(model) {
   const host = getHostname(url);
   if (!host || host === "newtab") return null;
   const saved = await fromStorageAsync(host);
-  model.SavedState = saved[host];
+  if (saved) model.State = saved[host];
   return saved;
 }
 

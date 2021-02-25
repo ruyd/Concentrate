@@ -36,9 +36,6 @@ function init() {
   chrome.storage.sync.get("Settings", function (store) {
     if (store.Settings) {
       Context.State = store.Settings;
-    } else {
-      // FirstRun Commit Default Context.State
-      commitToStorage();
     }
 
     checkboxes.forEach((checkbox, key) => {

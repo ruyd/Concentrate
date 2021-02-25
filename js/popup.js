@@ -100,15 +100,10 @@ function requestState(scope) {
   });
 }
 
-async function setState({ State, Tab, SavedState }, scope) {
+async function setState({ State, Tab }, scope) {
   Context.Tab = Tab;
 
-  let state = State;
-  if (scope === "init" || Object.keys(State).length === 0) {
-    state = SavedState;
-  }
-
-  Object.assign(Context.State, state);
+  Object.assign(Context.State, State);
 
   checkboxes.forEach((checkbox, key) => {
     checkbox.checked = Context.State[key];
@@ -121,12 +116,17 @@ async function setState({ State, Tab, SavedState }, scope) {
 function setBody() {
   document
     .getElementById("content")
-    .classList.toggle("hide", !Context.isAllowed || Context.isNewTab);
-  document.getElementById("newtab").classList.toggle("hide", !Context.isNewTab);
+    .classList.toggle(
+      "hide",
+      !Context.State.isAllowed || Context.State.isNewTab
+    );
+  document
+    .getElementById("newtab")
+    .classList.toggle("hide", !Context.State.isNewTab);
   document
     .getElementById("restricted")
-    .classList.toggle("hide", Context.isAllowed);
-  document.getElementById("hostname").innerText = Context.Hostname;
+    .classList.toggle("hide", Context.State.isAllowed);
+  document.getElementById("hostname").innerText = Context.State.Hostname;
 }
 
 function setScroll() {
