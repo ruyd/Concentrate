@@ -1,7 +1,7 @@
 const Context = {
   State: new NewTabState(),
 };
-const log = false ? function () {} : console.trace.bind(window.console);
+const log = false ? console.trace.bind(window.console) : function () {};
 
 //Listener
 chrome.runtime.onMessage.addListener(onMessageHandler);

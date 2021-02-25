@@ -3,7 +3,7 @@ const Context = {
   Tab: null,
   State: new PopupState(),
 };
-const log = false ? function () {} : console.trace.bind(window.console);
+const log = false ? console.trace.bind(window.console) : function () {};
 
 // Listeners
 chrome.runtime.onMessage.addListener(onMessageHandler);

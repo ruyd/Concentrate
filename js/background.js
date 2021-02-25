@@ -1,7 +1,7 @@
 "use strict";
 const Tabs = new Map();
 const Context = {};
-const log = false ? function () {} : console.trace.bind(window.console);
+const log = false ? console.trace.bind(window.console) : function () {};
 
 // Listeners
 /// Tab Events
@@ -91,6 +91,9 @@ function BackgroundState(loaded) {
   if (loaded) {
     Object.assign(this, loaded);
   }
+
+  //Should not be persisted hmm
+  this.EnableAutoScroll = false;
 }
 
 function TabModel(chrome_tab, settings) {
