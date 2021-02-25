@@ -4,9 +4,9 @@ var Timer;
 var Model = new ConcentrateModel();
 var IntervalId = -1;
 
+const log = false ? function () {} : console.trace.bind(window.console);
 const interval = 1000;
 const isYouTube = window.location.hostname.indexOf("youtube") > -1;
-const log = console.trace.bind(window.console);
 const removals_bannerAdWords = [
   "adserve",
   "ads",

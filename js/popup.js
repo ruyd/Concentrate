@@ -3,18 +3,7 @@ const Context = {
   Tab: null,
   State: new PopupState(),
 };
-
-function PopupState() {
-  this.ContentDoubleClick = false;
-  this.RemoveAds = false;
-  this.RemoveComments = false;
-  this.MutingOn = false;
-  this.EnableAutoScroll = false;
-  this.NewTabClick = false;
-  this.ShowClock = false;
-}
-
-const log = console.trace.bind(window.console);
+const log = false ? function () {} : console.trace.bind(window.console);
 
 // Listeners
 chrome.runtime.onMessage.addListener(onMessageHandler);
@@ -30,6 +19,17 @@ function onMessageHandler({ action, payload, scope }) {
     default:
       break;
   }
+}
+
+// Objects
+function PopupState() {
+  this.ContentDoubleClick = false;
+  this.RemoveAds = false;
+  this.RemoveComments = false;
+  this.MutingOn = false;
+  this.EnableAutoScroll = false;
+  this.NewTabClick = false;
+  this.ShowClock = false;
 }
 
 // Form

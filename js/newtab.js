@@ -1,12 +1,7 @@
 const Context = {
   State: new NewTabState(),
 };
-
-function NewTabState() {
-  this.NewTabColor = "#242424";
-  this.NewTabClick = true;
-  this.ShowClock = true;
-}
+const log = false ? function () {} : console.trace.bind(window.console);
 
 //Listener
 chrome.runtime.onMessage.addListener(onMessageHandler);
@@ -14,6 +9,13 @@ function onMessageHandler({ action, payload }, sender) {
   console.log(action, payload);
   Context.State = payload;
   bind();
+}
+
+// Objects
+function NewTabState() {
+  this.NewTabColor = "#242424";
+  this.NewTabClick = true;
+  this.ShowClock = true;
 }
 
 // Actions

@@ -1,7 +1,7 @@
 "use strict";
 const Tabs = new Map();
 const Context = {};
-const log = console.trace.bind(window.console);
+const log = false ? function () {} : console.trace.bind(window.console);
 
 // Listeners
 /// Tab Events
