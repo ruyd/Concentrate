@@ -6,7 +6,7 @@ var IntervalId = -1;
 
 const interval = 1000;
 const isYouTube = window.location.hostname.indexOf("youtube") > -1;
-const log = console.log.bind(window.console);
+const log = console.trace.bind(window.console);
 const removals_bannerAdWords = [
   "adserve",
   "ads",
@@ -176,10 +176,7 @@ function CreateButton(id, label, action) {
 }
 
 function setModel(payload) {
-  const model = new TabModel(
-    payload.Tab,
-    payload.SavedState || payload.SavedSettings
-  );
+  const model = new TabModel(payload.Tab, payload.SavedState);
   Model = model;
   model.bind();
   model.AudioButton.set(model.State.MutingOn);
@@ -228,6 +225,9 @@ class TabState extends Settings {
     this.EnableAutoScroll = false;
     this.AutoScrollSpeed = 5;
     this.PlayerType = GetUrlPlayerType();
+    this.Hostname;
+    this.isNewTab = false;
+    this.isAllowed = false;
   }
 }
 
@@ -478,7 +478,7 @@ TabModel.prototype.IsReady = function () {
 
 // Actions
 function removeVideoAds() {
-  if (!Model.State.HasVideo) return false;
+  if (!Model.State.RemoveAds) return false;
   for (const name of removals_videoAdWords) {
     removeClassName(name);
   }
@@ -487,6 +487,7 @@ function removeVideoAds() {
 
 // Public Service
 function muteCnnBang() {
+  if (!Model.State.MutingOn) return false;
   if (Model.State.PlayerType != playerTypes.CNN) return false;
 
   if (Model.MuteButton && !Model.MuteButton.isMuted()) {
@@ -498,7 +499,7 @@ function muteCnnBang() {
 
 // What happens with embeds?
 function muteYouTubeAds() {
-  if (!Model.State.HasVideo) return false;
+  if (!Model.State.MutingOn) return false;
   if (Model.State.PlayerType != playerTypes.YouTube) return false;
 
   if (Model.SkipButton && Model.State.SkipAds) {

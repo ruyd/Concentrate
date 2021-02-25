@@ -13,7 +13,7 @@ const Context = {
     AutoScrollSpeed: 5,
   },
 };
-const log = console.log.bind(window.console);
+const log = console.trace.bind(window.console);
 
 // Listeners
 chrome.runtime.onMessage.addListener(onMessageHandler);
@@ -100,12 +100,12 @@ function requestState(scope) {
   });
 }
 
-async function setState({ State, Tab, SavedState, SavedSettings }, scope) {
+async function setState({ State, Tab, SavedState }, scope) {
   Context.Tab = Tab;
 
   let state = State;
   if (scope === "init" || Object.keys(State).length === 0) {
-    state = SavedState || SavedSettings;
+    state = SavedState;
   }
 
   Object.assign(Context.State, state);
@@ -114,37 +114,8 @@ async function setState({ State, Tab, SavedState, SavedSettings }, scope) {
     checkbox.checked = Context.State[key];
   });
 
-  setHostname();
   setBody();
   setScroll();
-}
-
-function getUrl() {
-  return Context.Tab.pendingUrl ? Context.Tab.pendingUrl : Context.Tab.url;
-}
-
-function getHostname(url) {
-  if (
-    url.indexOf("extension://") > -1 &&
-    url.indexOf("html/options.html") > -1
-  ) {
-    return "options";
-  }
-  const helper = document.createElement("a");
-  helper.setAttribute("href", url);
-  return helper.hostname;
-}
-
-function setHostname() {
-  const url = getUrl();
-  if (!url) return;
-  const allowed = ["newtab"];
-  Context.Hostname = getHostname(url);
-  Context.isNewTab = Context.Hostname === "newtab";
-  Context.isAllowed =
-    allowed.includes(Context.Hostname) || url.startsWith("http");
-
-  document.getElementById("hostname").innerText = Context.Hostname;
 }
 
 function setBody() {
@@ -155,6 +126,7 @@ function setBody() {
   document
     .getElementById("restricted")
     .classList.toggle("hide", Context.isAllowed);
+  document.getElementById("hostname").innerText = Context.Hostname;
 }
 
 function setScroll() {

@@ -1,7 +1,7 @@
 "use strict";
 const Tabs = new Map();
 const Context = {};
-const log = console.log.bind(window.console);
+const log = console.trace.bind(window.console);
 
 // Listeners
 /// Tab Events
@@ -28,7 +28,7 @@ async function onMessageHandler(message, port) {
   switch (action) {
     case "connected":
       if (!senderModel) {
-        console.error("tab without model - bug1", Tabs, message, port);
+        console.error("bug1", Tabs, message, port);
       }
       await LoadSavedStateAsync(senderModel);
       if (port) port.postMessage({ action: "model", payload: senderModel });
@@ -43,7 +43,7 @@ async function onMessageHandler(message, port) {
       } else {
         Object.assign(Context.Settings, payload);
         Tabs.forEach((item) => {
-          Object.assign(item.SavedSettings, payload);
+          Object.assign(item.State, payload);
         });
         await commitToStorage({ Settings: Context.Settings });
       }
@@ -85,7 +85,7 @@ function sendMessage(message) {
 }
 
 // Objects
-function Settings(loaded) {
+function BackgroundState(loaded) {
   this.ContentDoubleClick = true;
   this.NewTabColor = "#242424";
   this.NewTabClick = true;
@@ -97,6 +97,10 @@ function Settings(loaded) {
   this.SkipAds = false;
   this.LabelWindows = true;
 
+  this.Hostname;
+  this.isNewTab;
+  this.isAllowed;
+
   if (loaded) {
     Object.assign(this, loaded);
   }
@@ -104,8 +108,11 @@ function Settings(loaded) {
 
 function TabModel(chrome_tab, settings) {
   this.Tab = chrome_tab;
-  this.SavedSettings = new Settings(settings);
-  this.State = {};
+  this.State = new BackgroundState(settings);
+  const url = GetUrl.apply(this);
+  this.State.Hostname = getHostname(url);
+  this.State.isNewTab = this.State.Hostname === "newtab";
+  this.State.isAllowed = this.State.isNewTab || url.startsWith("http");
 }
 
 function GetUrl() {
@@ -139,6 +146,7 @@ function tabify() {
 function setModel(item) {
   const model = new TabModel(item, Context.Settings);
   Tabs.set(item.id, model);
+  log(item, model, Context.Settings);
 }
 
 function changeModel(id, action) {
@@ -150,6 +158,7 @@ function changeModel(id, action) {
 }
 
 function commitToStorage(request) {
+  log(request);
   return new Promise((resolve) =>
     chrome.storage.sync.set(request, function (result) {
       resolve(result);

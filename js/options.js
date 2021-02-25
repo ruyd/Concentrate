@@ -1,17 +1,15 @@
 "use strict";
 // Defaults
-var SavedSettings = {
-  ContentDoubleClick: true,
-  NewTabColor: "#242424",
-  NewTabClick: true,
-  NewTabBookmarks: true,
-  RemoveAds: true,
-  RemoveComments: true,
-  ShowClock: true,
-  GrayingOn: true,
-  MutingOn: true,
-  SkipAds: true,
-  LabelWindow: true,
+const Context = {
+  State: {
+    NewTabColor: "#242424",
+    NewTabClick: true,
+    ShowClock: true,
+    ContentDoubleClick: true,
+    RemoveAds: true,
+    RemoveComments: true,
+    MutingOn: true,
+  },
 };
 
 // Listeners
@@ -24,7 +22,7 @@ function onMessageHandler({ action, scope }) {
 
 // Form - AutoChange for NewTab Options
 const checkboxes = new Map();
-const keys = Object.keys(SavedSettings);
+const keys = Object.keys(Context.State);
 keys.forEach((a) => {
   const el = document.getElementById(a + "InputCheckbox");
   if (el) checkboxes.set(a, el);
@@ -37,34 +35,34 @@ const colorIndicator = document.getElementById("indicator");
 function init() {
   chrome.storage.sync.get("Settings", function (store) {
     if (store.Settings) {
-      SavedSettings = store.Settings;
+      Context.State = store.Settings;
     } else {
-      // FirstRun Commit Default SavedSettings
+      // FirstRun Commit Default Context.State
       commitToStorage();
     }
 
     checkboxes.forEach((checkbox, key) => {
-      checkbox.checked = SavedSettings[key];
+      checkbox.checked = Context.State[key];
     });
 
-    colorInput.value = SavedSettings.NewTabColor || "";
+    colorInput.value = Context.State.NewTabColor || "";
     colorIndicator.style.backgroundColor = colorInput.value;
   });
 }
 
 async function save() {
   checkboxes.forEach((checkbox, key) => {
-    SavedSettings[key] = checkbox.checked;
+    Context.State[key] = checkbox.checked;
   });
 
-  SavedSettings.NewTabColor = colorInput.value;
+  Context.State.NewTabColor = colorInput.value;
   send();
 }
 
 function send() {
   let msg = {
     action: "update",
-    payload: SavedSettings,
+    payload: Context.State,
     scope: "all",
   };
 
