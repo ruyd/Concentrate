@@ -78,10 +78,8 @@ function mouseTimer(move) {
 }
 
 function scrollSpeed(move) {
-  sendToTab({
-    action: "scroll.speed",
-    payload: move,
-  });
+  Context.State.AutoScrollSpeed += move;
+  sendUpdate();
 }
 
 function init() {
@@ -158,11 +156,7 @@ function sendUpdate() {
 }
 
 function sendToTab(msg) {
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    for (let tab of tabs) {
-      chrome.tabs.sendMessage(tab.id, msg);
-    }
-  });
+  chrome.tabs.sendMessage(Context.Tab.id, msg);
 }
 
 //////

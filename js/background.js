@@ -70,9 +70,6 @@ async function onMessageHandler(message, port) {
         });
         await commitToStorage({ Settings: Context.Settings });
       }
-      break;
-
-    case "content.state":
       stateToOthers(model);
       break;
   }

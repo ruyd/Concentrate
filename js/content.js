@@ -99,11 +99,9 @@ function onMessageHandler(message, sender) {
     case "model":
       setModel(payload);
       break;
+    case "background.state":
     case "update":
       updateState(payload);
-      break;
-    case "scroll.speed":
-      updateScrollSpeed(payload);
       break;
   }
 }
@@ -654,7 +652,7 @@ function onKey(e) {
 }
 
 function updateScrollSpeed(speed) {
-  if (speed) Model.State.AutoScrollSpeed += speed;
+  Model.State.AutoScrollSpeed += speed;
   stateToBackground();
 }
 
