@@ -3,7 +3,7 @@ const Context = {
 };
 const log = false ? console.trace.bind(window.console) : function () {};
 
-//Listener
+// Listener
 chrome.runtime.onMessage.addListener(onMessageHandler);
 function onMessageHandler({ action, payload }, sender) {
   console.log(action, payload);
@@ -33,9 +33,6 @@ function bind() {
   chrome.storage.sync.get("Settings", function (data) {
     if (data.Settings) {
       Context.State = data.Settings;
-    } else {
-      //FirstRun Commit Default Settings
-      chrome.storage.sync.set({ Settings: Context.State });
     }
 
     if (Context.State.NewTabClick) {
@@ -85,5 +82,5 @@ function formatAMPM(date) {
   return strTime;
 }
 
-//Initial State
+//init
 bind();
