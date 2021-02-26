@@ -92,7 +92,7 @@ function requestState(scope) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     for (let tab of tabs) {
       sendToBackground({
-        action: "state.get",
+        action: "popup.state.get",
         id: tab.id,
         scope,
       });

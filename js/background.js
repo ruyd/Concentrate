@@ -24,6 +24,7 @@ function BackgroundState(loaded) {
 function TabModel(chrome_tab, settings) {
   this.Tab = chrome_tab;
   this.State = new BackgroundState(settings);
+  this.id = chrome_tab.id;
   const url = GetUrl.apply(this);
   this.State.Hostname = getHostname(url);
   this.State.isNewTab = this.State.Hostname === "newtab";
@@ -50,15 +51,16 @@ async function onMessageHandler(message, port) {
     case "content.connected":
       await LoadSavedStateAsync(model);
       port.postMessage({ action: "model", payload: model });
-      return;
+      break;
 
-    case "state.get":
+    case "popup.state.get":
       await LoadSavedStateAsync(model);
       stateToOthers(model);
-      return;
+      break;
 
-    case ("update", "content.state"):
-      if (scope != "all") {
+    case "update":
+    case "content.state":
+      if (scope === "tab") {
         Object.assign(model.State, payload);
         await CommitSavedStateAsync(model);
       } else {
@@ -86,6 +88,7 @@ function stateToOthers(model) {
   sendMessage({
     action: "background.state",
     payload: model,
+    id: model.id,
   });
 }
 
