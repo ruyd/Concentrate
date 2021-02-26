@@ -273,6 +273,12 @@ input:focus {
   user-select: none;
 }
 
+.help-container {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+}
+
 .speed {
   margin-top: -20px;
   height: 45px;
