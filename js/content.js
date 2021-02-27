@@ -6,7 +6,6 @@ var IntervalId = -1;
 
 const log = true ? console.trace.bind(window.console) : function () {};
 const interval = 1000;
-const isYouTube = window.location.hostname.indexOf("youtube") > -1;
 const removals_bannerAdWords = [
   "adserve",
   "ads",
@@ -61,6 +60,12 @@ const hasVideoPlayers = () => {
   return false;
 };
 
+// Listeners
+chrome.runtime.onMessage.addListener(runtimeMessageHandler);
+function runtimeMessageHandler(request, sender, sendResponse) {
+  onMessageHandler(request);
+}
+
 // Messaging
 function connect(message) {
   Port = chrome.runtime.connect({
@@ -105,16 +110,6 @@ function onMessageHandler(message, sender) {
       updateState(payload);
       break;
   }
-}
-
-chrome.runtime.onMessage.addListener(runtimeMessageHandler);
-function runtimeMessageHandler(request, sender, sendResponse) {
-  onMessageHandler(request);
-}
-
-function updateState(payload) {
-  Object.assign(Model.State, payload);
-  Model.bind();
 }
 
 // Composition
@@ -177,6 +172,12 @@ function setModel(payload) {
   model.AudioButton.set(model.State.MutingOn);
   model.PowerButton.set(model.State.GrayingOn);
 }
+
+function updateState(payload) {
+  Object.assign(Model.State, payload);
+  Model.bind();
+}
+
 // Objects
 
 function Greyout(action) {
