@@ -17,7 +17,6 @@ const removals_bannerAdWords = [
   "about:blank",
   "tree.com",
 ];
-
 const removals_classNames = [
   "OUTBRAIN",
   "mgbox",
@@ -32,7 +31,6 @@ const removals_videoAdWords = [
   "ytd-player-legacy-desktop-watch-ads-renderer",
   "ytd-watch-next-secondary-results-renderer sparkles-light-cta",
 ];
-
 const playerTypes = {
   YouTube: {
     player: "html5-video-player",
@@ -52,7 +50,6 @@ const playerTypes = {
     },
   },
 };
-
 const hasVideoPlayers = () => {
   for (const key in playerTypes) {
     if (document.getElementsByClassName(playerTypes[key].player)) return true;

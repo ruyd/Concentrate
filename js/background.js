@@ -21,10 +21,9 @@ function BackgroundState(loaded) {
   }
 }
 
-function TabModel(chrome_tab, settings) {
+function ConcentrateModel(chrome_tab, settings) {
   this.Tab = chrome_tab;
   this.State = new BackgroundState(settings);
-  this.id = chrome_tab.id;
   const url = GetUrl.apply(this);
   this.State.Hostname = getHostname(url);
   this.State.isNewTab = this.State.Hostname === "newtab";
@@ -64,14 +63,15 @@ async function onMessageHandler(message, port) {
       if (scope === "tab") {
         Object.assign(model.State, payload);
         await CommitSavedStateAsync(model);
+        stateToOthers(model);
       } else {
         Object.assign(Context.Settings, payload);
+        await commitToStorage({ Settings: Context.Settings });
         Tabs.forEach((item) => {
           Object.assign(item.State, payload);
+          stateToOthers(item);
         });
-        await commitToStorage({ Settings: Context.Settings });
       }
-      stateToOthers(model);
       break;
   }
 }
@@ -88,7 +88,7 @@ function stateToOthers(model) {
   sendMessage({
     action: "background.state",
     payload: model,
-    id: model.id,
+    id: model.Tab.id,
   });
 }
 
@@ -107,15 +107,15 @@ function checkDefaults(model) {
 function tabify() {
   Tabs.clear();
   return chrome.tabs.query({}, (list) => {
-    for (let item of list) {
-      if (item) setModel(item);
+    for (let tab of list) {
+      setModel(tab);
     }
   });
 }
-function setModel(item) {
-  const model = new TabModel(item, Context.Settings);
+function setModel(chrome_tab) {
+  const model = new ConcentrateModel(chrome_tab, Context.Settings);
   checkDefaults(model);
-  Tabs.set(item.id, model);
+  Tabs.set(chrome_tab.id, model);
 }
 
 function changeModel(id, action) {
@@ -162,10 +162,7 @@ async function LoadSavedStateAsync(model) {
 }
 
 function GetUrl() {
-  if (!this.Tab) {
-    return;
-  }
-  return this.Tab.pendingUrl ? this.Tab.pendingUrl : this.Tab.url;
+  return this.Tab?.pendingUrl ? this.Tab.pendingUrl : this.Tab.url;
 }
 
 function getHostname(url) {
