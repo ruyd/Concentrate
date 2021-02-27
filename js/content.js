@@ -100,7 +100,8 @@ function onMessageHandler(message, sender) {
       setModel(payload);
       break;
     case "background.state":
-    case "update":
+    case "options.update":
+    case "popup.update":
       updateState(payload);
       break;
   }
