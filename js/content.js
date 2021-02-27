@@ -578,10 +578,6 @@ function inject() {
   return true;
 }
 
-function save() {
-  stateToBackground();
-}
-
 function toggleMuting() {
   const turningOff = Model.State.MutingOn;
   Model.State.MutingOn = !Model.State.MutingOn;
@@ -591,13 +587,13 @@ function toggleMuting() {
   } else {
     Model.mute();
   }
-  save();
+  stateToBackground();
 }
 function toggleGraying() {
   Model.State.GrayingOn = !Model.State.GrayingOn;
   Model.PowerButton.set(Model.State.GrayingOn);
   Model.Greyout.set(Model.State.GrayingOn);
-  save();
+  stateToBackground();
 }
 
 // AutoScroll
@@ -628,6 +624,11 @@ function stopScroll() {
   IntervalId = -1;
 }
 
+function updateScrollSpeed(speed) {
+  Model.State.AutoScrollSpeed += speed;
+  stateToBackground();
+}
+
 function onKey(e) {
   const key = e.code;
   const controlDown = e.ctrlKey;
@@ -649,11 +650,6 @@ function onKey(e) {
       updateScrollSpeed(-1);
     }
   }
-}
-
-function updateScrollSpeed(speed) {
-  Model.State.AutoScrollSpeed += speed;
-  stateToBackground();
 }
 
 // Utils
@@ -720,11 +716,12 @@ function startTimer() {
       addtask(muteCnnBang);
     }
 
+    Model.detect();
+
     if (document.readyState === "complete" && !Model.injected) {
       Model.injected = inject();
     }
 
-    Model.detect();
     executeParallel(Model.Tasks);
     Model.tick();
   }

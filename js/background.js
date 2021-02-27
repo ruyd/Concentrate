@@ -45,7 +45,7 @@ async function onMessageHandler(message, port) {
   log(message, port);
   const { action, payload, id, scope } = message;
   const { sender } = port;
-  const tabId = sender && sender.tab ? sender.tab.id : id;
+  const tabId = sender?.tab ? sender.tab.id : id;
   const model = Tabs.get(tabId);
   switch (action) {
     case "content.connected":
@@ -58,7 +58,8 @@ async function onMessageHandler(message, port) {
       stateToOthers(model);
       break;
 
-    case "update":
+    case "options.update":
+    case "popup.update":
     case "content.state":
       if (scope === "tab") {
         Object.assign(model.State, payload);

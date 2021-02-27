@@ -144,7 +144,7 @@ function sendToBackground(message) {
 
 function sendUpdate() {
   let msg = {
-    action: "update",
+    action: "popup.update",
     payload: Context.State,
     id: Context.Tab.id,
     scope: Context.State.isNewTab ? "all" : "tab",

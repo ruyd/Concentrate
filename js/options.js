@@ -60,7 +60,7 @@ async function save() {
 
 function send() {
   let msg = {
-    action: "update",
+    action: "options.update",
     payload: Context.State,
     scope: "all",
   };
