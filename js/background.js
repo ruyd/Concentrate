@@ -57,7 +57,6 @@ async function onMessageHandler(message, port) {
       sendPopupModel(model);
       break;
 
-    case "options.update":
     case "popup.update":
     case "content.state":
       if (scope === "tab") {
@@ -65,22 +64,33 @@ async function onMessageHandler(message, port) {
         await CommitSavedStateAsync(model);
         stateToOthers(model);
       } else {
-        Object.assign(Context.Settings, payload);
-        await commitToStorage({ Settings: Context.Settings });
+        const settings = select(Context.Settings, payload);
+        await updateSettings(settings);
       }
       break;
 
     case "options.update":
-      Tabs.forEach((item) => {
-        Object.assign(item.State, payload);
-        stateToOthers(item);
-      });
+      await updateSettings(payload);
       break;
   }
 }
 
-function copySettings(target, {}) {
-  Object.assign(target, from);
+function select(proto, payload) {
+  var result = {};
+  const keys = Object.keys(proto);
+  for (const key of keys) {
+    result[key] = payload[key];
+  }
+  return result;
+}
+
+async function updateSettings(payload) {
+  Context.Settings = payload;
+  await commitToStorage({ Settings: payload });
+  Tabs.forEach((item) => {
+    Object.assign(item.State, payload);
+    stateToOthers(item);
+  });
 }
 
 function runtimeMessageHandler(message, sender, sendResponse) {

@@ -1,6 +1,6 @@
 "use strict";
 const Context = {
-  State: new OptionsState(),
+  Settings: new OptionsState(),
 };
 
 //Defaults True
@@ -24,7 +24,7 @@ function onMessageHandler({ action, scope }) {
 
 // Form - AutoChange for NewTab Options
 const checkboxes = new Map();
-const keys = Object.keys(Context.State);
+const keys = Object.keys(Context.Settings);
 keys.forEach((a) => {
   const el = document.getElementById(a + "InputCheckbox");
   if (el) checkboxes.set(a, el);
@@ -37,31 +37,31 @@ const colorIndicator = document.getElementById("indicator");
 function init() {
   chrome.storage.sync.get("Settings", function (store) {
     if (store.Settings) {
-      Context.State = store.Settings;
+      Context.Settings = store.Settings;
     }
 
     checkboxes.forEach((checkbox, key) => {
-      checkbox.checked = Context.State[key];
+      checkbox.checked = Context.Settings[key];
     });
 
-    colorInput.value = Context.State.NewTabColor || "";
+    colorInput.value = Context.Settings.NewTabColor || "";
     colorIndicator.style.backgroundColor = colorInput.value;
   });
 }
 
 async function save() {
   checkboxes.forEach((checkbox, key) => {
-    Context.State[key] = checkbox.checked;
+    Context.Settings[key] = checkbox.checked;
   });
 
-  Context.State.NewTabColor = colorInput.value;
+  Context.Settings.NewTabColor = colorInput.value;
   send();
 }
 
 function send() {
   let msg = {
     action: "options.update",
-    payload: Context.State,
+    payload: Context.Settings,
     scope: "all",
   };
 
