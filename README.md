@@ -30,11 +30,11 @@ This addon is forever free of charge with no interest in data collection or sell
 
 [Privacy](PRIVACY.TXT)
 
-_Not updated_
+_Installation - Not updated_
 
-[Install from Chrome Store](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
+[From Chrome Store](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
 
-[Install from Edge Store](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
+[From Edge Store](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
 
 ---
 
