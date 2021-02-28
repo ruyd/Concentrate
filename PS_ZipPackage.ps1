@@ -1,6 +1,6 @@
 
-if (Test-Path C:\Deploy\ConcentrateAddonPub.zip) {
-    Remove-Item C:\Deploy\ConcentrateAddonPub.zip
+if (Test-Path C:\Deploy\ConcentratePub.zip) {
+    Remove-Item C:\Deploy\ConcentratePub.zip
 }
 
 $files = New-Object System.Collections.ArrayList
@@ -17,17 +17,17 @@ $files = New-Object System.Collections.ArrayList
     ))
  
 Write-Host "Copying..."
-Copy-Item C:\Sources\ConcentrateAddon -Destination C:\Deploy -Recurse -Force
+Copy-Item C:\Sources\Concentrate -Destination C:\Deploy -Recurse -Force
 
 Write-Host "Removing files..."
 foreach ($file in $files) {
     if (Test-Path $file) {
-        Remove-Item C:\Deploy\ConcentrateAddon\$file -Recurse -Force
+        Remove-Item C:\Deploy\Concentrate\$file -Recurse -Force
     }
 }
 
-#Rename-Item C:\Deploy\ConcentrateAddon\manifest.deploy.json C:\Deploy\ConcentrateAddon\manifest.json
+#Rename-Item C:\Deploy\Concentrate\manifest.deploy.json C:\Deploy\Concentrate\manifest.json
 
 Write-Host "Zipping..."
-Compress-Archive -Path C:\Deploy\ConcentrateAddon -DestinationPath C:\Deploy\ConcentrateAddonPub.zip
+Compress-Archive -Path C:\Deploy\Concentrate -DestinationPath C:\Deploy\ConcentratePub.zip
 Write-Host "Package Ready C:\Deploy"

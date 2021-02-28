@@ -4,7 +4,7 @@
 
 Reading a lot or studying a bit?
 
-This add-on grew from a safe way to fight distractions and interruptions into a surprisingly helpful companion.
+This add-on grew from a safe way to fight interruptions and distractions into a surprisingly helpful companion.
 
 I really hope it also helps your studies and peace of mind.
 
