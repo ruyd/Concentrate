@@ -17,7 +17,7 @@ function OptionsState() {
 // Listeners
 chrome.runtime.onMessage.addListener(onMessageHandler);
 function onMessageHandler({ action, scope }) {
-  if (action === "update" && scope === "all") {
+  if (action == "popup.update" && scope === "all") {
     init();
   }
 }

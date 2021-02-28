@@ -52,9 +52,9 @@ async function onMessageHandler(message, port) {
       port.postMessage({ action: "model", payload: model });
       break;
 
-    case "popup.state.get":
+    case "popup.model":
       await LoadSavedStateAsync(model);
-      stateToOthers(model);
+      sendPopupModel(model);
       break;
 
     case "options.update":
@@ -67,13 +67,20 @@ async function onMessageHandler(message, port) {
       } else {
         Object.assign(Context.Settings, payload);
         await commitToStorage({ Settings: Context.Settings });
-        Tabs.forEach((item) => {
-          Object.assign(item.State, payload);
-          stateToOthers(item);
-        });
       }
       break;
+
+    case "options.update":
+      Tabs.forEach((item) => {
+        Object.assign(item.State, payload);
+        stateToOthers(item);
+      });
+      break;
   }
+}
+
+function copySettings(target, {}) {
+  Object.assign(target, from);
 }
 
 function runtimeMessageHandler(message, sender, sendResponse) {
@@ -84,10 +91,18 @@ function sendMessage(message) {
   chrome.runtime.sendMessage(message);
 }
 
+function sendPopupModel(model) {
+  sendMessage({
+    action: "background.model",
+    payload: model,
+    id: model.Tab.id,
+  });
+}
+
 function stateToOthers(model) {
   sendMessage({
     action: "background.state",
-    payload: model,
+    payload: model.State,
     id: model.Tab.id,
   });
 }

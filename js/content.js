@@ -36,7 +36,7 @@ const playerTypes = {
     player: "html5-video-player",
     button: "ytp-mute-button",
     isMuted: function (node) {
-      const title = (node ? node.getAttribute("title") : "") || "";
+      const title = node?.getAttribute("title") || "";
       return title.toLowerCase().indexOf("unmute") > -1;
     },
   },

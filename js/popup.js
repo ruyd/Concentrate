@@ -1,5 +1,6 @@
 "use strict";
 const Context = {
+  TabId: null,
   Tab: null,
   State: new PopupState(),
 };
@@ -7,11 +8,19 @@ const log = true ? console.trace.bind(window.console) : function () {};
 
 // Listeners
 chrome.runtime.onMessage.addListener(onMessageHandler);
-function onMessageHandler({ action, payload, scope }) {
+function onMessageHandler({ action, payload, scope, id }) {
   log(action, payload);
+  if (Context.TabId != id && scope != "all") {
+    log("blocked");
+    return;
+  }
   switch (action) {
+    case "background.model":
+      setModel(payload);
+      break;
+    case "options.update":
     case "background.state":
-      setState(payload, scope);
+      updateState(payload);
       break;
   }
 }
@@ -82,30 +91,25 @@ function scrollSpeed(move) {
   sendUpdate();
 }
 
-function init() {
-  requestState("init");
-}
-
-function requestState(scope) {
+function requestTabContext() {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     for (let tab of tabs) {
+      Context.TabId = tab.id;
       sendToBackground({
-        action: "popup.state.get",
+        action: "popup.model",
         id: tab.id,
-        scope,
       });
     }
   });
 }
 
-async function setState({ State, Tab }, scope) {
+function setModel({ State, Tab }) {
   Context.Tab = Tab;
+  updateState(State);
+}
 
-  if (!State) {
-    log("bug", scope, Tab);
-  }
-  Object.assign(Context.State, State);
-
+function updateState(state) {
+  Object.assign(Context.State, state);
   checkboxes.forEach((checkbox, key) => {
     log(checkbox, key, Context.State[key]);
     checkbox.checked = Context.State[key];
@@ -146,7 +150,7 @@ function sendUpdate() {
   let msg = {
     action: "popup.update",
     payload: Context.State,
-    id: Context.Tab.id,
+    id: Context.TabId,
     scope: Context.State.isNewTab ? "all" : "tab",
   };
 
@@ -161,4 +165,4 @@ function sendToTab(msg) {
 
 //////
 bind();
-init();
+requestTabContext();
