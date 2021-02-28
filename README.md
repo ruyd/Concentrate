@@ -32,10 +32,10 @@ This addon is forever free of charge with no interest in data collection or sell
 
 _Not updated_
 
-[Chrome](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
+[Install from Chrome Store](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
 
-[Edge](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
+[Install from Edge Store](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
 
 ---
 
-http://github.com/ruyd/Concentrate
+https://github.com/ruyd/Concentrate
