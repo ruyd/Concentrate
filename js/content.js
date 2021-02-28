@@ -184,7 +184,7 @@ function Greyout(action) {
     node.style.display = "none";
   };
   this.show = function () {
-    node.style.display = "block";
+    node.style.display = "flex";
   };
 
   this.set = function (state) {

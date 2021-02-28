@@ -11,6 +11,8 @@
   top: 0;
   left: 0;
   transition: all 0.3s;
+  justify-content: center;
+  align-items: center;
 }
 .concentrate:hover {
   opacity: 0.3;
@@ -20,14 +22,12 @@
   display: block;
   color: #333 !important;
   font-size: 300%;
-  position: relative;
   height: 100px;
   width: 200px;
   text-align: center;
-  top: 50%;
-  margin-left: 0 auto;
   user-select: none;
   pointer-events: none;
+  margin-top: 25px;
 }
 
 #power,
