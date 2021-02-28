@@ -10,7 +10,7 @@
   width: 100%;
   justify-content: center;
   align-items: center;
-  transition: all 0.3s;
+  transition: all 0.15s;
 }
 .concentrate:hover {
   opacity: 0.3;
