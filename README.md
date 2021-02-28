@@ -32,8 +32,6 @@ A Modern Add-on for a Quiet and Focused Browsing Experience.
 
 [Get for Edge](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
 
-This addon is forever free of charge
-
 [Privacy](PRIVACY.TXT)
 
 ---
