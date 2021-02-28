@@ -4,8 +4,6 @@
 
 Reading a lot or studying a bit?
 
-With so much competition for attention it's harder than it has to be.
-
 This add-on grew from a safe way to fight distractions and interruptions into a surprisingly helpful companion.
 
 I really hope it also helps your studies and peace of mind.
