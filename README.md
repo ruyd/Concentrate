@@ -36,6 +36,8 @@ _Installation - Not updated_
 
 [From Edge Store](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
 
+\*Advanced Install: Download and Load Unpacked
+
 ---
 
 https://github.com/ruyd/Concentrate
