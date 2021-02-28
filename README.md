@@ -30,13 +30,13 @@ This addon is forever free of charge with no interest in data collection or sell
 
 [Privacy](PRIVACY.TXT)
 
-_Installation - Not updated_
+## Installation - Not yet updated
 
 [From Chrome Store](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
 
 [From Edge Store](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
 
-\*Advanced Install: Download and Load Unpacked
+_Advanced Install without auto updates: Download and Load as Unpacked extension_
 
 ---
 
