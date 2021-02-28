@@ -64,7 +64,7 @@ function runtimeMessageHandler(request, sender, sendResponse) {
 }
 
 // Messaging
-function connect(message) {
+function connect() {
   Port = chrome.runtime.connect({
     name: "content",
   });
@@ -72,26 +72,21 @@ function connect(message) {
   Port.onMessage.addListener(onMessageHandler);
 
   Port.onDisconnect.addListener(function () {
-    if (Port) {
-      Port = null;
-    }
+    log("Disconnected -> Dev Only? -> Reloading");
+    window.location.reload();
   });
 
-  Port.postMessage(
-    message || {
-      action: "content.connected",
-    }
-  );
+  Port.postMessage({
+    action: "content.connected",
+  });
 }
 
 function stateToBackground(action = "content.state") {
-  const message = {
+  Port.postMessage({
     action,
     payload: Model.State,
     scope: "tab",
-  };
-  if (Port) Port.postMessage(message);
-  else connect(message);
+  });
 }
 
 function onMessageHandler(message, sender) {

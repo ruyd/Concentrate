@@ -63,7 +63,7 @@ function bind() {
 }
 
 function startTime() {
-  if (Context.State.ShowClock) {
+  if (Context.State?.ShowClock) {
     document.getElementById("txt").innerHTML = formatAMPM(new Date());
     Context.timeout = setTimeout(startTime, 500);
   } else {
