@@ -2,9 +2,9 @@
 
 # Concentrate
 
-Reading a lot and studying a bit?
+Reading a lot or studying a bit?
 
-It's harder than it has to be with so much competing for attention, no?
+With so much competition for attention it's harder than it has to be.
 
 This add-on grew from a safe way to fight distractions and interruptions into a surprisingly helpful companion.
 
