@@ -121,7 +121,7 @@ function setModel(chrome_tab) {
 function changeModel(id, action) {
   if (action === "update")
     chrome.tabs.get(id, (tab) => {
-      if (tab) setModel(tab);
+      setModel(tab);
     });
   else Tabs.delete(id);
 }
