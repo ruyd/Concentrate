@@ -56,7 +56,6 @@ const hasVideoPlayers = () => {
   }
   return false;
 };
-
 // Listeners
 chrome.runtime.onMessage.addListener(runtimeMessageHandler);
 function runtimeMessageHandler(request, sender, sendResponse) {
@@ -72,7 +71,7 @@ function connect() {
   Port.onMessage.addListener(onMessageHandler);
 
   Port.onDisconnect.addListener(function () {
-    log("Disconnected -> Dev Only? -> Reloading");
+    log("Disconnected -> Dev Only -> Reloading");
     window.location.reload();
   });
 
@@ -89,19 +88,21 @@ function stateToBackground(action = "content.state") {
   });
 }
 
+const receivers = [
+  {
+    catch: ["background.state", "options.update", "popup.update"],
+    fn: updateState,
+  },
+  {
+    catch: ["model"],
+    fn: setModel,
+  },
+];
 function onMessageHandler(message, sender) {
   log(message, sender);
   const { action, payload } = message;
-  switch (action) {
-    case "model":
-      setModel(payload);
-      break;
-    case "background.state":
-    case "options.update":
-    case "popup.update":
-      updateState(payload);
-      break;
-  }
+  const receiver = receivers.find((r) => r.catch.includes(action));
+  receiver.fn(payload);
 }
 
 // Composition
