@@ -32,9 +32,9 @@ This addon is forever free of charge with no interest in data collection or sell
 
 ## Installation - Not yet updated
 
-[For Chrome](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
+[Get for Chrome](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
 
-[For Edge](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
+[Get for Edge](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
 
 ---
 
