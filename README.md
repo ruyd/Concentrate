@@ -36,8 +36,6 @@ This addon is forever free of charge with no interest in data collection or sell
 
 [From Edge Store](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
 
-_Advanced Install without auto updates: Download and Load as Unpacked extension_
-
 ---
 
 https://github.com/ruyd/Concentrate
