@@ -30,10 +30,12 @@ This addon is forever free of charge with no interest in data collection or sell
 
 [Privacy](PRIVACY.TXT)
 
-http://github.com/ruyd/Concentrate
-
 _Not updated_
 
 [Chrome](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
 
 [Edge](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
+
+---
+
+http://github.com/ruyd/Concentrate
