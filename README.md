@@ -26,15 +26,15 @@ A Modern Add-on for a Quiet and Focused Browsing Experience.
 
 ![Image](visuals/Options.png)
 
-This addon is forever free of charge with no interest in data collection or selling.
-
-[Privacy](PRIVACY.TXT)
-
 ## Installation - Not yet updated
 
 [Get for Chrome](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
 
 [Get for Edge](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
+
+This addon is forever free of charge
+
+[Privacy](PRIVACY.TXT)
 
 ---
 
