@@ -399,7 +399,7 @@ ConcentrateModel.prototype.tick = function () {
 };
 
 ConcentrateModel.prototype.reset = function () {
-  this.State.SecondCounter = 0;
+  this.State.SecondCounter = this.State.ProgressInSeconds || 0;
 };
 
 // Multiple Support?
@@ -469,7 +469,7 @@ function removeVideoAds() {
   return true;
 }
 
-// Public Service
+// PTSD
 function muteCnnBang() {
   if (Model.State.PlayerType != playerTypes.CNN) return false;
 
