@@ -10,10 +10,10 @@ New safe way to fight interruptions, distractions and a surprisingly helpful app
 
 - Removes Flashy Advertising
 - Removes Social Media Links and Comments
-- Blocks YouTube Video Ads - Auto Skips or Mutes before Ad playback
-- Low Brightness Dark-Mode NewTab with Hidden Clock Timer
-- Speed Adjustable AutoScroll with Keyboard Shortcuts for Reading
 - FullScreen by Click and DoubleClick
+- Low Brightness Dark-Mode NewTab with Hidden Clock Timer
+- Blocks YouTube Video Ads - Auto Skips or Mutes before Ad playback
+- Speed Adjustable AutoScroll with Keyboard Shortcuts for Reading
 - Auto Mute for CNN's bang and anything new that comes up
 
 A Modern Add-on for a Quiet and Focused Browsing Experience
