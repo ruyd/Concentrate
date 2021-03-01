@@ -14,7 +14,7 @@ From a safe way to fight interruptions and distractions into a surprisingly help
 - Low Brightness Dark-Mode NewTab with Hidden Clock Timer
 - Speed Adjustable AutoScroll with Keyboard Shortcuts for Reading
 - FullScreen by Click and DoubleClick
-- Auto Mute for CNN and anything new that comes up
+- Auto Mute for CNN's bang and anything new that comes up
 
 A Modern Add-on for a Quiet and Focused Browsing Experience.
 
