@@ -114,9 +114,9 @@ function createElement(id, cls) {
   return node;
 }
 
-function GetButtonElement(cls) {
-  const buttons = document.getElementsByClassName(cls);
-  const node = buttons.length > 0 ? buttons[0] : null;
+function GetElement(cls) {
+  const nodes = document.getElementsByClassName(cls);
+  const node = nodes.length > 0 ? nodes[0] : null;
   return node;
 }
 
@@ -126,9 +126,15 @@ function GetTextContent(cls) {
   return result;
 }
 
+function GetPlayerProgress() {
+  //const el = GetElement("ytp-progress-bar");
+  // el?.getAttribute("aria-valuenow");
+  return GetTextContent("ytp-time-current");
+}
+
 function GetMuteButton(type) {
   if (!type) return null;
-  const node = GetButtonElement(type.button);
+  const node = GetElement(type.button);
   return node ? new MuteButton(node, type) : null;
 }
 
@@ -143,12 +149,12 @@ function GetUrlPlayerType() {
 }
 
 function GetSkipButton() {
-  const node = GetButtonElement("ytp-ad-skip-button");
+  const node = GetElement("ytp-ad-skip-button");
   return node ? new Button(node) : null;
 }
 
 function GetPlayButton() {
-  const node = GetButtonElement("ytp-play-button");
+  const node = GetElement("ytp-play-button");
   return node ? new Button(node) : null;
 }
 
@@ -207,7 +213,6 @@ function ContentState(loaded) {
   this.DurationInSeconds = 0;
   this.PreviousDuration = 0;
   this.isFullscreen = false;
-  this.isCounterRunning = false;
   this.SecondCounter = 0;
 
   if (loaded) {
@@ -385,30 +390,28 @@ ConcentrateModel.prototype.hide = function () {
 ConcentrateModel.prototype.tick = function () {
   if (!this.State.Showing) return;
 
+  if (this.State.SecondCounter >= this.State.DurationInSeconds) {
+    this.State.SecondCounter = 0;
+  }
+  if (!this.State.Paused) this.State.SecondCounter++;
+
   this.draw();
-
-  if (this.State.Paused) return;
-
-  if (!this.State.isCounterRunning) {
-    this.State.isCounterRunning = true;
-    this.State.SecondCounter = this.State.DurationInSeconds;
-  }
-
-  this.State.SecondCounter--;
-
-  if (this.State.SecondCounter < 1) {
-    this.reset();
-  }
 };
 
 ConcentrateModel.prototype.reset = function () {
   this.State.SecondCounter = 0;
-  this.State.isCounterRunning = false;
 };
 
+// Multiple Support?
 ConcentrateModel.prototype.detect = function () {
   if (!this.State) return;
-  this.State.Showing = document.getElementsByClassName("ad-showing").length > 0;
+
+  const showing = document.getElementsByClassName("ad-showing").length > 0;
+  if (showing && !this.State.Showing) {
+    this.reset();
+  }
+
+  this.State.Showing = showing;
 
   this.State.TimeDuration = GetTextContent("ytp-time-duration");
   if (this.State.TimeDuration) {
@@ -416,7 +419,7 @@ ConcentrateModel.prototype.detect = function () {
     this.State.DurationInSeconds =
       parseInt(dsplit[0]) * 60 + parseInt(dsplit[1]);
   }
-
+  this.State.ProgressInSeconds = GetPlayerProgress();
   this.State.HasVideo = hasVideoPlayers();
   this.State.PlayerType = GetUrlPlayerType();
   this.MuteButton = GetMuteButton(this.State.PlayerType);
@@ -427,17 +430,13 @@ ConcentrateModel.prototype.detect = function () {
 };
 
 ConcentrateModel.prototype.GetDurationText = function () {
-  const duration = this.State.SecondCounter;
-
-  if (duration <= 0) return "...";
-
+  if (this.State.Paused) return "...";
   let minutes = 0;
-  let seconds = duration > 0 ? duration : duration * -1;
+  let seconds = this.State.SecondCounter;
 
   if (seconds >= 60) {
-    const m = (seconds / 60) << 0;
-    minutes += m;
-    seconds -= 60 * m;
+    minutes = Math.floor(seconds / 60);
+    seconds -= 60 * minutes;
   }
 
   if (seconds < 10) {
@@ -449,6 +448,16 @@ ConcentrateModel.prototype.GetDurationText = function () {
 
 ConcentrateModel.prototype.IsReady = function () {
   return this.hasOwnProperty("State") && this.Tab;
+};
+
+ConcentrateModel.prototype.inject = function () {
+  if (!document.body || !Model.IsReady()) return false;
+  if (Model.injected) return false;
+  document.body.appendChild(Model.Greyout.Node);
+  document.body.appendChild(Model.AudioButton.Node);
+  document.body.appendChild(Model.PowerButton.Node);
+  Model.injected = true;
+  return true;
 };
 
 // Actions
@@ -562,14 +571,6 @@ function removeComments() {
     removeNode(word);
   }
 
-  return true;
-}
-
-function inject() {
-  if (!document.body || !Model.IsReady() || !Model.State.HasVideo) return false;
-  document.body.appendChild(Model.Greyout.Node);
-  document.body.appendChild(Model.AudioButton.Node);
-  document.body.appendChild(Model.PowerButton.Node);
   return true;
 }
 
@@ -712,11 +713,7 @@ function startTimer() {
     }
 
     Model.detect();
-
-    if (document.readyState === "complete" && !Model.injected) {
-      Model.injected = inject();
-    }
-
+    Model.inject();
     executeParallel(Model.Tasks);
     Model.tick();
   }
