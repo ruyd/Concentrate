@@ -4,7 +4,7 @@
 
 Reading a lot or studying a bit?
 
-This add-on grew from a safe way to fight interruptions and distractions into a surprisingly helpful companion.
+From a safe way to fight interruptions and distractions into a surprisingly helpful app for concentration.
 
 I really hope it also helps your studies and peace of mind.
 
