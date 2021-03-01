@@ -2,9 +2,7 @@
 
 # Concentrate
 
-Reading a lot or studying a bit?
-
-A surprisingly helpful app for concentration and a new safe way to fight interruptions, distractions:
+A surprisingly helpful app for concentration and a new safe way to fight interruptions, distractions
 
 ### Features
 
@@ -15,8 +13,6 @@ A surprisingly helpful app for concentration and a new safe way to fight interru
 - Blocks YouTube Video Ads - Auto Skips or Mutes before Ad playback
 - Speed Adjustable AutoScroll with Keyboard Shortcuts for Reading
 - Auto Mute for CNN's bang and anything new that comes up
-
-A Modern Add-on for a Quiet and Focused Browsing Experience
 
 ![Image](visuals/ConcentrateNewTab.gif)
 
