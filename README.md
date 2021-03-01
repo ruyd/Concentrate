@@ -2,11 +2,9 @@
 
 # Concentrate
 
-A Modern Add-on for a Quiet and Focused Browsing Experience
-
 Reading a lot or studying a bit?
 
-New safe way to fight interruptions, distractions and a surprisingly helpful app for concentration
+New safe way to fight interruptions, distractions and a surprisingly helpful app for concentration:
 
 ### Features
 
@@ -17,6 +15,8 @@ New safe way to fight interruptions, distractions and a surprisingly helpful app
 - Speed Adjustable AutoScroll with Keyboard Shortcuts for Reading
 - FullScreen by Click and DoubleClick
 - Auto Mute for CNN's bang and anything new that comes up
+
+A Modern Add-on for a Quiet and Focused Browsing Experience
 
 ![Image](visuals/ConcentrateNewTab.gif)
 
