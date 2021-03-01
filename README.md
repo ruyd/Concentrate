@@ -20,11 +20,11 @@ A Modern Add-on for a Quiet and Focused Browsing Experience
 
 ![Image](visuals/ConcentrateNewTab.gif)
 
+![Image](visuals/Options.png)
+
 ![Image](visuals/ConcentrateBlockVideo.gif)
 
 ![Image](visuals/ConcentrateScroll.gif)
-
-![Image](visuals/Options.png)
 
 ## Installation - Not yet updated
 
