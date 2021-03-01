@@ -2,7 +2,7 @@
 
 # Concentrate
 
-A surprisingly helpful browser app for concentration and a new safe way to fight interruptions
+A new safe way to fight interruptions and a surprisingly helpful browser app for concentration
 
 ### Features
 
