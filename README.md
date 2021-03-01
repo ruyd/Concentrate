@@ -28,7 +28,7 @@ A Modern Add-on for a Quiet and Focused Browsing Experience.
 
 [Get for Edge](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
 
-_This addon is forever free of charge with no interest in data collection or selling. Not everyone wants or shouldn't have to pay to remove advertising. I really hope it helps your studies and peace of mind._
+_This addon is forever free of charge with no interest in data collection or selling. Not everyone wants or should have to pay to remove advertising. I really hope it helps your studies and peace of mind._
 
 [Privacy](PRIVACY.TXT)
 
