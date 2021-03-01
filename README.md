@@ -16,7 +16,7 @@ From a safe way to fight interruptions and distractions to a surprisingly helpfu
 - FullScreen by Click and DoubleClick
 - Auto Mute for CNN's bang and anything new that comes up
 
-A Modern Add-on for a Quiet and Focused Browsing Experience.
+A Modern Add-on for a Quiet and Focused Browsing Experience
 
 ![Image](visuals/ConcentrateUI.gif)
 
