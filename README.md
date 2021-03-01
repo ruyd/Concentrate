@@ -4,7 +4,7 @@
 
 Reading a lot or studying a bit?
 
-From a safe way to fight interruptions and distractions into a surprisingly helpful app for concentration.
+From a safe way to fight interruptions and distractions into a surprisingly helpful app for concentration
 
 ### Features
 
