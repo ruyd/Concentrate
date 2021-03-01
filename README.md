@@ -18,9 +18,11 @@ New safe way to fight interruptions, distractions and a surprisingly helpful app
 
 A Modern Add-on for a Quiet and Focused Browsing Experience
 
-![Image](visuals/ConcentrateBlockVideo.gif)
-![Image](visuals/ConcentrateScroll.gif)
 ![Image](visuals/ConcentrateNewTab.gif)
+
+![Image](visuals/ConcentrateBlockVideo.gif)
+
+![Image](visuals/ConcentrateScroll.gif)
 
 ![Image](visuals/Options.png)
 
