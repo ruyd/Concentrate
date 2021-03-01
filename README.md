@@ -24,9 +24,9 @@ A Modern Add-on for a Quiet and Focused Browsing Experience.
 
 ## Installation - Not yet updated
 
-[Get for Chrome](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
+[Get now for Chrome](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
 
-[Get for Edge](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
+[Get now for Edge](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
 
 _This addon is forever free of charge with no interest in data collection or selling. Not everyone wants or should have to pay to remove advertising. I really hope it helps your studies and peace of mind._
 
