@@ -22,7 +22,8 @@
                 "css/content.css"
             ],
             "matches": [
-                "*://*/*"
+                "http://*/*",
+                "https://*/*"
             ],
             "run_at": "document_start"
         }
