@@ -8,9 +8,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: trmcnvn/chrome-addon@v2
         with:
-          extension: mmlolmfkhnilblibmnalmkinojfpcckh
+          extension: goecnaonchbggnbifdlgcdflabaiilpj
           zip: build/release.zip
           client-id: ${{ secrets.CHROME_CLIENT_ID }}
           client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
