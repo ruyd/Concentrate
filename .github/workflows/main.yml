@@ -9,9 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          repository: ruyd/Concentrate
-          path: build/release.zip
       - uses: trmcnvn/chrome-addon@v2
         with:
           extension: mmlolmfkhnilblibmnalmkinojfpcckh
