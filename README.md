@@ -16,7 +16,7 @@ A Surprisingly Helpful App for Concentration
 - Removes Social Media Links and Comments
 - FullScreen by Click and DoubleClick
 - Blocks YouTube Video Ads - Auto Skips or Mutes before Ad playback
-- Speed Adjustable AutoScroll with Keyboard Shortcuts for Reading
+- Speed Reversible AutoScroll with Keyboard Shortcuts
 - Auto Mute for CNN's bang and anything new that comes up
 - Low Brightness Dark-Mode NewTab with Hidden Clock Timer
 
