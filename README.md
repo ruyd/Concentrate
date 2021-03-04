@@ -2,7 +2,7 @@
 
 # Concentrate
 
-A surprisingly helpful app for concentration
+A Surprisingly Helpful App for Concentration
 
 ## Installation
 
