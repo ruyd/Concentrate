@@ -4,6 +4,12 @@
 
 A new safe way to fight interruptions and a surprisingly helpful app for concentration
 
+## Installation
+
+[Get now for Chrome](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
+
+[Get now for Edge](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
+
 ### Features
 
 - Removes Flashy Advertising
@@ -21,12 +27,6 @@ A new safe way to fight interruptions and a surprisingly helpful app for concent
 ![Image](visuals/ConcentrateBlockVideo.gif)
 
 ![Image](visuals/ConcentrateScroll.gif)
-
-## Installation
-
-[Get now for Chrome](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
-
-[Get now for Edge](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
 
 _This addon is forever free of charge with no interest in data collection or selling. Not everyone wants or should have to pay to learn without advertising. I really hope it helps your studies and peace of mind._
 
