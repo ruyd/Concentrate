@@ -22,7 +22,7 @@ A new safe way to fight interruptions and a surprisingly helpful app for concent
 
 ![Image](visuals/ConcentrateScroll.gif)
 
-## Installation - Not yet updated
+## Installation
 
 [Get now for Chrome](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
 
