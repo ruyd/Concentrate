@@ -8,10 +8,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: ruyd/Concentrate
+          path: build/release.zip
       - uses: trmcnvn/chrome-addon@v2
         with:
           extension: mmlolmfkhnilblibmnalmkinojfpcckh
-          zip: ./build/release.zip
+          zip: build/release.zip
           client-id: ${{ secrets.CHROME_CLIENT_ID }}
           client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
           refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
