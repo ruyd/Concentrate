@@ -1,33 +1,19 @@
-
-if (Test-Path C:\Deploy\ConcentratePub.zip) {
-    Remove-Item C:\Deploy\ConcentratePub.zip
+$result = ".\build\release.zip"
+if (Test-Path $result) {
+    Remove-Item $result
 }
 
 $files = New-Object System.Collections.ArrayList
 [void] $files.AddRange((
-        ".\.git",
-        ".\.vscode",
-        ".\.zipignore",
-        ".\.gitignore",
-        ".\.github",
-        ".\PS_ZipPackage.ps1",
-        ".\TODO",
-        ".\visuals\",
-        ".\tempCodeRunnerFile.ps1"
+        ".\css\",
+        ".\html\",
+        ".\images\",
+        ".\js\",
+        ".\manifest.json",
+        ".\PRIVACY.TXT",
+        ".\LICENSE"
     ))
- 
-Write-Host "Copying..."
-Copy-Item C:\Sources\Concentrate -Destination C:\Deploy -Recurse -Force
-
-Write-Host "Removing files..."
-foreach ($file in $files) {
-    if (Test-Path $file) {
-        Remove-Item C:\Deploy\Concentrate\$file -Recurse -Force
-    }
-}
-
-#Rename-Item C:\Deploy\Concentrate\manifest.deploy.json C:\Deploy\Concentrate\manifest.json
-
+  
 Write-Host "Zipping..."
-Compress-Archive -Path C:\Deploy\Concentrate -DestinationPath C:\Deploy\ConcentratePub.zip
-Write-Host "Package Ready C:\Deploy"
+Compress-Archive -Path $files -DestinationPath $result
+Write-Host "Package Ready $result"
