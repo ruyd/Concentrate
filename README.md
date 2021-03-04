@@ -2,7 +2,7 @@
 
 # Concentrate
 
-A Surprisingly Helpful App for Concentration
+A Modern Add-on for a Quiet and Focused Browsing Experience
 
 ## Installation
 
