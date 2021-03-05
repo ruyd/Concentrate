@@ -2,8 +2,6 @@
 
 # Concentrate
 
-[Concentrate](#focus)
-
 A Modern Add-on for a Quiet and Focused Browsing Experience
 
 ## Installation
