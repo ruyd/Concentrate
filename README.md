@@ -1,6 +1,8 @@
-# Concentrate
+### .
 
 ![Image](images/Concentrate.svg)
+
+# Concentrate
 
 A Modern Add-on for a Quiet and Focused Browsing Experience
 
