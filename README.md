@@ -1,10 +1,8 @@
 ![Image](images/Concentrate.svg)
 
-# Concentrate
+# Installation
 
 A Modern Add-on for a Quiet and Focused Browsing Experience
-
-## Installation
 
 [Get now for Chrome](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
 
