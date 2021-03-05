@@ -84,3 +84,4 @@ function formatAMPM(date) {
 
 //init
 bind();
+

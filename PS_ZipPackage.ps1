@@ -8,9 +8,7 @@ If ($checks.Count -gt 0) {
     }
     git commit -m "log false" -a 
     Write-Host "Yuca"
-    exit -1;
 }
-
 
 $result = ".\build\release.zip"
 if (Test-Path $result) {
