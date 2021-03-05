@@ -32,4 +32,4 @@ _This addon is forever free of charge with no interest in data collection or sel
 
 ---
 
-https://github.com/ruyd/Concentrate
+[github.com/ruyd/Concentrate](https://github.com/ruyd/Concentrate)
