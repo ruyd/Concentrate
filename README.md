@@ -1,5 +1,3 @@
-### .
-
 ![Image](images/Concentrate.svg)
 
 # Concentrate
