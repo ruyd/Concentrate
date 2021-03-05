@@ -1,6 +1,5 @@
 
 $checks = Select-String -Path .\js\*.js -Pattern "log = true" -SimpleMatch -List
-Write-Host $checks.Count
 If ($checks.Count -gt 0) {
     foreach ($item in $checks) {
         $replace_file = $item.ToString().substring(0,$item.ToString().indexOf(".js") + 3)
