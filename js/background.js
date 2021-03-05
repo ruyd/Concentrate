@@ -1,7 +1,7 @@
 "use strict";
 const Tabs = new Map();
 const Context = {};
-const log = true ? console.trace.bind(window.console) : function () {};
+const log = false ? console.trace.bind(window.console) : function () {};
 
 // Listeners
 chrome.tabs.onUpdated.addListener((tabId) => changeModel(tabId, "update"));
