@@ -24,6 +24,8 @@ const removals_classNames = [
   "ads[mail.google.com]",
   "ad",
   "contentText",
+  "ad-footer",
+  "ad-support-desktop",
 ];
 const removals_commentTags = [];
 const removals_videoAdWords = [
@@ -724,4 +726,3 @@ function startTimer() {
 /// init
 connect();
 startTimer();
-
