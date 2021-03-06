@@ -2,11 +2,17 @@
 const Tabs = new Map();
 const Context = {};
 const log = false ? console.trace.bind(window.console) : function () {};
+const blocked = [
+  "options",
+  "extensions",
+  "chrome.gooogle.com",
+  "microsoftedge.microsoft.com",
+];
 
 // Listeners
-chrome.tabs.onUpdated.addListener((tabId) => changeModel(tabId, "update"));
+chrome.tabs.onUpdated.addListener((tabId) => changeModel(tabId, "updated"));
 chrome.tabs.onCreated.addListener((tab) => setModel(tab));
-chrome.tabs.onRemoved.addListener((tabId) => changeModel(tabId, "remove"));
+chrome.tabs.onRemoved.addListener((tabId) => changeModel(tabId, "removed"));
 chrome.runtime.onConnect.addListener(onConnect);
 chrome.runtime.onMessage.addListener(runtimeMessageHandler);
 
@@ -27,7 +33,7 @@ function ConcentrateModel(chrome_tab, settings) {
   const url = GetUrl.apply(this);
   this.State.Hostname = getHostname(url);
   this.State.isNewTab = this.State.Hostname === "newtab";
-  this.State.isAllowed = this.State.isNewTab || url.startsWith("http");
+  this.State.isAllowed = checkIsAllowed(this, url);
 }
 
 /// Messaging
@@ -44,7 +50,7 @@ async function onMessageHandler(message, port) {
   log(message, port);
   const { action, payload, id, scope } = message;
   const { sender } = port;
-  const tabId = sender?.tab ? sender.tab.id : id;
+  const tabId = sender?.tab?.id ? sender.tab.id : id;
   const model = Tabs.get(tabId);
   switch (action) {
     case "content.connected":
@@ -143,8 +149,8 @@ function setModel(chrome_tab) {
   Tabs.set(chrome_tab.id, model);
 }
 
-function changeModel(id, action) {
-  if (action === "update")
+function changeModel(id, event) {
+  if (event === "updated")
     chrome.tabs.get(id, (tab) => {
       setModel(tab);
     });
@@ -186,6 +192,13 @@ async function LoadSavedStateAsync(model) {
   return true;
 }
 
+function checkIsAllowed(model, url) {
+  const protocol = url.startsWith("http");
+  return (
+    model.State.isNewTab || (protocol && !blocked.includes(model.Hostname))
+  );
+}
+
 function GetUrl() {
   return this.Tab?.pendingUrl ? this.Tab.pendingUrl : this.Tab.url;
 }
@@ -211,4 +224,3 @@ function init() {
 
 /////
 init();
-

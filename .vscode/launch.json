@@ -17,9 +17,9 @@
             "type": "edge",
             "request": "attach",
             "port": 9223,
-            "url": "chrome-extension://pjhadkjjllpjbglhokfpiaiedfdmchhh/html/background.html",
+            "url": "extension://pjhadkjjllpjbglhokfpiaiedfdmchhh/html/background.html",
             "webRoot": "${workspaceFolder}/js",
-            "preLaunchTask": "back"
+           
         },
         {
             "name": "NewTab",
