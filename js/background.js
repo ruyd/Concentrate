@@ -5,7 +5,7 @@ const log = false ? console.trace.bind(window.console) : function () {};
 const blocked = [
   "options",
   "extensions",
-  "chrome.gooogle.com",
+  "chrome.google.com",
   "microsoftedge.microsoft.com",
 ];
 
@@ -50,7 +50,7 @@ async function onMessageHandler(message, port) {
   log(message, port);
   const { action, payload, id, scope } = message;
   const { sender } = port;
-  const tabId = sender?.tab?.id ? sender.tab.id : id;
+  const tabId = id ?? (sender?.tab?.id > 0 ? sender.tab.id : null);
   const model = Tabs.get(tabId);
   switch (action) {
     case "content.connected":

@@ -166,4 +166,3 @@ function sendToTab(msg) {
 //////
 bind();
 requestTabContext();
-
