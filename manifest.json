@@ -1,6 +1,6 @@
 {
     "name": "Concentrate",
-    "version": "3.0.0.0",
+    "version": "3.0.0.1",
     "author": "GoodSpeed",
     "browser_action": {
         "default_icon": {
