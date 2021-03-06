@@ -194,7 +194,6 @@ async function LoadSavedStateAsync(model) {
 }
 
 function checkIsAllowed(model, url) {
-  log(blocked.includes(model.Hostname), model.Hostname);
   if (blocked.includes(model.Hostname)) return false;
   const protocol = url.startsWith("http");
   if (protocol) return true;
