@@ -19,7 +19,7 @@
             "port": 9223,
             "url": "extension://pjhadkjjllpjbglhokfpiaiedfdmchhh/html/background.html",
             "webRoot": "${workspaceFolder}/js",
-           
+            "preLaunchTask": "back"
         },
         {
             "name": "NewTab",

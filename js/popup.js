@@ -4,7 +4,7 @@ const Context = {
   Tab: null,
   State: new PopupState(),
 };
-const log = false ? console.trace.bind(window.console) : function () {};
+const log = true ? console.trace.bind(window.console) : function () {};
 
 // Listeners
 chrome.runtime.onMessage.addListener(onMessageHandler);
@@ -111,7 +111,6 @@ function setModel({ State, Tab }) {
 function updateState(state) {
   Object.assign(Context.State, state);
   checkboxes.forEach((checkbox, key) => {
-    log(checkbox, key, Context.State[key]);
     checkbox.checked = Context.State[key];
   });
 

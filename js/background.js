@@ -1,7 +1,7 @@
 "use strict";
 const Tabs = new Map();
 const Context = {};
-const log = false ? console.trace.bind(window.console) : function () {};
+const log = true ? console.trace.bind(window.console) : function () {};
 const blocked = [
   "options",
   "extensions",
@@ -82,6 +82,7 @@ async function onMessageHandler(message, port) {
 }
 
 function select(proto, payload) {
+  if (Object.keys(proto || {}).length === 0) return payload;
   var result = {};
   const keys = Object.keys(proto);
   for (const key of keys) {
