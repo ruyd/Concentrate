@@ -4,7 +4,7 @@ var Timer;
 var Model = new ConcentrateModel();
 var IntervalId = -1;
 
-const log = false ? console.trace.bind(window.console) : function () {};
+const log = true ? console.trace.bind(window.console) : function () {};
 const interval = 1000;
 const removals_bannerAdWords = [
   "adserve",
@@ -16,13 +16,15 @@ const removals_bannerAdWords = [
   "javascript:window",
   "about:blank",
   "tree.com",
+  "phoenix-widget",
+  "phoenix",
 ];
 const removals_classNames = [
   "OUTBRAIN",
   "mgbox",
   "IL_BASE",
   "ads[mail.google.com]",
-  "ad",
+  "ad[mail.google.com]",
   "contentText",
   "ad-footer",
   "ad-support-desktop",
@@ -32,6 +34,12 @@ const removals_videoAdWords = [
   "video-ads",
   "ytd-player-legacy-desktop-watch-ads-renderer",
   "ytd-watch-next-secondary-results-renderer sparkles-light-cta",
+];
+
+const removals = [
+  ...removals_bannerAdWords,
+  ...removals_classNames,
+  ...removals_videoAdWords,
 ];
 const playerTypes = {
   YouTube: {
@@ -463,6 +471,60 @@ ConcentrateModel.prototype.inject = function () {
 };
 
 // Actions
+const Suspects = new Set();
+const UniqueClassNames = new Set();
+const SuspectClassNames = new Set();
+function preparse() {
+  const hostname = Model.State?.Hostname ?? "x0x0x";
+  Suspects.clear();
+  document.querySelectorAll("[id]").forEach((node) => {
+    if (checkTextsForSuspect(node.id, hostname)) Suspects.add(node);
+  });
+
+  UniqueClassNames.clear();
+  SuspectClassNames.clear();
+  []
+    .concat(
+      ...[...document.querySelectorAll("*")].map((node) => [...node.classList])
+    )
+    .forEach((name) => UniqueClassNames.add(name));
+
+  UniqueClassNames.forEach((name) => {
+    if (checkTextsForSuspect(name, hostname)) SuspectClassNames.add(name);
+  });
+
+  for (const name of SuspectClassNames) {
+    const nodes = Array.from(document.getElementsByClassName(name));
+    nodes.forEach((n) => Suspects.add(n));
+  }
+}
+
+function checkTextsForSuspect(text, hostname) {
+  removals.map((word) => {
+    if (word.indexOf("[") > -1) {
+      const start = word.indexOf("[") + 1;
+      const exceptions = word.substring(start).replace("]", "").split(",");
+      const exception = exceptions.find((e) => e == hostname);
+      if (exception) return false;
+      word = word.substring(0, start); //clean on new array, why not extend words hmm...
+    }
+
+    const match = text.indexOf(word) > -1;
+    return match;
+  });
+}
+
+function removeSuspects() {
+  if (!Model.State.RemoveAds) return false;
+
+  for (const node of Suspects) {
+    log("removing", node);
+    node.remove();
+  }
+
+  return true;
+}
+
 function removeVideoAds() {
   if (!Model.State.RemoveAds) return false;
   for (const name of removals_videoAdWords) {
@@ -706,10 +768,9 @@ async function executeParallel(tasks) {
 function startTimer() {
   if (Model.IsReady()) {
     if (Model.Tasks.size === 0) {
+      addtask(preparse);
+      addtask(removeSuspects);
       addtask(muteYouTubeAds);
-      addtask(removeFrameAds);
-      addtask(removeClassAds);
-      addtask(removeVideoAds);
       addtask(removeComments);
       addtask(muteCnnBang);
     }
