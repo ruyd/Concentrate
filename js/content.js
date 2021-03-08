@@ -768,9 +768,10 @@ async function executeParallel(tasks) {
 function startTimer() {
   if (Model.IsReady()) {
     if (Model.Tasks.size === 0) {
+      addtask(muteYouTubeAds);
       addtask(preparse);
       addtask(removeSuspects);
-      addtask(muteYouTubeAds);
+      addtask(removeFrameAds);
       addtask(removeComments);
       addtask(muteCnnBang);
     }
