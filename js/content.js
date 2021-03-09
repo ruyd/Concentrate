@@ -473,23 +473,21 @@ ConcentrateModel.prototype.inject = function () {
 
 // Actions
 const Suspects = new Set();
-const UniqueClassNames = new Set();
-const SuspectClassNames = new Set();
 const indexof = (w, s) => s.indexOf(w) > -1;
 const attrib = (o, s) => o.getAttribute(s) || nevermatch;
 function preparse() {
   const hostname = Model.State?.Hostname ?? nevermatch;
   Suspects.clear();
-  UniqueClassNames.clear();
-  SuspectClassNames.clear();
-
-  document.querySelectorAll("*").forEach((node) => {
-    if (node.tagName === "IFRAME") {
-      checkForSuspect(node, hostname, ["src", "name"]);
-    } else {
-      checkForSuspect(node, hostname);
-    }
-  });
+  document
+    .querySelectorAll("div[id],div[class],iframe[src]")
+    .forEach((node) => {
+      if (node.tagName === "IFRAME") {
+        checkForSuspect(node, hostname, ["src", "name"]);
+      } else {
+        checkForSuspect(node, hostname);
+        node.classList.forEach((c) => UniqueClassNames.add(c));
+      }
+    });
 }
 
 function checkForSuspect(node, hostname, attribArray = []) {
