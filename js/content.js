@@ -511,25 +511,36 @@ function checkiFrame(node, hostname) {
   const src = attrib(node, "src");
   const name = attrib(node, "name");
   if (checkTextsForSuspect([src, name], hostname)) {
+    log("iframe sus", node);
     Suspects.add(node);
   }
 }
 
 function checkTextsForSuspect(textsArray, hostname) {
-  removals.map((word) => {
-    if (word.indexOf("[") > -1) {
-      const start = word.indexOf("[") + 1;
-      const exceptions = word.substring(start).replace("]", "").split(",");
-      const exception = exceptions.find((e) => e == hostname);
-      if (exception) return false;
-      word = word.substring(0, start); //clean on new array, why not extend words hmm...
-    }
-
-    const match = textsArray.find((text) => text.indexOf(word) > -1);
-    if (match) return true;
-  });
+  removals
+    .filter((word) => !indexof(word, hostname))
+    .map((word) => {
+      const cleaned = cleanWordException(word);
+      const match = textsArray.find((text) => text.indexOf(cleaned.word) > -1);
+      if (match) return true;
+    });
 
   return false;
+}
+
+//not extend words hmm...
+function cleanWordException(word) {
+  const result = {
+    word,
+    exception: false,
+  };
+  if (word.indexOf("[") > -1) {
+    const start = word.indexOf("[") + 1;
+    const exceptions = word.substring(start).replace("]", "").split(",");
+    result.exception = exceptions.find((e) => e == hostname) ? true : false;
+    result.word = word.substring(0, start);
+  }
+  return result;
 }
 
 function removeSuspects() {

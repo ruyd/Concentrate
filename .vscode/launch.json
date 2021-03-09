@@ -9,7 +9,7 @@
             "type": "edge",
             "request": "attach",
             "port": 9223,
-            "url": "https://mail.google.com/mail/u/0/#inbox",
+            "url": "https://readm.org",
             "webRoot": "${workspaceFolder}/js"
         },
         {
