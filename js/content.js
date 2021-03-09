@@ -478,16 +478,13 @@ const attrib = (o, s) => o.getAttribute(s) || nevermatch;
 function preparse() {
   const hostname = Model.State?.Hostname ?? nevermatch;
   Suspects.clear();
-  document
-    .querySelectorAll("div[id],div[class],iframe[src]")
-    .forEach((node) => {
-      if (node.tagName === "IFRAME") {
-        checkForSuspect(node, hostname, ["src", "name"]);
-      } else {
-        checkForSuspect(node, hostname);
-        node.classList.forEach((c) => UniqueClassNames.add(c));
-      }
-    });
+  document.querySelectorAll("div[id],div[class],iframe").forEach((node) => {
+    if (node.tagName === "IFRAME") {
+      checkForSuspect(node, hostname, ["src", "name"]);
+    } else {
+      checkForSuspect(node, hostname);
+    }
+  });
 }
 
 function checkForSuspect(node, hostname, attribArray = []) {
