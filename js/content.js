@@ -4,7 +4,7 @@ var Timer;
 var Model = new ConcentrateModel();
 var IntervalId = -1;
 
-const log = true ? console.trace.bind(window.console) : function () {};
+const log = true ? console.log.bind(window.console) : function () {};
 const interval = 1000;
 const removals_bannerAdWords = [
   "adserve",
@@ -483,7 +483,10 @@ function preparse() {
   SuspectClassNames.clear();
 
   document.querySelectorAll("[id]").forEach((node) => {
-    if (checkTextsForSuspect([node.id], hostname)) Suspects.add(node);
+    if (checkTextsForSuspect([node.id], hostname)) {
+      log("sid", node.id, node);
+      Suspects.add(node);
+    }
   });
 
   []
@@ -510,35 +513,37 @@ function preparse() {
 function checkiFrame(node, hostname) {
   const src = attrib(node, "src");
   const name = attrib(node, "name");
-  if (checkTextsForSuspect([src, name], hostname)) {
+  if (checkTextsForSuspect([src, name, node.id], hostname)) {
     log("iframe sus", node);
     Suspects.add(node);
   }
 }
 
 function checkTextsForSuspect(textsArray, hostname) {
-  removals
-    .filter((word) => !indexof(word, hostname))
-    .map((word) => {
-      const cleaned = cleanWordException(word);
-      const match = textsArray.find((text) => text.indexOf(cleaned.word) > -1);
+  for (const word of removals) {
+    if (word.indexOf(hostname) == -1) {
+      const cleaned = checkWordException(word, hostname);
+      const match = textsArray.find((text) =>
+        cleaned.word.length > 2
+          ? text.indexOf(cleaned.word) > -1
+          : text === cleaned.word
+      );
       if (match) return true;
-    });
+    }
+  }
 
   return false;
 }
 
-//not extend words hmm...
-function cleanWordException(word) {
+//why not extend words hmm...
+function checkWordException(word, hostname) {
   const result = {
     word,
-    exception: false,
+    isException: false,
   };
   if (word.indexOf("[") > -1) {
-    const start = word.indexOf("[") + 1;
-    const exceptions = word.substring(start).replace("]", "").split(",");
-    result.exception = exceptions.find((e) => e == hostname) ? true : false;
-    result.word = word.substring(0, start);
+    result.word = word.substring(0, word.indexOf("["));
+    result.isException = word.indexOf(hostname) > -1;
   }
   return result;
 }
