@@ -478,18 +478,20 @@ const attrib = (o, s) => o.getAttribute(s) || nevermatch;
 function preparse() {
   const hostname = Model.State?.Hostname ?? nevermatch;
   Suspects.clear();
-  document.querySelectorAll("div[id],div[class],iframe").forEach((node) => {
-    let direct = Array.from(node.classList).find((c) =>
-      removals_classNames.includes(c)
-    );
-    if (direct) {
-      addsuspect(node);
-    } else if (node.tagName === "IFRAME") {
-      checkForSuspect(node, hostname, ["src", "name"]);
-    } else {
-      checkForSuspect(node, hostname);
-    }
-  });
+  document
+    .querySelectorAll("div[id],div[class],iframe,td[class]")
+    .forEach((node) => {
+      let direct = Array.from(node.classList).find((c) =>
+        removals_classNames.includes(c)
+      );
+      if (direct) {
+        addsuspect(node);
+      } else if (node.tagName === "IFRAME") {
+        checkForSuspect(node, hostname, ["src", "name"]);
+      } else {
+        checkForSuspect(node, hostname);
+      }
+    });
 }
 
 function addsuspect(node) {
@@ -508,8 +510,7 @@ function checkForSuspect(node, hostname, attribArray = []) {
       hostname
     )
   ) {
-    log("suspect", node);
-    Suspects.add(node);
+    addsuspect(node);
     return true;
   }
   return false;
