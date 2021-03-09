@@ -4,7 +4,7 @@ var Timer;
 var Model = new ConcentrateModel();
 var IntervalId = -1;
 
-const log = true ? console.log.bind(window.console) : function () {};
+const log = false ? console.log.bind(window.console) : function () {};
 const interval = 1000;
 const removals_bannerAdWords = [
   "adserve",
