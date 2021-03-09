@@ -474,23 +474,31 @@ ConcentrateModel.prototype.inject = function () {
 const Suspects = new Set();
 const UniqueClassNames = new Set();
 const SuspectClassNames = new Set();
+const indexof = (w, s) => s.indexOf(w) > -1;
+const attrib = (o, s) => o.getAttribute(s) || "xxxxx";
 function preparse() {
   const hostname = Model.State?.Hostname ?? "x0x0x";
   Suspects.clear();
-  document.querySelectorAll("[id]").forEach((node) => {
-    if (checkTextsForSuspect(node.id, hostname)) Suspects.add(node);
-  });
-
   UniqueClassNames.clear();
   SuspectClassNames.clear();
+
+  document.querySelectorAll("[id]").forEach((node) => {
+    if (checkTextsForSuspect([node.id], hostname)) Suspects.add(node);
+  });
+
   []
     .concat(
-      ...[...document.querySelectorAll("*")].map((node) => [...node.classList])
+      ...[...document.querySelectorAll("*")].map((node) => {
+        if (node.tagName === "IFRAME") {
+          checkiFrame(node);
+        }
+        return [...node.classList];
+      })
     )
     .forEach((name) => UniqueClassNames.add(name));
 
   UniqueClassNames.forEach((name) => {
-    if (checkTextsForSuspect(name, hostname)) SuspectClassNames.add(name);
+    if (checkTextsForSuspect([name], hostname)) SuspectClassNames.add(name);
   });
 
   for (const name of SuspectClassNames) {
@@ -499,7 +507,15 @@ function preparse() {
   }
 }
 
-function checkTextsForSuspect(text, hostname) {
+function checkiFrame(node) {
+  const src = attrib(node, "src");
+  const name = attrib(node, "name");
+  if (checkTextsForSuspect([src, name], hostname)) {
+    Suspects.add(node);
+  }
+}
+
+function checkTextsForSuspect(textsArray, hostname) {
   removals.map((word) => {
     if (word.indexOf("[") > -1) {
       const start = word.indexOf("[") + 1;
@@ -509,9 +525,11 @@ function checkTextsForSuspect(text, hostname) {
       word = word.substring(0, start); //clean on new array, why not extend words hmm...
     }
 
-    const match = text.indexOf(word) > -1;
-    return match;
+    const match = textsArray.find((text) => text.indexOf(word) > -1);
+    if (match) return true;
   });
+
+  return false;
 }
 
 function removeSuspects() {
@@ -591,8 +609,6 @@ function removeFrameAds() {
   if (!Model.State.RemoveAds) return false;
 
   const frames = document.getElementsByTagName("IFRAME");
-  const match = (w, s) => s.indexOf(w) > -1;
-  const attrib = (o, s) => o.getAttribute(s) || "xxxxx";
 
   for (let f = 0; f < frames.length; f++) {
     const frame = frames[f];
