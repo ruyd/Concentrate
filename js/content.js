@@ -482,23 +482,17 @@ function preparse() {
   UniqueClassNames.clear();
   SuspectClassNames.clear();
 
-  document.querySelectorAll("[id]").forEach((node) => {
-    if (checkTextsForSuspect([node.id], hostname)) {
-      log("sid", node.id, node);
-      Suspects.add(node);
+  document.querySelectorAll("*").forEach((node) => {
+    if (node.tagName === "IFRAME") {
+      checkiFrame(node, hostname);
+    } else if (node.id) {
+      if (checkTextsForSuspect([node.id], hostname)) {
+        log("sid", node.id, node);
+        Suspects.add(node);
+      }
     }
+    node.classList?.forEach((cls) => UniqueClassNames.add(cls));
   });
-
-  []
-    .concat(
-      ...[...document.querySelectorAll("*")].map((node) => {
-        if (node.tagName === "IFRAME") {
-          checkiFrame(node, hostname);
-        }
-        return [...node.classList];
-      })
-    )
-    .forEach((name) => UniqueClassNames.add(name));
 
   UniqueClassNames.forEach((name) => {
     if (checkTextsForSuspect([name], hostname)) SuspectClassNames.add(name);
