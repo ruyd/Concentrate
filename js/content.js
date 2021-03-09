@@ -6,6 +6,7 @@ var IntervalId = -1;
 
 const log = false ? console.log.bind(window.console) : function () {};
 const interval = 1000;
+const nevermatch = "x0x0x";
 const removals_bannerAdWords = [
   "adserve",
   "ads",
@@ -475,42 +476,38 @@ const Suspects = new Set();
 const UniqueClassNames = new Set();
 const SuspectClassNames = new Set();
 const indexof = (w, s) => s.indexOf(w) > -1;
-const attrib = (o, s) => o.getAttribute(s) || "xxxxx";
+const attrib = (o, s) => o.getAttribute(s) || nevermatch;
 function preparse() {
-  const hostname = Model.State?.Hostname ?? "x0x0x";
+  const hostname = Model.State?.Hostname ?? nevermatch;
   Suspects.clear();
   UniqueClassNames.clear();
   SuspectClassNames.clear();
 
   document.querySelectorAll("*").forEach((node) => {
     if (node.tagName === "IFRAME") {
-      checkiFrame(node, hostname);
-    } else if (node.id) {
-      if (checkTextsForSuspect([node.id], hostname)) {
-        log("susid", node.id, node);
-        Suspects.add(node);
-      }
+      checkForSuspect(node, hostname, ["src", "name"]);
+    } else {
+      checkForSuspect(node, hostname);
     }
-    node.classList.forEach((cls) => UniqueClassNames.add(cls));
   });
-
-  UniqueClassNames.forEach((name) => {
-    if (checkTextsForSuspect([name], hostname)) SuspectClassNames.add(name);
-  });
-
-  for (const name of SuspectClassNames) {
-    const nodes = Array.from(document.getElementsByClassName(name));
-    nodes.forEach((n) => Suspects.add(n));
-  }
 }
 
-function checkiFrame(node, hostname) {
-  const src = attrib(node, "src");
-  const name = attrib(node, "name");
-  if (checkTextsForSuspect([src, name, node.id], hostname)) {
-    log("susframe", node);
+function checkForSuspect(node, hostname, attribArray = []) {
+  const attribValues = [];
+  attribArray.forEach((a) =>
+    attribValues.push(node.getAttribute(a) ?? nevermatch)
+  );
+  if (
+    checkTextsForSuspect(
+      [node.id, ...node.classList, ...attribValues],
+      hostname
+    )
+  ) {
+    log("suspect", node);
     Suspects.add(node);
+    return true;
   }
+  return false;
 }
 
 function checkTextsForSuspect(textsArray, hostname) {
