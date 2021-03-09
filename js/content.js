@@ -490,7 +490,7 @@ function preparse() {
     .concat(
       ...[...document.querySelectorAll("*")].map((node) => {
         if (node.tagName === "IFRAME") {
-          checkiFrame(node);
+          checkiFrame(node, hostname);
         }
         return [...node.classList];
       })
@@ -507,7 +507,7 @@ function preparse() {
   }
 }
 
-function checkiFrame(node) {
+function checkiFrame(node, hostname) {
   const src = attrib(node, "src");
   const name = attrib(node, "name");
   if (checkTextsForSuspect([src, name], hostname)) {
@@ -787,7 +787,6 @@ function startTimer() {
       addtask(muteYouTubeAds);
       addtask(preparse);
       addtask(removeSuspects);
-      addtask(removeFrameAds);
       addtask(removeComments);
       addtask(muteCnnBang);
     }
