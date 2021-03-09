@@ -487,6 +487,7 @@ function preparse() {
   });
 }
 
+//rework sig, primitives
 function checkForSuspect(node, hostname, attribArray = []) {
   const attribValues = [];
   attribArray.forEach((a) =>
@@ -545,14 +546,6 @@ function removeSuspects() {
   return true;
 }
 
-function removeVideoAds() {
-  if (!Model.State.RemoveAds) return false;
-  for (const name of removals_videoAdWords) {
-    removeClassName(name);
-  }
-  return true;
-}
-
 // PTSD
 function muteCnnBang() {
   if (Model.State.PlayerType != playerTypes.CNN) return false;
@@ -604,42 +597,6 @@ function muteYouTubeAds() {
     Model.hide();
   }
 
-  return true;
-}
-
-function removeFrameAds() {
-  if (!Model.State.RemoveAds) return false;
-
-  const frames = document.getElementsByTagName("IFRAME");
-
-  for (let f = 0; f < frames.length; f++) {
-    const frame = frames[f];
-    const id = attrib(frame, "id");
-    const name = attrib(frame, "name");
-    const src = attrib(frame, "src");
-    const hit = removals_bannerAdWords.find(
-      (word) => match(word, id) || match(word, name) || match(word, src)
-    );
-    if (typeof hit == "string") {
-      log("removing", frame);
-      frame.remove();
-    }
-  }
-
-  return true;
-}
-
-function removeClassAds() {
-  if (!Model.State.RemoveAds) return false;
-  for (const cname of removals_classNames) {
-    const start = cname.indexOf("[") + 1;
-    const except = cname.substring(start).replace("]", "").split(",");
-    const url = getUrl();
-    if (except && except.find((hostname) => url.indexOf(hostname) > -1)) {
-      continue;
-    }
-    removeClassName(cname);
-  }
   return true;
 }
 
