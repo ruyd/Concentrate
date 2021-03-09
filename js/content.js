@@ -487,11 +487,11 @@ function preparse() {
       checkiFrame(node, hostname);
     } else if (node.id) {
       if (checkTextsForSuspect([node.id], hostname)) {
-        log("sid", node.id, node);
+        log("susid", node.id, node);
         Suspects.add(node);
       }
     }
-    node.classList?.forEach((cls) => UniqueClassNames.add(cls));
+    node.classList.forEach((cls) => UniqueClassNames.add(cls));
   });
 
   UniqueClassNames.forEach((name) => {
@@ -508,7 +508,7 @@ function checkiFrame(node, hostname) {
   const src = attrib(node, "src");
   const name = attrib(node, "name");
   if (checkTextsForSuspect([src, name, node.id], hostname)) {
-    log("iframe sus", node);
+    log("susframe", node);
     Suspects.add(node);
   }
 }
