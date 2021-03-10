@@ -468,32 +468,34 @@ ConcentrateModel.prototype.inject = function () {
 };
 
 // Actions
-const Suspects = new Set();
+const Suspects = [];
 const indexof = (w, s) => s.indexOf(w) > -1;
 const attrib = (o, s) => o.getAttribute(s) || nevermatch;
-function preparse() {
+function removeAds() {
   if (!Model.State.RemoveAds) return false;
-  const hostname = Model.State?.Hostname ?? nevermatch;
-  Suspects.clear();
+  const hostname = Model.State.Hostname ?? nevermatch;
+  Suspects.splice(0, Suspects.length);
   document
-    .querySelectorAll("div[id],div[class],iframe,td[class]")
+    .querySelectorAll("div[id],div[class],iframe,td[class],script")
     .forEach((node) => {
-      let direct = Array.from(node.classList).find((c) =>
-        removals_classNames.includes(c)
-      );
-      if (direct) {
-        addsuspect(node);
+      let exact = removals_classNames.find((c) => node.classList.contains(c));
+      if (exact) {
+        addSuspect(node);
       } else if (node.tagName === "IFRAME") {
         checkForSuspect(node, hostname, ["src", "name"]);
+      } else if (node.tagName === "SCRIPT") {
+        checkForSuspect(node, hostname, ["src"]);
       } else {
         checkForSuspect(node, hostname);
       }
     });
+
+  Suspects.forEach((node) => node.remove());
   return true;
 }
 
-function addsuspect(node) {
-  Suspects.add(node);
+function addSuspect(node) {
+  Suspects.push(node);
 }
 
 //rework sig, primitives
@@ -508,7 +510,7 @@ function checkForSuspect(node, hostname, attribArray = []) {
       hostname
     )
   ) {
-    addsuspect(node);
+    addSuspect(node);
     return true;
   }
   return false;
@@ -752,8 +754,7 @@ function startTimer() {
   if (Model.IsReady()) {
     if (Model.Tasks.size === 0) {
       addtask(muteYouTubeAds);
-      addtask(preparse);
-      addtask(removeSuspects);
+      addtask(removeAds);
       addtask(removeComments);
       addtask(muteCnnBang);
     }
