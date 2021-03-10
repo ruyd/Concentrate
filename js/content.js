@@ -19,6 +19,7 @@ const removals_bannerAdWords = [
   "tree.com",
   "phoenix-widget",
   "phoenix",
+  "infolinks.com",
 ];
 const removals_classNames = [
   "OUTBRAIN",
