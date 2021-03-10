@@ -37,11 +37,7 @@ const removals_videoAdWords = [
   "ytd-watch-next-secondary-results-renderer sparkles-light-cta",
 ];
 
-const removals = [
-  ...removals_bannerAdWords,
-  ...removals_classNames,
-  ...removals_videoAdWords,
-];
+const removals = [...removals_bannerAdWords, ...removals_videoAdWords];
 const playerTypes = {
   YouTube: {
     player: "html5-video-player",
@@ -476,6 +472,7 @@ const Suspects = new Set();
 const indexof = (w, s) => s.indexOf(w) > -1;
 const attrib = (o, s) => o.getAttribute(s) || nevermatch;
 function preparse() {
+  if (!Model.State.RemoveAds) return false;
   const hostname = Model.State?.Hostname ?? nevermatch;
   Suspects.clear();
   document
@@ -492,6 +489,7 @@ function preparse() {
         checkForSuspect(node, hostname);
       }
     });
+  return true;
 }
 
 function addsuspect(node) {
