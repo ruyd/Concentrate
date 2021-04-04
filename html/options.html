@@ -61,14 +61,15 @@
         </div>
         <div>
             <div class="visual">
-                <h2>New Tab</h2>
+                <h2>Custom New Tab</h2>
                 <div id="indicator" class="color-indicator"></div>
             </div>
             <div class="form">
-                <h3>Color</h3>
-                <input type="text" id="color" name="color" />
-
-
+                <h3>Replace NewTab</h3>
+                <label class="switch">
+                    <input type="checkbox" value="true" id="NewTabEnabledInputCheckbox">
+                    <span class="slider round"></span>
+                </label>
                 <h3>FullScreen Click</h3>
                 <label class="switch">
                     <input type="checkbox" value="true" id="NewTabClickInputCheckbox">
@@ -79,6 +80,8 @@
                     <input type="checkbox" value="true" id="ShowClockInputCheckbox">
                     <span class="slider round"></span>
                 </label>
+                <h3>Color</h3>
+                <input type="color" id="color" name="color" />
             </div>
         </div>
     </div>

@@ -252,7 +252,7 @@ input:focus {
 }
 
 .visual {
-  height: 200px;
+  height: 190px;
 }
 
 .options {
@@ -281,4 +281,15 @@ input:focus {
   font-size: xx-large;
 }
 
-/**/
+input[type="color"] {
+  background: none;
+  border: none;
+  height: 50px;
+  width: 150px;
+  padding: 0;
+  margin-top: -5px;
+}
+
+::-webkit-color-swatch {
+  border-radius: 20px;
+}

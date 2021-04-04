@@ -476,27 +476,29 @@ function removeAds() {
   if (!Model.State.RemoveAds) return false;
   const hostname = Model.State.Hostname ?? nevermatch;
   Suspects.splice(0, Suspects.length);
-  document
-    .querySelectorAll("div[id],div[class],iframe,td[class],script")
-    .forEach((node) => {
-      let exact = removals_classNames.find((c) => node.classList.contains(c));
-      if (exact) {
-        addSuspect(node);
-      } else if (node.tagName === "IFRAME") {
-        checkForSuspect(node, hostname, ["src", "name"]);
-      } else if (node.tagName === "SCRIPT") {
-        checkForSuspect(node, hostname, ["src"]);
-      } else {
-        checkForSuspect(node, hostname);
-      }
-    });
 
-  Suspects.forEach((node) => node.remove());
+  const nodes = Array.from(
+    document.querySelectorAll("script,div[id],div[class],iframe,td[class]")
+  );
+  nodes.forEach((node) => {
+    let exact = removals_classNames.find((c) => node.classList.contains(c));
+    if (exact) {
+      addSuspect(node);
+    } else if (node.tagName === "IFRAME") {
+      checkForSuspect(node, hostname, ["src", "name"]);
+    } else if (node.tagName === "SCRIPT") {
+      checkForSuspect(node, hostname, ["src"]);
+    } else {
+      checkForSuspect(node, hostname);
+    }
+  });
+
   return true;
 }
 
 function addSuspect(node) {
-  Suspects.push(node);
+  node.remove();
+  //Suspects.push(node);
 }
 
 //rework sig, primitives

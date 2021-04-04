@@ -45,5 +45,25 @@
         "images/*",
         "js/*"
     ],
+    "commands": {
+        "AutoScroll": {
+            "suggested_key": {
+                "default": "Ctrl+Space"
+            },
+            "description": "Start/Stop Auto Scroll"
+        },
+        "ScrollForward": {
+            "suggested_key": {
+                "default": "Ctrl+Up"
+            },
+            "description": "Scroll Up/Faster"
+        },
+        "ScrollDown": {
+            "suggested_key": {
+                "default": "Ctrl+Down"
+            },
+            "description": "Scroll Down/Slower"
+        }
+    },
     "manifest_version": 2
 }
