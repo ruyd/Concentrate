@@ -288,6 +288,11 @@ input[type="color"] {
   width: 150px;
   padding: 0;
   margin-top: -5px;
+  cursor: pointer;
+}
+
+input[type="color"]:hover {
+  filter: invert(20%);
 }
 
 ::-webkit-color-swatch {
