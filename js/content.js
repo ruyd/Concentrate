@@ -9,17 +9,17 @@ const interval = 1000;
 const nevermatch = "x0x0x";
 const removals_bannerAdWords = [
   "adserve",
-  "ads",
-  "_ad",
+  "ad",
+  "_ads",
   "podium",
   "doubleclick",
   "chatan",
   "javascript:window",
-  "about:blank",
   "tree.com",
   "phoenix-widget",
   "phoenix",
   "infolinks.com",
+  "pbs__player"
 ];
 const removals_classNames = [
   "OUTBRAIN",

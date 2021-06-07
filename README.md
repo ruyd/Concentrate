@@ -6,8 +6,6 @@ A Modern Add-on for a Quiet and Focused Browsing Experience
 
 [Get now for Chrome](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
 
-[Get now for Edge](https://microsoftedge.microsoft.com/addons/detail/mmlolmfkhnilblibmnalmkinojfpcckh)
-
 ### Features
 
 - Removes Flashy Advertising
