@@ -3,9 +3,6 @@
 # Installation
 
 A Modern Add-on for a Quiet and Focused Browsing Experience
-
-[Get now for Chrome](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
-
 ### Features
 
 - Removes Flashy Advertising
@@ -27,6 +24,8 @@ A Modern Add-on for a Quiet and Focused Browsing Experience
 _This addon is forever free of charge with no interest in data collection or selling. Not everyone wants or should have to pay to learn without advertising. I really hope it helps your studies and peace of mind._
 
 [Privacy](PRIVACY.TXT)
+
+[Get now for Chrome](https://chrome.google.com/webstore/detail/goecnaonchbggnbifdlgcdflabaiilpj)
 
 ---
 
