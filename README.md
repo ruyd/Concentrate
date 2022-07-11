@@ -1,6 +1,9 @@
 ![Image](images/Concentrate.svg)
 
 A Modern Add-on for a Quiet and Focused Browsing Experience
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ### Features
 
 - Removes Flashy Advertising

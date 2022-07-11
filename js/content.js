@@ -19,7 +19,10 @@ const removals_bannerAdWords = [
   "phoenix-widget",
   "phoenix",
   "infolinks.com",
-  "pbs__player"
+  "pbs__player",
+  "theAd",
+  "bms_player",
+  "aniBox"
 ];
 const removals_classNames = [
   "OUTBRAIN",
@@ -30,6 +33,7 @@ const removals_classNames = [
   "contentText",
   "ad-footer",
   "ad-support-desktop",
+  "bx-gbi-frame"
 ];
 const removals_commentTags = [];
 const removals_videoAdWords = [
@@ -743,7 +747,6 @@ var executing = false;
 async function executeParallel(tasks) {
   if (tasks.size === 0) return;
   if (executing) return;
-  //why does it only work like this, closure? block scope? sandboxed windows hmmm
   const wrapped = Array.from(tasks).map(
     (task) => new Promise((resolve) => resolve(task()))
   );
@@ -752,7 +755,6 @@ async function executeParallel(tasks) {
   executing = false;
 }
 
-// Timer
 function startTimer() {
   if (Model.IsReady()) {
     if (Model.Tasks.size === 0) {
