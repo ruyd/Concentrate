@@ -4,7 +4,7 @@ var Timer;
 var Model = new ConcentrateModel();
 var IntervalId = -1;
 
-const log = false ? console.log.bind(window.console) : function () {};
+const log = false ? console.log.bind(window.console) : function () { };
 const interval = 1000;
 const nevermatch = "x0x0x";
 const removals_bannerAdWords = [
@@ -22,7 +22,8 @@ const removals_bannerAdWords = [
   "pbs__player",
   "theAd",
   "bms_player",
-  "aniBox"
+  "aniBox",
+  "trendi"
 ];
 const removals_classNames = [
   "OUTBRAIN",
@@ -653,17 +654,16 @@ function autoScroll() {
   log("autoScroll");
   if (Model.State.EnableAutoScroll) {
     if (IntervalId < 0) {
-      const delay = 50;
+      const delay = 2;
       clearInterval(IntervalId);
       if (Model.State.AutoScrollSpeed === 0) Model.State.AutoScrollSpeed = 1;
       IntervalId = setInterval(
         () =>
           window.scrollBy({
             top: Model.State.AutoScrollSpeed,
-            left: 0,
             behavior: "smooth",
           }),
-        delay
+        delay * Model.State.AutoScrollSpeed
       );
     }
   } else {
